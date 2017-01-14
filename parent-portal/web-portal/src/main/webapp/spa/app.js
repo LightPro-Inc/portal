@@ -108,6 +108,12 @@ if (!String.format) {
 	            controller: 'mesureUnitCtrl as vm',
 	            requireAuthenticated: true
 	        })
+	        .state('main.settings.tax', {
+	            url: '/tax',
+	            templateUrl: 'modules/admin/settings/tax/taxView.html',
+	            controller: 'taxCtrl as vm',
+	            requireAuthenticated: true
+	        })
             .state('main.hotel', {
                 abstract: true,
                 url:'/hotel',
@@ -254,6 +260,26 @@ if (!String.format) {
 	            url: '/stock-movement',
 	            templateUrl: 'modules/stocks/settings/stock-movement/stockMovementView.html',
 	            controller: 'stockMovementCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales', {
+                abstract: true,
+                url:'/sales',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/sales/salesView.html',      
+                        controller: 'salesCtrl as vm'                  
+                    },                    
+                    'sideBarSales@main.sales' : {
+                        templateUrl: 'modules/sales/side-bar/sideBarView.html',
+                        controller: 'salesSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.sales.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/sales/dashboard/dashboardView.html',
+	            controller: 'salesDashboardCtrl as vm',
 	            requireAuthenticated: true
 	        });
 	}

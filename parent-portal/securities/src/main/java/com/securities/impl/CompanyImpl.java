@@ -18,6 +18,7 @@ import com.securities.api.MesureUnits;
 import com.securities.api.Modules;
 import com.securities.api.Persons;
 import com.securities.api.Sequences;
+import com.securities.api.Taxes;
 
 public class CompanyImpl implements Company {
 					
@@ -171,5 +172,10 @@ public class CompanyImpl implements Company {
 	@Override
 	public boolean isPresent() throws IOException {
 		return base.domainsStore(dm).exists(id);
+	}
+
+	@Override
+	public Taxes taxes() {
+		return new TaxesImpl(this.base);
 	}
 }

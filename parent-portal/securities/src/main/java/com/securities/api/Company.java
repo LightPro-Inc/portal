@@ -36,4 +36,5 @@ public interface Company extends Recordable<UUID> {
 	Sequences sequences();
 	MesureUnits mesureUnits();
 	MesureUnitTypes mesureUnitTypes();
+	Taxes taxes();
 }
