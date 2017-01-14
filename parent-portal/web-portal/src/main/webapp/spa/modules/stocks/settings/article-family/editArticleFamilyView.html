@@ -1,0 +1,39 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{{vm.title}}
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+		                <label class="control-label" for="Category">Catégorie</label>
+		                <input type="text" class="form-control" ng-model="vm.item.category" name="Category" id="Category" disabled>
+		            </div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="row">
+	                <div class="col-sm-12">
+	                    <label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+	                    <input type="text" class="form-control" ng-model="vm.item.name" name="Name" id="Name" placeholder="Renseigner le libellé"
+	                    	validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+	                </div>
+	
+	                <div class="col-sm-12 selectContainer">                            
+                        <label class="control-label" for="Description">Description</label>
+                        <textarea rows="3" class="form-control" name="Description" id="Description" ng-model="vm.item.description" placeholder="Décrivez la famille d'article"></textarea>
+                    </div>
+	            </div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<span>(*) champ obligatoire</span>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+				<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+			</div>
+		</div>
+	</div>
+</form>

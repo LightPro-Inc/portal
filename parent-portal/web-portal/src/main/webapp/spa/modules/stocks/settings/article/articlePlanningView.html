@@ -1,0 +1,45 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.save(vm.plannings)">
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Données de plannification pour l'article {{ vm.article.name }}</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-if="vm.loadingData">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading metadatas...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-if="!vm.loadingMetadatas" class="row">
+                    <div class="col-sm-8 center-block" style="float:none;">
+                        <div class="table-responsive">
+                            <table class="table table-condensed shortMargin">
+                                <tr>
+                                    <th>Entrepôt</th>
+                                    <th>Stock maximum</th>                                    
+                                    <th>Stock de sécurité</th>
+                                    <th>Stock minimum</th>
+                                </tr>
+                                <tr ng-repeat="item in vm.plannings">
+                                    <td>{{ item.location }}</td>
+                                    <td class="shortPadding"><input type="number" class="form-control input-sm" placeholder="Entrer un nombre" ng-model="item.maximumStock" required /></td>
+                                    <td class="shortPadding"><i><input type="number" class="form-control input-sm" placeholder="Entrer un nombre" ng-model="item.safetyStock" required /></i></td>
+                                    <td class="shortPadding"><input type="number" class="form-control input-sm" placeholder="Entrer un nombre" ng-model="item.minimumStock" required /></td>                                    
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

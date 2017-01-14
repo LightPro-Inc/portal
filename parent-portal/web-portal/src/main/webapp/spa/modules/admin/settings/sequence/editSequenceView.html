@@ -1,0 +1,48 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="form-group">
+			 <label class="control-label" for="name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+	         <input type="text" class="form-control" ng-model="vm.item.name" name="name" id="name" placeholder="Renseigner le nom complet" validate-on="blur" required required-message="'Nom complet est un champ obligatoire'">
+		</div>	
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-6">
+					<label class="control-label" for="prefix">Préfixe</label>
+	        		<input type="text" class="form-control" ng-model="vm.item.prefix" name="prefix" id="prefix" placeholder="Renseigner un préfixe">
+				</div>
+				<div class="col-md-6">
+					<label class="control-label" for="suffix">Suffixe</label>
+	        		<input type="text" class="form-control" ng-model="vm.item.suffix" name="suffix" id="suffix" placeholder="Renseigner un suffixe">
+				</div>
+			</div>
+		</div>		
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-6">
+					<label class="control-label" for="size"><small style="color: red">*</small>&nbsp;&nbsp;Taille</label>
+	                <input type="number" class="form-control" ng-model="vm.item.size" name="size" id="size" placeholder="Renseigner la taille" validate-on="blur" required required-message="'Taille est un champ obligatoire'">
+				</div>
+				<div class="col-md-6">
+					<label class="control-label" for="step"><small style="color: red">*</small>&nbsp;&nbsp;Etape</label>
+	                <input type="number" class="form-control" ng-model="vm.item.step" name="step" id="step" placeholder="Renseigner le pas" validate-on="blur" required required-message="'Etape est un champ obligatoire'">
+				</div>
+			</div>
+		</div>	
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-6">
+					<label class="control-label" for="nextNumber"><small style="color: red">*</small>&nbsp;&nbsp;Nombre suivant</label>
+	                <input type="number" class="form-control" ng-model="vm.item.nextNumber" name="nextNumber" id="nextNumber" placeholder="Renseigner le nombre suivant" validate-on="blur" required required-message="'Nombre suivant est un champ obligatoire'">
+				</div>
+			</div>
+		</div>						
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

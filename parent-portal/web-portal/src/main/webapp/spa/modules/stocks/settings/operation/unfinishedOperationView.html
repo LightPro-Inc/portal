@@ -1,0 +1,54 @@
+<div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Opérations inachevées ({{ vm.type.name }})</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-if="vm.loadingData">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading metadatas...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-if="!vm.loadingMetadatas" class="row">
+                    <div class="col-sm-12 center-block" style="float:none;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered shortMargin">
+                                <tr>
+                                	<th></th>
+                                	<th>Date</th>
+                                    <th>Référence</th>
+                                    <th>Document source</th>                                    
+                                    <th>Emplacement source</th>
+                                    <th>Emplacement de destination</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="item in vm.items">
+                                    <td class="shortPadding">{{ $index + 1 }}</td>
+                                    <td class="shortPadding">{{item.movementDate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                                    <td class="shortPadding">{{item.reference}}</td>
+                                    <td class="shortPadding">{{item.documentSource}}</td>
+                                    <td class="shortPadding">{{item.sourceLocation}}</td>
+                                    <td class="shortPadding">{{item.destinationLocation}}</td>  
+                                    <td>
+                						<button type="button" class="btn btn-primary btn-xs" ng-click="vm.modifyItem(item)"><i class="fa fa-pencil"></i></button>
+                						<button type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item)"><i class="fa fa-trash-o"></i></button>
+                					</td>                                  
+                                </tr>
+                                <tr ng-if="vm.items.length == 0">
+	                                <td colspan="7" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+	                            </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+            	<label class="label label-danger">Total : {{vm.items.length}} éléments</label>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary" ng-click="vm.close()">Retour</button>
+                </div>
+            </div>
+        </div>
+    </div>

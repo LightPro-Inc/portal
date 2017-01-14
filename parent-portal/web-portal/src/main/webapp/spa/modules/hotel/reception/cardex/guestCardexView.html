@@ -1,0 +1,100 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title">Client : {{vm.item.fullName}}</h4>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<form role="form" class="form-horizontal" novalidate angular-validator name="addForm" angular-validator-submit="vm.editItem()">
+						<div class="panel panel-default">
+							<div class="panel-heading clearfix">
+								<div class="panel-title">
+									<strong>Informations personnelles</strong>
+								</div>
+							</div>
+							<div class="panel-body">
+								<div ng-show="vm.loadingGuestData">
+					               <div class="col-xs-4"></div>
+					               <div class="col-xs-4">
+					                   <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+					               </div>
+					               <div class="col-xs-4"></div>
+					           </div>
+					           <div ng-show="!vm.loadingGuestData">
+					           	   <div class="form-group">
+										<label class="col-lg-2 control-label" for="LastName">Nom</label>
+										<div class="col-lg-10">
+											<input type="text" class="form-control input-sm" id="LastName" name="LastName" ng-model="vm.item.lastName" placeholder="Renseigner le nom">
+										</div>
+									</div>	
+									<div class="form-group">
+										<label class="col-lg-2 control-label" for="FirstName">Prénoms</label>
+										<div class="col-lg-10">
+											<input type="text" class="form-control input-sm" id="FirstName" name="FirstName" ng-model="vm.item.firstName" placeholder="Renseigner le prénom">
+										</div>
+									</div>	
+									<div class="form-group">
+										<div class="col-lg-offset-2 col-lg-10">
+											<div class="checkbox">
+												<label><input name="Sex" type="radio" value="M" ng-model="vm.item.sex"> Masculin</label>
+												<label><input name="Sex" type="radio" value="F" ng-model="vm.guest.sex"> Féminin</label>
+											</div>
+										</div>
+									</div>
+					           </div>																				
+							</div>
+							<div class="panel-footer clearfix">
+								<button type="submit" click-once class="btn btn-primary pull-right">Enregistrer</button>
+							</div>
+						</div>		
+					</form>										
+				</div>
+				<div class="col-md-6">					
+					<div class="panel panel-default">
+						<div class="panel-heading clearfix">
+							<div class="panel-title">
+								<strong>Liste des réservations</strong>
+							</div>
+						</div>
+						<div class="panel-body">
+							<div ng-show="vm.loadingBookingData">
+				               <div class="col-xs-4"></div>
+				               <div class="col-xs-4">
+				                   <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+				               </div>
+				               <div class="col-xs-4"></div>
+				           </div>
+				           <div ng-show="!vm.loadingBookingData">
+				           	   <div class="table-responsive">
+									<table class="table table-condensed shortMargin">
+						                <tr>
+						                    <th>N°</th>
+						                    <th>Chambre</th>
+						                    <th>Début</th>
+						                    <th>Fin</th>    
+						                    <th>Total TTC</th>                 
+						                </tr>
+						                <tr ng-repeat="item in vm.bookings">
+						                    <td class="shortPadding">{{ $index + 1 }}</td>
+						                    <td class="shortPadding">{{ item.room }}</td>
+						                    <td class="shortPadding"><i>{{ item.start|date:'dd/MM/yyyy' }}</i></td>
+						                    <td class="shortPadding"><i>{{ item.end|date:'dd/MM/yyyy' }}</i></td>
+						                    <td class="shortPadding"><i>{{ item.ttcTotalBookingAmount | number }} FCFA</i></td>		                    
+						                </tr>
+						            </table>
+								</div>
+				           </div>																				
+						</div>
+						<div class="panel-footer clearfix">
+							<label class="label label-danger">{{vm.bookings.length}} réservations</label>
+						</div>
+					</div>											
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<button class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>			
+		</div>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+<div class="col-md-12">	
+	<h3>Tableau de bord</h3>
+	<div class="row">
+		<div class="col-md-12">
+		    <div class="panel panel-success">
+		        <div class="panel-heading clearfix">
+		            <h3 class="panel-title pull-left">Locations <span ng-if="!vm.loadingLocations" class="badge badge-sm up bg-danger" style="background-color:darkblue;">{{ vm.resumeStat.totalAmount | number }} FCFA</span></h3>
+		            <div class="pull-right form-inline">
+                        <button class="btn btn-primary btn-sm" ng-click="vm.loadResumeLocations()"><i class="fa fa-refresh"></i></button>
+                    </div>
+		        </div>
+		        <div class="panel-body">
+		            <div ng-if="vm.loadingLocations">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Charger ventes..</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+		            <div class="row" ng-if="!vm.loadingLocations">
+			            <div class="col-md-offset-3 col-md-6" style="min-width:900px; overflow-x:auto; overflow-y:hidden">
+		                    <div fusioncharts
+		                         width="600"
+		                         height="400"
+		                         type="pie3d"
+		                         dataSource="{{vm.locationsByRoomCategory}}">
+		                    </div>
+		                </div>               
+		            </div>
+		        </div>
+		        <div class="panel-footer">
+		
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>

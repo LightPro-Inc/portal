@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_zS6UwNOnEeaAgcuX2xdOMg" name="NewModel">
+  <packagedElement xmi:type="uml:Interface" xmi:id="___-dQNOnEeaAgcuX2xdOMg" name="Horodatable">
+    <ownedOperation xmi:id="_bQoyENOoEeaAgcuX2xdOMg" name="owner"/>
+    <ownedOperation xmi:id="_df_lkNOoEeaAgcuX2xdOMg" name="lastModifier"/>
+    <ownedOperation xmi:id="_iowPINOoEeaAgcuX2xdOMg" name="dateCreated"/>
+    <ownedOperation xmi:id="_sWjKINOoEeaAgcuX2xdOMg" name="lastModifiedDate"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_6siYQNOoEeaAgcuX2xdOMg" name="Person">
+    <ownedOperation xmi:id="_0lz1INOpEeaAgcuX2xdOMg" name="firstName"/>
+    <ownedOperation xmi:id="_1ttRUNOpEeaAgcuX2xdOMg" name="lastName"/>
+    <ownedOperation xmi:id="_2rfvQNOpEeaAgcuX2xdOMg" name="sex"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="__y0VkNOoEeaAgcuX2xdOMg" name="Persons" memberEnd="__y0VkdOoEeaAgcuX2xdOMg __zaygtOoEeaAgcuX2xdOMg" navigableOwnedEnd="__zaygtOoEeaAgcuX2xdOMg">
+    <ownedEnd xmi:id="__y0VkdOoEeaAgcuX2xdOMg" name="persons" type="_6siYQNOoEeaAgcuX2xdOMg" association="__y0VkNOoEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__zaygNOoEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__zaygdOoEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="__zaygtOoEeaAgcuX2xdOMg" name="horodatables" type="___-dQNOnEeaAgcuX2xdOMg" association="__y0VkNOoEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__0AoYNOoEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__0AoYdOoEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_YPW88NOpEeaAgcuX2xdOMg" name="DomainMetadata">
+    <ownedOperation xmi:id="_NFPN4NOpEeaAgcuX2xdOMg" name="name"/>
+    <ownedOperation xmi:id="_PUGSINOpEeaAgcuX2xdOMg" name="keyName"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_EMyxENOqEeaAgcuX2xdOMg" name="Persons"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_jdbicNOqEeaAgcuX2xdOMg" name="personssToPersons" memberEnd="_jdbicdOqEeaAgcuX2xdOMg _jdbidNOqEeaAgcuX2xdOMg" navigableOwnedEnd="_jdbidNOqEeaAgcuX2xdOMg">
+    <ownedEnd xmi:id="_jdbicdOqEeaAgcuX2xdOMg" name="personss" type="_EMyxENOqEeaAgcuX2xdOMg" aggregation="shared" association="_jdbicNOqEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jdbictOqEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jdbic9OqEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_jdbidNOqEeaAgcuX2xdOMg" name="persons" type="_6siYQNOoEeaAgcuX2xdOMg" association="_jdbicNOqEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jdbiddOqEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jdbidtOqEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_me8ysNOqEeaAgcuX2xdOMg" name="DomainStore"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_BIKtANOrEeaAgcuX2xdOMg" name="PersonMetadata">
+    <interfaceRealization xmi:id="_KYC88NOrEeaAgcuX2xdOMg" client="_BIKtANOrEeaAgcuX2xdOMg" supplier="_YPW88NOpEeaAgcuX2xdOMg" contract="_YPW88NOpEeaAgcuX2xdOMg"/>
+    <ownedOperation xmi:id="_DOijoNOrEeaAgcuX2xdOMg" name="firstName"/>
+    <ownedOperation xmi:id="_EXvnYNOrEeaAgcuX2xdOMg" name="lastName"/>
+    <ownedOperation xmi:id="_FrUvINOrEeaAgcuX2xdOMg" name="sex"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_NLcRoNOrEeaAgcuX2xdOMg" name="Persons" memberEnd="_NLcRodOrEeaAgcuX2xdOMg _NMD8stOrEeaAgcuX2xdOMg" navigableOwnedEnd="_NMD8stOrEeaAgcuX2xdOMg">
+    <ownedEnd xmi:id="_NLcRodOrEeaAgcuX2xdOMg" name="persons" type="_6siYQNOoEeaAgcuX2xdOMg" association="_NLcRoNOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NMD8sNOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NMD8sdOrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_NMD8stOrEeaAgcuX2xdOMg" name="personMetadatas" type="_BIKtANOrEeaAgcuX2xdOMg" association="_NLcRoNOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NMrAsNOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NMrAsdOrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_N75eMNOrEeaAgcuX2xdOMg" name="Personss" memberEnd="_N76FQNOrEeaAgcuX2xdOMg _N77TYtOrEeaAgcuX2xdOMg" navigableOwnedEnd="_N77TYtOrEeaAgcuX2xdOMg">
+    <ownedEnd xmi:id="_N76FQNOrEeaAgcuX2xdOMg" name="personss" type="_EMyxENOqEeaAgcuX2xdOMg" association="_N75eMNOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_N77TYNOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_N77TYdOrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_N77TYtOrEeaAgcuX2xdOMg" name="personMetadatas" type="_BIKtANOrEeaAgcuX2xdOMg" association="_N75eMNOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_N78hgNOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_N78hgdOrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_X3F8ANOrEeaAgcuX2xdOMg" name="DomainStores" memberEnd="_X3F8AdOrEeaAgcuX2xdOMg _X3F8BNOrEeaAgcuX2xdOMg" navigableOwnedEnd="_X3F8BNOrEeaAgcuX2xdOMg">
+    <ownedEnd xmi:id="_X3F8AdOrEeaAgcuX2xdOMg" name="domainStores" type="_me8ysNOqEeaAgcuX2xdOMg" association="_X3F8ANOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_X3F8AtOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_X3F8A9OrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_X3F8BNOrEeaAgcuX2xdOMg" name="domainMetadatas" type="_YPW88NOpEeaAgcuX2xdOMg" association="_X3F8ANOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_X3F8BdOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_X3F8BtOrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_ahaNMNOrEeaAgcuX2xdOMg" name="DomainsStore"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_fQ9skNOrEeaAgcuX2xdOMg" name="DomainsStores" memberEnd="_fQ9skdOrEeaAgcuX2xdOMg _fQ9slNOrEeaAgcuX2xdOMg" navigableOwnedEnd="_fQ9slNOrEeaAgcuX2xdOMg">
+    <ownedEnd xmi:id="_fQ9skdOrEeaAgcuX2xdOMg" name="domainsStores" type="_ahaNMNOrEeaAgcuX2xdOMg" association="_fQ9skNOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fQ9sktOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fQ9sk9OrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_fQ9slNOrEeaAgcuX2xdOMg" name="domainMetadatas" type="_YPW88NOpEeaAgcuX2xdOMg" association="_fQ9skNOrEeaAgcuX2xdOMg">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_fQ9sldOrEeaAgcuX2xdOMg"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fQ9sltOrEeaAgcuX2xdOMg" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+</uml:Model>

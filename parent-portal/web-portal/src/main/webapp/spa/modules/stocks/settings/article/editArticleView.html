@@ -1,0 +1,60 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{{vm.title}}
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+		                <label class="control-label" for="Family">Famille</label>
+		                <input type="text" class="form-control" ng-model="vm.item.family" name="Family" id="Family" disabled>
+		            </div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+	                <div class="col-sm-6">
+	                    <label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+	                    <input type="text" class="form-control" ng-model="vm.item.name" name="Name" id="Name" placeholder="Renseigner le libellé"
+	                    	validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+	                </div>
+	
+	                <div class="col-sm-6">                            
+                        <label class="control-label" for="InternalReference"><small style="color: red">*</small>&nbsp;&nbsp;Référence interne</label>
+                        <input type="text" class="form-control" ng-model="vm.item.internalReference" name="InternalReference" id="InternalReference" placeholder="Renseigner une référence"
+	                    	validate-on="blur" required required-message="'Référence interne est un champ obligatoire'">                        
+                    </div>
+	            </div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+	                <div class="col-sm-6">
+	                    <label class="control-label" for="quantity">Quantité (en {{vm.item.mesureUnitShortName}})</label>
+	            		<input type="text" class="form-control" ng-model="vm.item.quantity" name="quantity" id="quantity" placeholder="Renseigner la quantité" validate-on="blur" required required-message="'Quantité est un champ obligatoire'">
+	                </div>
+	
+	                <div class="col-sm-6">                            
+                        <label class="control-label" for="Cost">Coût (F CFA)</label>
+	            		<input type="text" class="form-control" ng-model="vm.item.cost" name="Cost" id="Cost" placeholder="Renseigner le coût" validate-on="blur" required required-message="'Coût est un champ obligatoire'">                       
+                    </div>
+	            </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="barCode">Code barre</label>
+	            <input type="text" class="form-control" ng-model="vm.item.barCode" name="barCode" id="barCode" placeholder="Renseigner le code barre">
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="Description">Description</label>
+                <textarea rows="3" class="form-control" name="Description" id="Description" ng-model="vm.item.description" placeholder="Renseigner les caractéristiques de l'article"></textarea>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<span>(*) champ obligatoire</span>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+				<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+			</div>
+		</div>
+	</div>
+</form>

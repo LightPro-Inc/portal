@@ -1,0 +1,42 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{{vm.title}}
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+		                <label class="control-label" for="Category">Catégorie</label>
+		                <input type="text" class="form-control" ng-model="vm.item.category" name="Category" id="Category" disabled>
+		            </div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="row">
+	                <div class="col-sm-6">
+	                    <label class="control-label" for="Number">Numéro</label>
+	                    <input type="text" class="form-control" ng-model="vm.item.number" name="Number" id="Number" placeholder="Renseigner le numéro de la chambre">
+	                </div>
+	
+	                <div class="col-sm-6 selectContainer">                            
+                        <label class="control-label" for="Floor"><small style="color: red">*</small>&nbsp;&nbsp;Niveau</label>
+                        <select class="form-control" id="Floor" name="Floor"
+                                ng-model="vm.item.floorId" required required-message="'Niveau est un champ obligatoire'">
+                            <option value="">-- Choisir un niveau --</option>
+                            <option ng-repeat="option in vm.floors" value="{{option.id}}">{{option.name}}</option>
+                        </select>
+                    </div>
+	            </div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<span>(*) champ obligatoire</span>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+				<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+			</div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,94 @@
+<form role="form" novalidate angular-validator name="addCustomerForm" angular-validator-submit="vm.Save()">
+<div class="row">
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title">Entreprise</h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+				<div class="col-sm-12">
+		            <div class="col-md-4">
+		                <div class="form-group">
+		                    <label for="Name">Dénomination</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.denomination" name="Name" id="Name" placeholder="Dénomination de votre entreprise"
+		                               validate-on="blur" required required-message="'La dénomination est un champ obligatoire'">
+		
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="Rccm">Regis de commerce</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.rccm" name="Rccm" id="Rccm" placeholder="Regis de commerce"
+		                               validate-on="blur" required required-message="'Le regis de commerce est un champ obligatoire'">
+		
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="Ncc">N° de compte contribuable</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.ncc" id="Ncc" name="Ncc" placeholder="N° de compte contribuable"
+		                               validate-on="blur" required required-message="'Le N° de compte contribuable est un champ obligatoire'">
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="SiegeSocial">Siège social</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.siegeSocial" id="SiegeSocial" name="SiegeSocial" placeholder="Renseigner le siège social">
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="PoBox">Adresse postale</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.bp" id="PoBox" name="PoBox" placeholder="Renseigner l'adresse postale">
+		                    </div>
+		                </div>		                
+		            </div>
+		            <div class="col-md-4">
+		            	<div class="form-group">
+		                    <label for="Tel1">Téléphone</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.tel" id="Tel1" name="Tel1" placeholder="Renseigner le principal numéro de téléphone"
+		                               validate-on="blur" required required-message="'Le N° de téléphone principal est un champ obligatoire'">
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="Fax">Fax</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.fax" id="Fax" name="Fax" placeholder="Renseigner le N° de Fax">
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="email">Adresse e-mail</label>
+		                    <div class="form-group">
+		                        <input type="email" class="form-control" ng-model="vm.company.email" id="email" name="email" placeholder="Renseigner votre adresse e-mail"
+		                               validate-on="blur" required required-message="'L''adresse e-mail est un champ obligatoire'">
+		                    </div>
+		                </div>
+		                <div class="form-group">
+		                    <label for="WebSite">Site web</label>
+		                    <div class="form-group">
+		                        <input type="text" class="form-control" ng-model="vm.company.webSite" id="WebSite" name="WebSite" placeholder="Renseigner votre site web">
+		                    </div>
+		                </div> 
+		            </div>
+		            <div class="col-md-4">
+		                <div class="form-group">
+		                    <label class="control-label" for="Photo">Logo</label>
+		                    <div class="col-md-12">
+		                        <img ng-src="{{vm.company.logo}}" style="width:150px;height:auto;" />
+		                        <input id="Logo" name="Logo" type="file" ng-model="vm.company.logo" accept="image/*" class="input-sm" app-filereader style="width : 135px; padding: 0px; height: 30px;" />
+		                    </div>
+		                </div>
+		            </div>                                       
+		         </div>         
+            </div>
+        </div>
+        <div class="panel-footer clearfix">
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary" click-once>Enregistrer</button>
+			</div>
+        </div>
+    </div>
+</div>
+</form>

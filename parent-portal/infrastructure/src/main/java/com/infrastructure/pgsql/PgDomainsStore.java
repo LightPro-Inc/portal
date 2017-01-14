@@ -1,0 +1,169 @@
+package com.infrastructure.pgsql;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import com.infrastructure.core.DomainMetadata;
+import com.infrastructure.datasource.DomainStore;
+import com.infrastructure.datasource.DomainsStore;
+import com.infrastructure.datasource.Base.OrderDirection;
+
+public class PgDomainsStore implements DomainsStore {
+
+	private transient final PgBase base;
+	private transient final DomainMetadata dm;
+	
+	public PgDomainsStore(final PgBase base, final DomainMetadata dm) {
+		this.base = base;
+		this.dm = dm;
+	}
+	
+	@Override
+	public DomainStore createDs(Object key) {
+		return new PgDomainStore(this.base, key, dm);
+	}
+
+	@Override
+	public List<DomainStore> getAll() throws IOException {		
+		return getAllOrdered(null, null);
+	}
+
+	private void set(Object key, Map<String, Object> params, UUID author) throws IOException {
+		
+		if(params.isEmpty())
+			throw new IOException("Vous devez spécifier un champ à modifier !");
+		
+		String clause = "";
+		String clauseSet = "";
+		List<Object> values = new ArrayList<Object>();
+		
+		Set<String> keys = params.keySet();
+		for (String string : keys) {
+			clause += string + ",";	
+			clauseSet += "?,";
+		}
+		
+		clause = clause.substring(0, clause.lastIndexOf(","));
+		clauseSet = clauseSet.substring(0, clauseSet.lastIndexOf(","));
+		
+		Collection<Object> elements = params.values();
+		for (Object object : elements) {
+			values.add(object);
+		}
+								
+		String statement; 
+		
+	    if(author == null){	    	
+	    	statement = String.format("INSERT INTO %s (%s, %s) VALUES (%s, ?)", dm.domainName(), clause, dm.keyName(), clauseSet);
+	    }
+	    else {
+	    	values.add(author);
+	    	values.add(author);
+	    	statement = String.format("INSERT INTO %s (%s, ownerid, lastmodifierid, datecreated, lastmodifieddate, %s) VALUES (%s, ?, ?, now(), now(), ?)", dm.domainName(), clause, dm.keyName(), clauseSet);
+	    }
+	    
+	    values.add(key);
+		this.base.executeUpdate(statement, values);
+	}
+	
+	@Override
+	public void set(Object key, Map<String, Object> params) throws IOException {
+		set(key, params, base.author());
+	}
+
+	@Override
+	public boolean exists(Object key) throws IOException {
+		String statement = String.format("SELECT * FROM %s WHERE %s=?", dm.domainName(), dm.keyName());		
+		List<Object> values = this.base.executeQuery(statement, Arrays.asList(key));
+		
+		return !values.isEmpty();
+	}
+
+	@Override
+	public void delete(Object key) throws IOException {
+		String statement = String.format("DELETE FROM %s WHERE %s=?", dm.domainName(), dm.keyName());		
+		this.base.executeUpdate(statement, Arrays.asList(key));
+	}
+
+	@Override
+	public DomainMetadata dm() {
+		return this.dm;
+	}
+
+	@Override
+	public List<DomainStore> findDs(String statement, List<Object> params) throws IOException {
+		  	
+    	List<Object> values = this.base.executeQuery(statement, params);
+    	
+    	List<DomainStore> domainsStore = new ArrayList<DomainStore>();
+    	for (Object key : values) {
+			domainsStore.add(new PgDomainStore(this.base, key, dm));
+		}
+    	
+    	return domainsStore;
+	}
+	
+	@Override
+	public List<Object> find(String statement, List<Object> params) throws IOException {		  
+    	return this.base.executeQuery(statement, params);
+	}
+
+	@Override
+	public void execute(String statement, List<Object> params) throws IOException {
+		this.base.executeUpdate(statement, params); 
+	}
+
+	@Override
+	public List<DomainStore> getAllOrdered(String orderKey, OrderDirection direction) throws IOException {
+		String statement;
+		
+		if(orderKey == null)
+			statement = String.format("SELECT %s FROM %s", dm.keyName(), dm.domainName());
+		else{
+			
+			if(direction == OrderDirection.ASC)
+				statement = String.format("SELECT %s FROM %s ORDER BY %s ASC", dm.keyName(), dm.domainName(), orderKey);
+			else
+				statement = String.format("SELECT %s FROM %s ORDER BY %s DESC", dm.keyName(), dm.domainName(), orderKey);
+		}
+		
+    	List<Object> values = this.base.executeQuery(statement, new ArrayList<Object>());
+    	
+    	List<DomainStore> domainsStore = new ArrayList<DomainStore>();
+    	for (Object id : values) {
+			domainsStore.add(new PgDomainStore(this.base, id, dm));
+		}
+    	
+    	return domainsStore;
+	}
+
+	@Override
+	public List<DomainStore> getAllByKeyOrdered(String key, Object keyValue, String orderKey, OrderDirection direction) throws IOException {
+		String statement;
+		
+		if(orderKey == null)
+			statement = String.format("SELECT %s FROM %s WHERE %s=?", dm.keyName(), dm.domainName());
+		else{
+			
+			if(direction == OrderDirection.ASC)
+				statement = String.format("SELECT %s FROM %s WHERE %s=? ORDER BY %s ASC", dm.keyName(), dm.domainName(), orderKey);
+			else
+				statement = String.format("SELECT %s FROM %s WHERE %s=? ORDER BY %s DESC", dm.keyName(), dm.domainName(), orderKey);
+		}
+		
+    	List<Object> values = this.base.executeQuery(statement, Arrays.asList(keyValue));
+    	    	
+    	List<DomainStore> domainsStore = new ArrayList<DomainStore>();
+    	for (Object id : values) {
+			domainsStore.add(new PgDomainStore(this.base, id, dm));
+		}
+    	
+    	return domainsStore;
+	}
+}

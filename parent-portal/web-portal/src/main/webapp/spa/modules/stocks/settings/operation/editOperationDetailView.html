@@ -1,0 +1,23 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="form-group">
+			<label class="control-label" for="article"><small style="color: red">*</small>&nbsp;&nbsp;Article</label>
+	        <select class="form-control" id="article" name="article" ng-model="vm.item.articleId" validate-on="blur" required required-message="'Article est un champ obligatoire'">
+                 <option value="">-- Choisir un article --</option>
+                 <option ng-repeat="option in vm.articles" value="{{option.id}}">{{option.name}}</option>
+             </select>
+		</div>		
+		<div class="form-group">
+			 <label class="control-label" for="quantity"><small style="color: red">*</small>&nbsp;&nbsp;Quantité</label>
+	         <input type="number" class="form-control" ng-model="vm.item.quantity" name="quantity" id="quantity" placeholder="Renseigner la quantité" validate-on="blur" required required-message="'Quantité est un champ obligatoire'">
+		</div>								
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

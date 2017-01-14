@@ -1,0 +1,39 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{{vm.title}}
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-12">
+		                <label class="control-label" for="Label"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+		                <input type="text" class="form-control" ng-model="vm.item.name" name="Label" id="Label" placeholder="Renseigner le libellé"
+		                       validate-on="blur" required required-message="'Le libellé est un champ obligatoire'">
+		            </div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="row">
+	                <div class="col-sm-6">
+	                    <label class="control-label" for="Capacity">Capacité</label>
+	                    <input type="number" class="form-control" min="1" ng-model="vm.item.capacity" name="Capacity" id="Capacity" placeholder="Renseigner la capacité d'accueil">
+	                </div>
+	
+	                <div class="col-sm-6 selectContainer">                            
+	                    <label class="control-label" for="NightPrice">Prix nuitée</label>
+	                    <input type="number" class="form-control" ng-model="vm.item.nightPrice" name="NightPrice" id="NightPrice" placeholder="Renseigner le prix d'une nuitée">
+	                </div>
+	            </div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<span>(*) champ obligatoire</span>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+				<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+			</div>
+		</div>
+	</div>
+</form>

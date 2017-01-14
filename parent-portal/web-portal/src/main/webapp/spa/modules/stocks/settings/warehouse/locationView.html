@@ -1,0 +1,47 @@
+<div class="row">
+	<div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+        	<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Emplacements de {{vm.warehouse.name}}</h4>            
+            <div class="pull-right">
+            	<button class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-8 col-md-offset-2">
+            	<div class="table-responsive">
+	                <table class="table table-bordered table-hover shortMargin">
+		                <thead>
+		                	<tr>
+		                        <th></th>
+		                        <th>Nom complet</th>
+		                        <th>Nom court</th>
+		                        <th>Activé</th>
+		                        <th></th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                	<tr ng-repeat="item in vm.items">
+		                        <td class="shortPadding">{{$index + 1}}</td>
+		                        <td class="shortPadding"><i>{{ item.name }}</i></td>
+		                        <td class="shortPadding"><i>{{ item.shortName }}</i></td>  
+		                        <td class="shortPadding"><i>{{ item.active ? 'Activé' : 'Désactivé' }}</i></td>                                    
+		                        <td>
+		                            <button class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item)"><i class="fa fa-pencil"></i></button>
+		                            <button class="btn btn-primary btn-xs" ng-click="vm.deleteItem(item)"><i class="fa fa-trash-o"></i></button>
+		                            <button class="btn btn-primary btn-xs" ng-click="vm.activateItem(item)">{{item.active ? 'Désactiver' : 'Activer'}}</button>
+		                        </td>
+		                    </tr>
+		                    <tr ng-if="vm.items.length == 0">
+                                <td colspan="8" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+                            </tr>
+		                </tbody>                                        
+	                </table>
+	            </div>
+            </div>
+        </div>
+        <div class="panel-footer clearfix">
+            <label class="label label-danger">{{ vm.items.length }} emplacements</label>
+            <button class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="form-group">
+			<label class="control-label" for="warehouse">Entrepôt</label>
+	        <input type="text" class="form-control" ng-model="vm.warehouse.name" name="warehouse" id="warehouse" disabled>
+		</div>		
+		<div class="form-group">
+			 <label class="control-label" for="name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+	         <input type="text" class="form-control" ng-model="vm.item.name" name="name" id="name" placeholder="Renseigner le libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+		</div>	
+		<div class="form-group">
+			 <label class="control-label" for="operationCategory"><small style="color: red">*</small>&nbsp;&nbsp;Catégorie</label>
+			 <select class="form-control" name="operationCategory" id="operationCategory" ng-model="vm.item.categoryId" validate-on="blur" required required-message="'Catégorie est un champ obligatoire'">
+			 	<option value="">-- Choisir une catégorie --</option>
+			 	<option ng-repeat="option in vm.operationCategories" value="{{option.id}}">{{option.name}}</option>
+			 </select>	         
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="sourceLocation"><small style="color: red">*</small>&nbsp;&nbsp;Emplacement source par défaut</label>
+			 <select class="form-control" name="sourceLocation" id="sourceLocation" ng-model="vm.item.defaultSourceLocationId" validate-on="blur" required required-message="'Emplacement source est un champ obligatoire'">
+			 	<option value="">-- Choisir un emplacement --</option>
+			 	<option ng-repeat="option in vm.locations" value="{{option.id}}">{{option.name}}</option>
+			 </select>	         
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="destinationLocation"><small style="color: red">*</small>&nbsp;&nbsp;Emplacement de destination par défaut</label>
+			 <select class="form-control" name="destinationLocation" id="destinationLocation" ng-model="vm.item.defaultDestinationLocationId" validate-on="blur" required required-message="'Emplacement de destination est un champ obligatoire'">
+			 	<option value="">-- Choisir un emplacement --</option>
+			 	<option ng-repeat="option in vm.locations" value="{{option.id}}">{{option.name}}</option>
+			 </select>	         
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="sequence"><small style="color: red">*</small>&nbsp;&nbsp;Séquence</label>
+			 <select class="form-control" name="sequence" id="sequence" ng-model="vm.item.sequenceId" validate-on="blur" required required-message="'Séquence est un champ obligatoire'">
+			 	<option value="">-- Choisir une séquence --</option>
+			 	<option ng-repeat="option in vm.sequences" value="{{option.id}}">{{option.name}}</option>
+			 </select>	         
+		</div>						
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

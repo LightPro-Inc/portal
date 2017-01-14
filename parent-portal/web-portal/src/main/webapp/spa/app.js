@@ -1,0 +1,290 @@
+if (!String.format) {
+  String.format = function(format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number] 
+        : match
+      ;
+    });
+  };
+}
+
+(function(){
+	'use strict';
+	
+	angular.module('lightpro',['common.core', 'common.ui'])
+		   .config(config)
+		   .run(run);
+	
+	config.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider', '$provide', 'localStorageServiceProvider'];
+	function config($stateProvider, $urlRouterProvider, $httpProvider, $provide, localStorageServiceProvider){
+
+		localStorageServiceProvider.setPrefix("lightpro");
+		
+		$provide.decorator('$uibModal', function ($delegate) {
+            var open = $delegate.open;
+
+            $delegate.open = function (options) { // avoid closing by backdrop click
+                options = angular.extend(options || {}, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+
+                return open(options);
+            };
+            return $delegate;
+        });
+		
+		 $urlRouterProvider.otherwise('/login');
+		
+		 $stateProvider
+         .state('login', {
+             url:'/login',
+             templateUrl: 'main/login/loginView.html',
+             controller: 'loginCtrl as vm'                
+         })
+         .state('main', {
+                abstract: true,
+                url:'/main',
+                views: {
+                    '' : {
+                        templateUrl: 'main/mainView.html',
+                        controller: 'mainCtrl as vm'
+                    },                    
+                    'toolbar@main' : {
+                        templateUrl: 'main/top-bar/topBarView.html',
+                        controller: 'topBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.dashboard', {
+                url:'/dashboard',
+                templateUrl: 'main/home/homeView.html',
+                controller: 'homeCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.about', {
+                url:'/about',
+                templateUrl: 'main/about/aboutView.html',
+                controller: 'aboutCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings', {
+                abstract: true,
+                url:'/settings',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/admin/settings/settingsView.html',      
+                        controller: 'settingsCtrl as vm'                  
+                    },                    
+                    'sideBarSetting@main.settings' : {
+                        templateUrl: 'modules/admin/settings/side-bar/sideBarView.html',
+                        controller: 'settingsSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.settings.enterprise', {
+                url:'/enterprise',
+                templateUrl: 'modules/admin/settings/enterprise/enterpriseView.html',
+                controller: 'enterpriseCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings.module', {
+                url:'/module',
+                templateUrl: 'modules/admin/settings/module/moduleView.html',
+                controller: 'moduleCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings.sequence', {
+                url:'/sequence',
+                templateUrl: 'modules/admin/settings/sequence/sequenceView.html',
+                controller: 'sequenceCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings.mesure-unit', {
+	            url: '/mesure-unit',
+	            templateUrl: 'modules/admin/settings/mesure-unit/mesureUnitView.html',
+	            controller: 'mesureUnitCtrl as vm',
+	            requireAuthenticated: true
+	        })
+            .state('main.hotel', {
+                abstract: true,
+                url:'/hotel',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/hotel/hotelView.html',      
+                        controller: 'hotelCtrl as vm'                  
+                    },                    
+                    'sideBarHotel@main.hotel' : {
+                        templateUrl: 'modules/hotel/side-bar/sideBarView.html',
+                        controller: 'hotelSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.hotel.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/hotel/dashboard/dashboardView.html',
+	            controller: 'hotelDashboardCtrl as vm',
+	            requireAuthenticated: true
+	        })
+            .state('main.hotel.planning', {
+                url:'/planning',
+                templateUrl: 'modules/hotel/reception/planning/planningView.html',
+                controller: 'planningCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.hotel.booking', {
+	            url: '/booking/{bookingId}',
+	            templateUrl: 'modules/hotel/reception/planning/editBookView.html',
+	            controller: 'editBookCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.hotel.booking-history', {
+	            url: '/booking-history',
+	            templateUrl: 'modules/hotel/reception/booking-history/bookingHistoryView.html',
+	            controller: 'bookingHistoryCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.hotel.cardex', {
+	            url: '/cardex',
+	            templateUrl: 'modules/hotel/reception/cardex/cardexView.html',
+	            controller: 'cardexCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.hotel.cardex-guest', {
+	            url: '/cardex-guest/{guestId}',
+	            templateUrl: 'modules/hotel/reception/cardex/guestCardexView.html',
+	            controller: 'guestCardexCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.hotel.nettoyage', {
+	            url: '/nettoyage',
+	            templateUrl: 'modules/hotel/gouvernance/nettoyage/nettoyageView.html',
+	            controller: 'nettoyageCtrl as vm',
+	            requireAuthenticated: true
+	        })	        	       
+	        .state('main.hotel.roomcategory', {
+                url:'/roomcategory',
+                templateUrl: 'modules/hotel/settings/roomCategory/roomCategoryView.html',
+                controller: 'roomCategoryCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.hotel.room', {
+                url:'/room/{categoryId}',
+                templateUrl: 'modules/hotel/settings/room/roomView.html',
+                controller: 'roomCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.stocks', {
+                abstract: true,
+                url:'/stocks',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/stocks/stocksView.html',      
+                        controller: 'stocksCtrl as vm'                  
+                    },                    
+                    'sideBarStocks@main.stocks' : {
+                        templateUrl: 'modules/stocks/side-bar/sideBarView.html',
+                        controller: 'stocksSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.stocks.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/stocks/dashboard/dashboardView.html',
+	            controller: 'stocksDashboardCtrl as vm',
+	            requireAuthenticated: true
+	        })	        
+	        .state('main.stocks.article-family', {
+	            url: '/article-family/{categoryId}',
+	            templateUrl: 'modules/stocks/settings/article-family/articleFamilyView.html',
+	            controller: 'articleFamilyCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.article-category', {
+	            url: '/article-category',	            
+	            templateUrl: 'modules/stocks/settings/article-category/articleCategoryView.html',
+	            controller: 'articleCategoryCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.article', {
+	            url: '/article/{familyId}',
+	            templateUrl: 'modules/stocks/settings/article/articleView.html',
+	            controller: 'articleCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.warehouse', {
+	            url: '/warehouse',
+	            templateUrl: 'modules/stocks/settings/warehouse/warehouseView.html',
+	            controller: 'warehouseCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.warehouse-location', {
+	            url: '/location/{warehouseId}',
+	            templateUrl: 'modules/stocks/settings/warehouse/locationView.html',
+	            controller: 'locationCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.warehouse-operation-type', {
+	            url: '/operation-type/{warehouseId}',
+	            templateUrl: 'modules/stocks/settings/operation-type/operationTypeView.html',
+	            controller: 'operationTypeCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.article-planning', {
+	            url: '/article-planning/{articleId}',
+	            templateUrl: 'modules/stocks/settings/article/articlePlanningView.html',
+	            controller: 'articlePlanningCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.unfinished-operation', {
+	            url: '/unfinished-operation/{operationTypeId}',
+	            templateUrl: 'modules/stocks/settings/operation/unfinishedOperationView.html',
+	            controller: 'unfinishedOperationCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.edit-operation', {
+	            url: '/edit-operation/{operationTypeId}/{operationId}',
+	            templateUrl: 'modules/stocks/settings/operation/editOperationView.html',
+	            controller: 'editOperationCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.stocks.stock-movement', {
+	            url: '/stock-movement',
+	            templateUrl: 'modules/stocks/settings/stock-movement/stockMovementView.html',
+	            controller: 'stockMovementCtrl as vm',
+	            requireAuthenticated: true
+	        });
+	}
+	
+	run.$inject = ['$rootScope', '$state', 'membershipService', 'localStorageService', '$base64'];
+	function run($rootScope, $state, membershipService, localStorageService, $base64){		
+		
+		var repositoryData = localStorageService.get('repository');		
+		$rootScope.repository = repositoryData ? JSON.parse($base64.decode(repositoryData)) : {};
+        if ($rootScope.repository.loggedUser) {            
+            membershipService.initializeAfterLogin($rootScope.repository);
+        }
+        
+        var stateChangeStartEvent = $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState, fromParams) {
+            
+            if (toState.requireAuthenticated == true && !membershipService.isUserLoggedIn()) {                                
+                $state.go('login');
+                evt.preventDefault();
+                return;
+            }
+            
+            if (membershipService.isUserLoggedIn() && toState.name == 'login') {
+                $state.go('main.dashboard');
+                evt.preventDefault();
+                return;
+            }           
+        });
+        
+        $rootScope.$on('$destroy', function ()
+        {
+            stateChangeStartEvent();
+        });
+	}
+})();

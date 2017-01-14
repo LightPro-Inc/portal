@@ -1,0 +1,112 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="row">
+	    <div class="panel panel-primary">
+	        <div class="panel-heading clearfix">
+	            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{ vm.type.name }} / {{vm.title}}</h4>
+	        </div>
+	        <div class="panel-body">
+	            <div ng-if="vm.loadingData">
+	                <div class="col-xs-4"></div>
+	                <div class="col-xs-4">
+	                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading metadatas...</label>
+	                </div>
+	                <div class="col-xs-4"></div>
+	            </div>
+	            <div ng-if="!vm.loadingMetadatas" class="row">
+	                <div class="col-sm-12">	                
+	                    <div class="form-group form-group-sm">
+	                    	<div class="row">
+		                    	<div class="col-sm-6">
+		                    		<label class="control-label col-sm-4" for="documentSource">Document source</label>
+		                    		<div class="col-sm-8">
+		                    			<input type="text" class="form-control" ng-model="vm.item.documentSource" name="documentSource" id="documentSource" placeholder="Renseigner le document source" validate-on="blur">
+		                    		</div>		            				
+		                    	</div>
+		                    	<div class="col-sm-6">
+		                            <label class="control-label col-sm-4" for="movementDate"><small ng-if="vm.item.delayed" style="color: red">*</small>&nbsp;&nbsp;Date</label>                                
+	                                <div class="col-sm-5">
+	                                    <div class="input-group">
+	                                        <input type="text" class="form-control" id="movementDate" name="movementDate" ng-model="vm.item.movementDate" placeholder="Renseigner date" validate-on="blur" ng-required="vm.item.delayed" ng-disabled="!vm.item.delayed" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" />
+	                                        <span class="input-group-btn">
+	                                            <button ng-disabled="!vm.item.delayed" type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+	                                        </span>
+	                                    </div>                                    
+	                                </div>
+	                                <div class="col-sm-3">
+	                                	<div class="checkbox">
+		                                    <label class="i-checks">
+		                                        <input type="checkbox" ng-model="vm.item.delayed">
+		                                        <i></i>
+		                                        En différé
+		                                    </label>
+		                                </div>
+	                                </div>	                                
+		                        </div>
+		                    </div>
+	                    </div>
+	                    <div class="form-group form-group-sm">
+		                	<div class="row">
+		                		<div class="col-sm-6">
+		                			<label class="control-label col-sm-4" for="sourceLocation"><small style="color: red">*</small>&nbsp;&nbsp;Source</label>
+					                <div class="col-sm-8">
+					                	<select class="form-control" id="sourceLocation" name="sourceLocation"
+					                        ng-model="vm.item.sourceLocationId" validate-on="blur" required required-message="'Source est un champ obligatoire'">
+						                    <option value="">-- Choisir un emplacement --</option>
+						                    <option ng-repeat="option in vm.locations" value="{{option.id}}">{{option.name}}</option>
+						                </select>
+					                </div>
+		                		</div>
+		                		<div class="col-sm-6">
+		                			<label class="control-label col-sm-4" for="destinationLocation"><small style="color: red">*</small>&nbsp;&nbsp;Destination</label>
+					                <div class="col-sm-8">
+					                	<select class="form-control" id="destinationLocation" name="destinationLocation"
+					                        ng-model="vm.item.destinationLocationId" validate-on="blur" required required-message="'Destination est un champ obligatoire'">
+						                    <option value="">-- Choisir un emplacement --</option>
+						                    <option ng-repeat="option in vm.locations" value="{{option.id}}">{{option.name}}</option>
+						                </select>
+					                </div>					                
+		                		</div>
+		                	</div>
+		                </div>
+		                <div class="row">
+		                	<div class="col-md-8 center-block" style="float:none;">
+		                		<div class="pull-right form-group">
+			                		<button type="button" class="btn btn-primary btn-sm" ng-click="vm.addNew()">Ajouter</button>
+			                	</div>
+		                		<table class="table table-bordered table-condensed shortMargin">
+		                			<thead>
+		                				<tr>
+		                					<th>Article</th>
+		                					<th>Quantité</th>
+		                					<th></th>
+		                				</tr>		                				
+		                			</thead>
+		                			<tbody>
+		                				<tr ng-repeat="item in vm.item.movements" ng-if="!item.deleted">
+		                					<td class="shortMargin">{{item.article}}</td>
+		                					<td class="shortMargin">{{item.quantity}}</td>
+		                					<td>
+		                						<button type="button" class="btn btn-primary btn-xs" ng-click="vm.modifyItem(item)"><i class="fa fa-pencil"></i></button>
+		                						<button type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item)"><i class="fa fa-trash-o"></i></button>
+		                					</td>
+		                				</tr>
+		                				<tr ng-if="vm.item.movements.length == 0">
+			                                <td colspan="3" class="text-center" style="color: orangered"><i>Aucune ligne d'article.</i></td>
+			                            </tr>
+		                			</tbody>
+		                		</table>
+		                	</div>
+		                </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="panel-footer clearfix">
+	            <div class="pull-right">
+	                <button type="submit" class="btn btn-primary">Enregistrer brouillon</button>
+	                <button type="button" class="btn btn-primary" ng-click="vm.validate()">Valider</button>
+                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Annuler</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</form>
