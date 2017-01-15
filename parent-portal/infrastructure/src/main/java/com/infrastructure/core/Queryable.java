@@ -8,5 +8,6 @@ public interface Queryable<T> {
 	List<T> find(String filter) throws IOException;		
 	List<T> find(int page, int pageSize, String filter) throws IOException;
 	int totalCount(String filter) throws IOException;
-	boolean exists(Object id) throws IOException;
+	boolean contains(T item) throws IOException;
+	T build(Object id);	
 }

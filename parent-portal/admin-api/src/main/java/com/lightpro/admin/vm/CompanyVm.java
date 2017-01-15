@@ -71,4 +71,14 @@ public class CompanyVm {
 	public String getLogo() throws IOException {
 		return company.logo();
 	}
+	
+	@JsonGetter
+	public String getCurrencyName() throws IOException {
+		return company.currencyName();
+	}
+	
+	@JsonGetter
+	public String getCurrencyShortName() throws IOException {
+		return company.currencyShortName();
+	}
 }

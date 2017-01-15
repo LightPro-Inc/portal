@@ -17,6 +17,8 @@ public interface Company extends Recordable<UUID> {
 	String email() throws IOException;
 	String webSite() throws IOException;
 	String logo() throws IOException;
+	String currencyName() throws IOException;
+	String currencyShortName() throws IOException;
 	
 	Company update( String denomination, 
 		            String rccm, 
@@ -27,7 +29,9 @@ public interface Company extends Recordable<UUID> {
 		            String fax,
 		            String email, 
 		            String webSite, 
-		            String logo) throws IOException;
+		            String logo,
+		            String currencyName,
+		            String currencyShortName) throws IOException;
 	
 	void changeLogo(String logo) throws IOException;	
 	Modules modules();	

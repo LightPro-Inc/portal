@@ -74,8 +74,12 @@ public class PersonsImpl implements Persons {
 	}
 
 	@Override
-	public boolean exists(Object id) throws IOException {
-		return ds.exists(id);
+	public boolean contains(Person item) throws IOException {
+		return ds.exists(item.id());
 	}
 
+	@Override
+	public Person build(Object id) {
+		return new PersonImpl(this.base, id);
+	}
 }

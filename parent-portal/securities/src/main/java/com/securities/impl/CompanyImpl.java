@@ -99,7 +99,9 @@ public class CompanyImpl implements Company {
 					   	   String fax,
 					   	   String email,
 				   	   	   String webSite, 
-				   	   	   String logo) throws IOException {
+				   	   	   String logo,
+				   	   	   String currencyName,
+				   	   	   String currencyShortName) throws IOException {
 		
 		if(denomination.isEmpty())
 			throw new IllegalArgumentException("La dénomination ne doit pas être vide!");
@@ -115,6 +117,8 @@ public class CompanyImpl implements Company {
 		params.put(dm.emailKey(), email);
 		params.put(dm.webSiteKey(), webSite);
 		params.put(dm.logoKey(), logo);
+		params.put(dm.currencyNameKey(), currencyName);
+		params.put(dm.currencyShortName(), currencyShortName);
 		
 		ds.set(params);
 		
@@ -177,5 +181,15 @@ public class CompanyImpl implements Company {
 	@Override
 	public Taxes taxes() {
 		return new TaxesImpl(this.base);
+	}
+
+	@Override
+	public String currencyName() throws IOException {
+		return ds.get(dm.currencyNameKey());
+	}
+
+	@Override
+	public String currencyShortName() throws IOException {
+		return ds.get(dm.currencyShortName());
 	}
 }

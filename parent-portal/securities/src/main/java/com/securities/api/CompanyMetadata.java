@@ -66,4 +66,12 @@ public class CompanyMetadata implements DomainMetadata {
 	public String logoKey(){
 		return "logo";
 	}
+	
+	public String currencyNameKey(){
+		return "currencyname";
+	}
+	
+	public String currencyShortName(){
+		return "currencyshortname";
+	}
 }

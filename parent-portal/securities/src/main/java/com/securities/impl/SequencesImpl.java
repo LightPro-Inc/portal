@@ -126,7 +126,12 @@ public class SequencesImpl implements Sequences {
 	}
 
 	@Override
-	public boolean exists(Object id) throws IOException {
-		return ds.exists(id);
+	public boolean contains(Sequence item) throws IOException {
+		return ds.exists(item.id());
+	}
+
+	@Override
+	public Sequence build(Object id) {
+		return new SequenceImpl(this.base, id);
 	}
 }

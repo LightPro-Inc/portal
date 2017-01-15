@@ -5,6 +5,7 @@ encoding//src/main/webapp/spa/main/home/homeView.html=UTF-8
 encoding//src/main/webapp/spa/main/login/loginView.html=UTF-8
 encoding//src/main/webapp/spa/main/mainView.html=UTF-8
 encoding//src/main/webapp/spa/main/top-bar/topBarView.html=UTF-8
+encoding//src/main/webapp/spa/modules/admin/settings/enterprise/enterpriseView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/mesure-unit/editMesureUnitView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/mesure-unit/mesureUnitView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/sequence/editSequenceView.html=UTF-8

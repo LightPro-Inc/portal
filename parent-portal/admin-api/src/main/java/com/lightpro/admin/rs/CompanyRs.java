@@ -120,16 +120,18 @@ public class CompanyRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						company().update(  cmd.getDenomination(), 
-							     cmd.rccm(), 
-							     cmd.ncc(), 
-							     cmd.siegeSocial(), 
-							     cmd.bp(), 
-							     cmd.tel(), 
-							     cmd.fax(),
-							     cmd.email(), 
-							     cmd.webSite(), 
-							     cmd.logo());
+						company().update(cmd.getDenomination(), 
+									     cmd.rccm(), 
+									     cmd.ncc(), 
+									     cmd.siegeSocial(), 
+									     cmd.bp(), 
+									     cmd.tel(), 
+									     cmd.fax(),
+									     cmd.email(), 
+									     cmd.webSite(), 
+									     cmd.logo(),
+									     cmd.currencyName(),
+									     cmd.currencyShortName());
 				
 						return Response.status(Response.Status.OK).build();
 					}
