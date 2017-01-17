@@ -29,6 +29,10 @@ encoding//src/main/webapp/spa/modules/hotel/settings/roomCategory/roomCategoryVi
 encoding//src/main/webapp/spa/modules/hotel/side-bar/sideBarView.html=UTF-8
 encoding//src/main/webapp/spa/modules/sales/dashboard/dashboardView.html=UTF-8
 encoding//src/main/webapp/spa/modules/sales/salesView.html=UTF-8
+encoding//src/main/webapp/spa/modules/sales/settings/product/editProductView.html=UTF-8
+encoding//src/main/webapp/spa/modules/sales/settings/product/productPricingView.html=UTF-8
+encoding//src/main/webapp/spa/modules/sales/settings/product/productTaxView.html=UTF-8
+encoding//src/main/webapp/spa/modules/sales/settings/product/productView.html=UTF-8
 encoding//src/main/webapp/spa/modules/sales/side-bar/sideBarView.html=UTF-8
 encoding//src/main/webapp/spa/modules/stocks/dashboard/dashboardView.html=UTF-8
 encoding//src/main/webapp/spa/modules/stocks/settings/article-category/articleCategoryView.html=UTF-8

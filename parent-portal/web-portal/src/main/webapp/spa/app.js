@@ -281,6 +281,24 @@ if (!String.format) {
 	            templateUrl: 'modules/sales/dashboard/dashboardView.html',
 	            controller: 'salesDashboardCtrl as vm',
 	            requireAuthenticated: true
+	        })
+	        .state('main.sales.product', {
+	            url: '/product',
+	            templateUrl: 'modules/sales/settings/product/productView.html',
+	            controller: 'productCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.product-tax', {
+	            url: '/product-tax/{productId}',
+	            templateUrl: 'modules/sales/settings/product/productTaxView.html',
+	            controller: 'productTaxCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.product-pricing', {
+	            url: '/product-pricing/{productId}',
+	            templateUrl: 'modules/sales/settings/product/productPricingView.html',
+	            controller: 'productPricingCtrl as vm',
+	            requireAuthenticated: true
 	        });
 	}
 	

@@ -44,6 +44,9 @@ public class PgBase implements Base {
     		config.addDataSourceProperty("cachePrepStmts", "true");
     		config.addDataSourceProperty("prepStmtCacheSize", "250");
     		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+    		config.setMaximumPoolSize(100);
+    		config.setConnectionTimeout(34000);
+    		config.setMaxLifetime(60000);
 
             return origin = new HikariDataSource(config);
     	}else
@@ -138,7 +141,7 @@ public class PgBase implements Base {
 	
 	synchronized private Connection connection() throws IOException {
 		try {
-			if(conn == null || conn.isClosed())
+			if(conn == null)
 				conn = getDs().getConnection();
 			
 			return conn;
@@ -150,5 +153,6 @@ public class PgBase implements Base {
 	@Override
 	public void terminate() throws IOException {
 		DbUtils.closeQuietly(connection());
+		conn = null;
 	}
 }

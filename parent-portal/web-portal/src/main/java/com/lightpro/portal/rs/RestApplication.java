@@ -20,6 +20,7 @@ import com.lightpro.hotel.rs.GuestRs;
 import com.lightpro.hotel.rs.PersonRs;
 import com.lightpro.hotel.rs.RoomCategoryRs;
 import com.lightpro.hotel.rs.RoomRs;
+import com.lightpro.sales.rs.ProductRs;
 import com.lightpro.stocks.rs.ArticleCategoryRs;
 import com.lightpro.stocks.rs.ArticleFamilyRs;
 import com.lightpro.stocks.rs.ArticleRs;
@@ -70,6 +71,9 @@ public class RestApplication extends ResourceConfig {
 		register(OperationCategoryRs.class);
 		register(OperationRs.class);
 		register(StockMovementRs.class);
+		
+		// 4 - ventes		
+		register(ProductRs.class);
 		
 		// register features
 		register(JacksonFeature.class);		

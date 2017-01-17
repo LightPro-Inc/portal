@@ -152,9 +152,9 @@ public class PgDomainsStore implements DomainsStore {
 		else{
 			
 			if(direction == OrderDirection.ASC)
-				statement = String.format("SELECT %s FROM %s WHERE %s=? ORDER BY %s ASC", dm.keyName(), dm.domainName(), orderKey);
+				statement = String.format("SELECT %s FROM %s WHERE %s=? ORDER BY %s ASC", dm.keyName(), dm.domainName(), key, orderKey);
 			else
-				statement = String.format("SELECT %s FROM %s WHERE %s=? ORDER BY %s DESC", dm.keyName(), dm.domainName(), orderKey);
+				statement = String.format("SELECT %s FROM %s WHERE %s=? ORDER BY %s DESC", dm.keyName(), dm.domainName(), key, orderKey);
 		}
 		
     	List<Object> values = this.base.executeQuery(statement, Arrays.asList(keyValue));
