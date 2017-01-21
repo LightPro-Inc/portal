@@ -8,38 +8,73 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.securities.api.Person;
 
 final public class PersonVm {
-	private final transient Person human;
+	private final transient Person origin;
 	
 	public PersonVm() {
         throw new UnsupportedOperationException("#HumanVm()");
     }
 	
 	public PersonVm(final Person hmn) {
-        this.human = hmn;
+        this.origin = hmn;
     }
 	
 	@JsonGetter
-	UUID getId(){
-		return this.human.id();
+	public UUID getId(){
+		return origin.id();
 	}
 	
 	@JsonGetter
-	String getFirstName() throws IOException {
-		return this.human.firstName();
+	public String getFirstName() throws IOException {
+		return origin.firstName();
 	}
 	
 	@JsonGetter
-	String getLastName() throws IOException {
-		return this.human.lastName();
+	public String getLastName() throws IOException {
+		return origin.lastName();
 	}
 	
 	@JsonGetter
-	String getFullName() throws IOException {
-		return this.human.fullName();
+	public String getFullName() throws IOException {
+		return origin.fullName();
+	}
+	
+	@JsonGetter
+	public String getSex() throws IOException{
+		return origin.sex().name();
+	}
+	
+	@JsonGetter
+	public String getAddress() throws IOException {
+		return origin.address();
+	}
+	
+	@JsonGetter
+	public Date getBirthDate() throws IOException {
+		return origin.birthDate();
+	}
+	
+	@JsonGetter
+	public String getTel1() throws IOException {
+		return origin.tel1();
+	}
+	
+	@JsonGetter
+	public String getTel2() throws IOException{
+		return origin.tel2();
+	}
+	
+	@JsonGetter
+	public String getEmail() throws IOException {
+		return origin.email();
+	}
+	
+	@JsonGetter
+	public String getPhoto() throws IOException {
+		return origin.photo();
 	}
 	
 	@JsonGetter
 	Date getDateCreated() throws IOException {
-		return this.human.horodate().dateCreated();
+		return this.origin.horodate().dateCreated();
 	}	
 }

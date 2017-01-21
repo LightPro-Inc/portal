@@ -2,7 +2,13 @@ package com.securities.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.ws.rs.NotFoundException;
 
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
@@ -11,6 +17,7 @@ import com.infrastructure.datasource.DomainsStore;
 import com.securities.api.Person;
 import com.securities.api.PersonMetadata;
 import com.securities.api.Persons;
+import com.securities.api.Sex;
 
 public class PersonsImpl implements Persons {
 
@@ -70,7 +77,7 @@ public class PersonsImpl implements Persons {
 		params.add("%" + filter + "%");
 		
 		List<Object> results = ds.find(statement, params);
-		return (int)results.get(0);			
+		return Integer.parseInt(results.get(0).toString());			
 	}
 
 	@Override
@@ -81,5 +88,48 @@ public class PersonsImpl implements Persons {
 	@Override
 	public Person build(Object id) {
 		return new PersonImpl(this.base, id);
+	}
+
+	@Override
+	public void delete(Person item) throws IOException {
+		ds.delete(item.id());
+	}
+
+	@Override
+	public Person get(UUID id) throws IOException {
+		Person item = build(id);
+		
+		if(!item.isPresent())
+			throw new NotFoundException("La personne n'a pas été trouvé !");
+		
+		return item;
+	}
+
+	@Override
+	public Person add(String firstName, String lastName, Sex sex, String address, Date birthDate, String tel1, String tel2, String email, String photo) throws IOException {
+		
+		if (firstName == null || firstName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid firstName : it can't be empty!");
+        }
+		
+		if (lastName == null || lastName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid lastName : it can't be empty!");
+        }
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(dm.firstNameKey(), firstName);
+		params.put(dm.lastNameKey(), lastName);
+		params.put(dm.sexKey(), sex.name());
+		params.put(dm.addressKey(), address);
+		params.put(dm.birthDateKey(), birthDate);
+		params.put(dm.tel1Key(), tel1);
+		params.put(dm.tel2Key(), tel2);
+		params.put(dm.emailKey(), email);
+		params.put(dm.photoKey(), photo);
+		
+		UUID id = UUID.randomUUID();
+		ds.set(id, params);
+		
+		return build(id);
 	}
 }

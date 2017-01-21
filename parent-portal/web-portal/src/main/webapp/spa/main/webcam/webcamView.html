@@ -1,0 +1,21 @@
+﻿<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">Capturer une image</h4>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <webcam
+                  on-stream="onStream(stream)"
+                  on-streaming="onSuccess()"
+                  on-error="onError(err)"
+                  channel="myChannel">
+            </webcam>
+        </div>
+    </div>
+    <div class="panel-footer clearfix">
+        <div class="pull-right">
+            <button type="button" class="btn btn-primary" ng-click="chooseImage()">Capturer</button>
+            <button type="button" class="btn btn-danger" ng-click="closeDialog()">Annuler</button>
+        </div>
+    </div>
+</div>

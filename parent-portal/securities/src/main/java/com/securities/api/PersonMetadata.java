@@ -38,4 +38,28 @@ public class PersonMetadata implements DomainMetadata {
 	public String sexKey() {
 		return "sex";
 	}	
+	
+	public String addressKey() {
+		return "address";
+	}
+	
+	public String birthDateKey() {
+		return "birthdate";
+	}
+	
+	public String tel1Key() {
+		return "tel1";
+	}
+	
+	public String tel2Key() {
+		return "tel2";
+	}
+	
+	public String emailKey() {
+		return "email";
+	}
+	
+	public String photoKey() {
+		return "photo";
+	}
 }

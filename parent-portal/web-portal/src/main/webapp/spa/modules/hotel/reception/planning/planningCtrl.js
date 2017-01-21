@@ -6,8 +6,8 @@
 	
 	app.controller('planningCtrl', planningCtrl);
 	
-	planningCtrl.$inject = ['apiService', '$scope', '$rootScope', '$timeout', '$uibModal', '$confirm', 'notificationService', '$state', 'roomSettingsService'];
-	function planningCtrl(apiService, $scope, $rootScope, $timeout, $uibModal, $confirm, notificationService, $state, roomSettingsService){
+	planningCtrl.$inject = ['apiService', '$scope', '$rootScope', '$timeout', '$uibModal', '$confirm', 'notificationService', '$state', '$stateParams'];
+	function planningCtrl(apiService, $scope, $rootScope, $timeout, $uibModal, $confirm, notificationService, $state, $stateParams){
 
 		var vm = this;
 		var dp;
@@ -39,7 +39,7 @@
 	            rowHeaderColumns: [
 	           	                {title: "Chambre", width: 80},
 	           	                {title: "Capacité", width: 80},
-	           	                {title: "Status", width: 80}
+	           	                {title: "Statut", width: 80}
 	           	            ],
 	            onBeforeResHeaderRender: function(args) {
 	            	  var beds = function(count) {
@@ -50,7 +50,7 @@
 	            	  args.resource.columns[0].html = beds(args.resource.capacity);
 	            	  args.resource.columns[1].html = args.resource.status;
 	            	  
-	            	  switch (args.resource.status) {
+	            	  switch (args.resource.statusId) {
 	            	      case "DIRTY":
 	            	          args.resource.cssClass = "status_dirty";
 	            	          break;
@@ -68,7 +68,7 @@
                 	
                 	apiService.post(String.format("/web/api/booking/{0}/move", args.e.id()), params,
     					function(response){
-        					loadEvents(); 
+        					loadRooms(args.newStart); 
         					
         					if(args.e.data.roomId == args.newResource){
         						notificationService.displaySuccess("Modification de la période effectuée avec succès !");
@@ -78,7 +78,7 @@
     					},
     					function(error){
     						notificationService.displayError(error);
-    						loadEvents();
+    						loadRooms(args.newStart);
     					}
         			); 
                 },
@@ -90,12 +90,12 @@
 
                 	apiService.post(String.format("/web/api/booking/{0}/resize", args.e.id()), params,
         					function(response){
-            					loadEvents();    						
+            					loadRooms(args.newStart);    						
         						notificationService.displaySuccess("Modification de la période effectuée avec succès !");
         					},
         					function(error){
         						notificationService.displayError(error);
-        						loadEvents();
+        						loadRooms(args.newStart);
         					}
         			);           	
                 },
@@ -114,7 +114,7 @@
 	                    }
 	                }).result.then(function () {
 	                	dp.clearSelection();
-	                	loadEvents();
+	                	loadRooms(args.start);
 	                }, function () {
 	                	dp.clearSelection();
 	                });                  
@@ -129,7 +129,7 @@
 
                 		apiService.post(String.format('/web/api/booking/{0}/cancel', args.e.id()), null,
             					function(response){
-                					loadEvents();    						
+                					loadRooms(args.e.start);    						
             						notificationService.displaySuccess("La réservation a été annulée avec succès !");
             					},
             					function(error){
@@ -140,8 +140,8 @@
                 },
                 onBeforeEventRender: function(args) {                	
                     
-                    args.data.barColor = roomSettingsService.getColorStatus(args.e.status);
-                    var status = roomSettingsService.getStatus(args.e.status);
+                    args.data.barColor = args.e.statusColor;
+                    var status = args.e.status;
                     
                     // customize the reservation HTML: text, start and end dates
                     args.data.html = args.data.guest + " (" + args.data.start.toString("d/M/yyyy") + " - " + args.data.end.toString("d/M/yyyy") + ")" + "<br /><span style='color:gray'>" + status + "</span>";
@@ -211,20 +211,25 @@
             );                       
 		}			
 		
-		this.$onInit = function(){
-			$timeout(function(){
-				dp = $scope.scheduler;
-			});			
-			
-			apiService.get('/web/api/room', null,
+		function loadRooms(date){
+			date = date || DayPilot.Date.today();
+			apiService.get('/web/api/room/available', null,
 						function(response){
 				
 							vm.schedulerConfig.resources = response.data;
 							vm.schedulerConfig.visible = true;
 							
-							loadEvents(DayPilot.Date.today());							
+							loadEvents(date);							
 						}
-			);											
+			);				
+		}
+		
+		this.$onInit = function(){
+			$timeout(function(){
+				dp = $scope.scheduler;
+			});			
+			
+			loadRooms($stateParams.startDate);
 		}
 	}
 	

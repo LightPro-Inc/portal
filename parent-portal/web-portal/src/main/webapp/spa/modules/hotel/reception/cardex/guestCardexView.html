@@ -23,22 +23,57 @@
 					           </div>
 					           <div ng-show="!vm.loadingGuestData">
 					           	   <div class="form-group">
-										<label class="col-lg-2 control-label" for="LastName">Nom</label>
-										<div class="col-lg-10">
+										<label class="col-md-3 control-label" for="LastName">Nom</label>
+										<div class="col-md-9">
 											<input type="text" class="form-control input-sm" id="LastName" name="LastName" ng-model="vm.item.lastName" placeholder="Renseigner le nom">
 										</div>
 									</div>	
 									<div class="form-group">
-										<label class="col-lg-2 control-label" for="FirstName">Prénoms</label>
-										<div class="col-lg-10">
+										<label class="col-md-3 control-label" for="FirstName">Prénoms</label>
+										<div class="col-md-9">
 											<input type="text" class="form-control input-sm" id="FirstName" name="FirstName" ng-model="vm.item.firstName" placeholder="Renseigner le prénom">
 										</div>
 									</div>	
 									<div class="form-group">
-										<div class="col-lg-offset-2 col-lg-10">
+										<label class="col-md-3 control-label" for="dateOfBirth">Date naiss.</label>
+										<div class="col-md-9">
+											<div class="input-group">
+		                                        <input type="text" class="form-control input-sm" id="dateOfBirth" name="dateOfBirth" uib-datepicker-popup="{{vm.datepicker.format}}" ng-model="vm.item.birthDate" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" placeholder="yyyy-MM-dd" />
+		                                        <span class="input-group-btn">
+		                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+		                                        </span>
+		                                    </div>
+										</div>
+									</div>	
+									<div class="form-group">
+										<label class="control-label col-md-3" for="Addresse">Adresse</label>
+										<div class="col-md-9">
+											<input type="text" class="form-control input-sm" ng-model="vm.item.address" name="Addresse" id="Addresse" placeholder="Renseigner l'adresse">
+										</div>
+									</div>	
+									<div class="form-group">
+										<label class="control-label col-md-3" for="Tel1">Tel 1</label>
+										<div class="col-md-9">
+											<input type="text" class="form-control input-sm" ng-model="vm.item.tel1" name="Tel1" id="Tel1" placeholder="Renseigner le téléphone 1">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-3" for="Tel2">Tel 2</label>
+										<div class="col-md-9">
+											<input type="text" class="form-control input-sm" ng-model="vm.item.tel2" name="Tel2" id="Tel2" placeholder="Renseigner le téléphone 2">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-3" for="email">E-mail</label>
+										<div class="col-md-9">
+											<input type="email" class="form-control input-sm" ng-model="vm.item.email" id="email" name="email" placeholder="Renseigner l'adresse mail">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-offset-2 col-md-10">
 											<div class="checkbox">
-												<label><input name="Sex" type="radio" value="M" ng-model="vm.item.sex"> Masculin</label>
-												<label><input name="Sex" type="radio" value="F" ng-model="vm.guest.sex"> Féminin</label>
+												<label><input name="Sex" type="radio" value="M" ng-model="vm.item.sex"> Homme</label>
+												<label><input name="Sex" type="radio" value="F" ng-model="vm.item.sex"> Femme</label>
 											</div>
 										</div>
 									</div>

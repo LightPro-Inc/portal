@@ -3,18 +3,31 @@
 	
 	app.controller('editBookCtrl', editBookCtrl);
 	
-	editBookCtrl.$inject = ['$state', '$rootScope', '$stateParams', 'apiService', '$timeout', 'notificationService', '$uibModal', '$confirm'];
-	function editBookCtrl($state, $rootScope, $stateParams, apiService, $timeout, notificationService, $uibModal, $confirm){
+	editBookCtrl.$inject = ['$state', '$rootScope', '$stateParams', 'apiService', '$timeout', 'notificationService', '$uibModal', '$confirm', '$previousState'];
+	function editBookCtrl($state, $rootScope, $stateParams, apiService, $timeout, notificationService, $uibModal, $confirm, $previousState){
 		var vm = this;
 		
 		vm.bookingId = $stateParams.bookingId;
 		
-		vm.goPreviousPage = goPreviousPage;
+		
+		vm.dateOptions = {
+	            formatYear: 'yy',
+	            startingDay: 1
+	        };
+
+        vm.datepicker = { format: 'yyyy-MM-dd' };
+        vm.datepickerDeliveredBy = { format: 'yyyy-MM-dd' };
+        
+        // Function
+        vm.openDatePicker = openDatePicker;
+        vm.openDatePickerDeliveredBy = openDatePickerDeliveredBy;
+        vm.goPreviousPage = goPreviousPage;
 		vm.identifyGuest = identifyGuest;
 		vm.searchPerson = searchPerson;
 		vm.razGuest = razGuest;
 		vm.canSaveGuest = canSaveGuest;
 		vm.canClearGuest = canClearGuest;
+		vm.save = save;
 		
 		function canSaveGuest(){
 			return vm.guest && (vm.guest.firstName && vm.guest.lastName)
@@ -39,6 +52,7 @@
 
             	$timeout(function(){
             		vm.guest = personSelected;
+            		vm.guest.birthDate = new Date(personSelected.birthDate);            		            		
             	});            	
             }, function () {
 
@@ -52,23 +66,55 @@
 												$timeout(function(){
 													vm.loadingGuestData = false;
 													
-													vm.guest = response.data;													
+													vm.guest = response.data;	
+													vm.guest.birthDate = new Date(vm.guest.birthDate);
 													notificationService.displaySuccess('Hôte enregistré avec succès !');
 												});												
 											}
 			);
 		}
 		
-		function goPreviousPage(){
-			$state.go($rootScope.previousState);
+		function save(){
+			vm.item.guest = vm.guest;
+			vm.item.guestId = vm.guest.id;
+			
+			vm.loadingBooking = true;
+			apiService.put(String.format('/web/api/booking/{0}', vm.bookingId), vm.item,
+											function(response){
+												vm.loadingBooking = false;	
+												
+												$timeout(function(){
+																							
+													notificationService.displaySuccess('Réservation modifiée avec succès !');
+													vm.goPreviousPage();
+												});												
+											},
+											function(error){
+												vm.loadingBooking = false;	
+												notificationService.displayError(error);
+											}
+			);
 		}
 		
+		function goPreviousPage(){
+			if($previousState.get().state.name == 'main.hotel.planning')
+			{
+				var previous = $previousState.get();
+				previous.params.startDate = vm.item.start;
+				$state.go(previous.state, previous.params);
+			}
+			else
+				$previousState.go();
+		}
+
 		function loadGuest(){
 			// obtenir l'hôte        	
 			vm.loadingGuestData = true;
 			apiService.get(String.format('/web/api/booking/{0}/guest', vm.bookingId), null,
 							function(response){
 								vm.guest = response.data;
+								if (!(vm.guest.birthDate == null))
+				                    vm.guest.birthDate = new Date(vm.guest.birthDate);
 								vm.loadingGuestData = false;
 							},
 							function(error){
@@ -142,9 +188,14 @@
 		}
 		
 		function loadBooking(){
+			vm.loadingBooking = true;
 			apiService.get(String.format('/web/api/booking/{0}', vm.bookingId), null, 
 					function(response){
+						vm.loadingBooking = false;
 						vm.item = response.data; 
+						
+						if(vm.item.deliveredDatePiece)
+							vm.item.deliveredDatePiece = new Date(vm.item.deliveredDatePiece);
 						
 						vm.bookingStatus = [                
 						                    {
@@ -177,13 +228,30 @@
 							loadGuest();
 						}else{
 							razGuest();
+						}						
+					},
+					function(error){
+							vm.loadingBooking = false;
+							notificationService.displayError(error);
 						}
-					}
 			);
-		}
+		}		
 		
-		this.$onInit = function(){
-        	        	          	     
+		function openDatePicker($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.datepicker.opened = true;
+        };
+        
+		function openDatePickerDeliveredBy($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.datepickerDeliveredBy.opened = true;
+        };
+        
+		this.$onInit = function(){        	        	          	   
         	loadBooking();        	        	        	
         }
 	}

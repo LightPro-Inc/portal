@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,8 +37,8 @@ public class PgDomainsStore implements DomainsStore {
 
 	private void set(Object key, Map<String, Object> params, UUID author) throws IOException {
 		
-		if(params.isEmpty())
-			throw new IOException("Vous devez spécifier un champ à modifier !");
+		/*if(params.isEmpty())
+			throw new IOException("Vous devez spécifier un champ à modifier !");*/
 		
 		String clause = "";
 		String clauseSet = "";
@@ -49,8 +50,10 @@ public class PgDomainsStore implements DomainsStore {
 			clauseSet += "?,";
 		}
 		
-		clause = clause.substring(0, clause.lastIndexOf(","));
-		clauseSet = clauseSet.substring(0, clauseSet.lastIndexOf(","));
+		if(!params.isEmpty()){
+			clause = clause.substring(0, clause.lastIndexOf(","));
+			clauseSet = clauseSet.substring(0, clauseSet.lastIndexOf(","));
+		}		
 		
 		Collection<Object> elements = params.values();
 		for (Object object : elements) {
@@ -65,7 +68,11 @@ public class PgDomainsStore implements DomainsStore {
 	    else {
 	    	values.add(author);
 	    	values.add(author);
-	    	statement = String.format("INSERT INTO %s (%s, ownerid, lastmodifierid, datecreated, lastmodifieddate, %s) VALUES (%s, ?, ?, now(), now(), ?)", dm.domainName(), clause, dm.keyName(), clauseSet);
+	    	
+	    	if(clause.isEmpty())
+	    		statement = String.format("INSERT INTO %s (ownerid, lastmodifierid, datecreated, lastmodifieddate, %s) VALUES (?, ?, now(), now(), ?)", dm.domainName(), dm.keyName(), clauseSet);
+	    	else
+	    		statement = String.format("INSERT INTO %s (%s, ownerid, lastmodifierid, datecreated, lastmodifieddate, %s) VALUES (%s, ?, ?, now(), now(), ?)", dm.domainName(), clause, dm.keyName(), clauseSet);
 	    }
 	    
 	    values.add(key);
@@ -79,10 +86,7 @@ public class PgDomainsStore implements DomainsStore {
 
 	@Override
 	public boolean exists(Object key) throws IOException {
-		String statement = String.format("SELECT * FROM %s WHERE %s=?", dm.domainName(), dm.keyName());		
-		List<Object> values = this.base.executeQuery(statement, Arrays.asList(key));
-		
-		return !values.isEmpty();
+		return exists(dm.keyName(), key);
 	}
 
 	@Override
@@ -165,5 +169,36 @@ public class PgDomainsStore implements DomainsStore {
 		}
     	
     	return domainsStore;
+	}
+
+	@Override
+	public List<DomainStore> getAllByKey(String key, Object keyValue) throws IOException {
+		return getAllByKeyOrdered(key, keyValue, null, null);
+	}
+
+	@Override
+	public boolean exists(Object key, Object keyValue) throws IOException {
+		String statement = String.format("SELECT * FROM %s WHERE %s=?", dm.domainName(), key);		
+		List<Object> values = this.base.executeQuery(statement, Arrays.asList(keyValue));
+		
+		return !values.isEmpty();
+	}
+
+	@Override
+	public long count(String statement, List<Object> params) throws IOException {
+		List<Object> results = find(statement, params);
+		return Long.parseLong(results.get(0).toString());
+	}
+
+	@Override
+	public Optional<Object> getFirst(String statement, List<Object> params) throws IOException {
+		List<Object> results = find(statement, params);		
+		return results.stream().findFirst();
+	}
+
+	@Override
+	public Optional<DomainStore> getFirstDs(String statement, List<Object> params) throws IOException {
+		List<DomainStore> results = findDs(statement, params);		
+		return results.stream().findFirst();
 	}
 }

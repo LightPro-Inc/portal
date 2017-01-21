@@ -1,4 +1,4 @@
-﻿body, html, .row-offcanvas {
+body, html, .row-offcanvas {
     height: 100%;
 }
 
@@ -289,4 +289,26 @@ ul.pagination > li
 
 .navbar { 
     border-radius:0; 
+}
+
+.scheduler_default_rowheadercol2
+{
+    background: #ffffff;
+}
+.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner 
+{
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    background-color: transparent;
+    border-left: 5px solid #1a9d13; /* status: "free" (default), green color */
+    border-right: 0px none;
+}
+.status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #ea3624; /* status: "dirty", red color */
+}
+.status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #f9ba25; /* status: "cleanup", orange color */
 }

@@ -7,8 +7,8 @@
 	
 	app.controller('roomCtrl', roomCtrl);
 	
-	roomCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$stateParams', '$state', '$rootScope'];
-	function roomCtrl(apiService, $uibModal, $confirm, notificationService, $stateParams, $state, $rootScope){
+	roomCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$stateParams', '$state', '$rootScope', '$previousState'];
+	function roomCtrl(apiService, $uibModal, $confirm, notificationService, $stateParams, $state, $rootScope, $previousState){
 		var vm = this;
 		
 		vm.categoryId = $stateParams.categoryId;
@@ -117,7 +117,7 @@
 		}
 		
 		function goPreviousPage(){
-			$state.go($rootScope.previousState);
+			$previousState.go();
 		}
 		
 		this.$onInit = function(){

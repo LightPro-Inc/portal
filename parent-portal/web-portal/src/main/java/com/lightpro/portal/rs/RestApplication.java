@@ -13,14 +13,17 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.lightpro.admin.rs.CompanyRs;
 import com.lightpro.admin.rs.MembershipRs;
 import com.lightpro.admin.rs.MesureUnitRs;
+import com.lightpro.admin.rs.PersonRs;
 import com.lightpro.admin.rs.SequenceRs;
 import com.lightpro.admin.rs.TaxRs;
 import com.lightpro.hotel.rs.BookingRs;
 import com.lightpro.hotel.rs.GuestRs;
-import com.lightpro.hotel.rs.PersonRs;
+import com.lightpro.hotel.rs.MaidRs;
 import com.lightpro.hotel.rs.RoomCategoryRs;
 import com.lightpro.hotel.rs.RoomRs;
+import com.lightpro.sales.rs.CustomerRs;
 import com.lightpro.sales.rs.ProductRs;
+import com.lightpro.sales.rs.QuotationRs;
 import com.lightpro.stocks.rs.ArticleCategoryRs;
 import com.lightpro.stocks.rs.ArticleFamilyRs;
 import com.lightpro.stocks.rs.ArticleRs;
@@ -53,13 +56,14 @@ public class RestApplication extends ResourceConfig {
 		register(SequenceRs.class);
 		register(MesureUnitRs.class);
 		register(TaxRs.class);
+		register(PersonRs.class);
 		
 		// 2 - hotel
 		register(RoomCategoryRs.class);		
 		register(RoomRs.class);		
 		register(BookingRs.class);	
 		register(GuestRs.class);	
-		register(PersonRs.class);	
+		register(MaidRs.class);	
 		
 		// 3 - stocks		
 		register(ArticleFamilyRs.class);
@@ -74,6 +78,8 @@ public class RestApplication extends ResourceConfig {
 		
 		// 4 - ventes		
 		register(ProductRs.class);
+		register(QuotationRs.class);
+		register(CustomerRs.class);
 		
 		// register features
 		register(JacksonFeature.class);		

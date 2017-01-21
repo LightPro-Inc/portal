@@ -3,8 +3,8 @@
 	
 	app.controller('guestCardexCtrl', guestCardexCtrl);
 	
-	guestCardexCtrl.$inject = ['$state', '$rootScope', '$stateParams', 'apiService', '$timeout', 'notificationService', '$uibModal', '$confirm'];
-	function guestCardexCtrl($state, $rootScope, $stateParams, apiService, $timeout, notificationService, $uibModal, $confirm){
+	guestCardexCtrl.$inject = ['$state', '$rootScope', '$stateParams', 'apiService', '$timeout', 'notificationService', '$uibModal', '$confirm', '$previousState'];
+	function guestCardexCtrl($state, $rootScope, $stateParams, apiService, $timeout, notificationService, $uibModal, $confirm, $previousState){
 		var vm = this;
 		
 		vm.guestId = $stateParams.guestId;
@@ -32,7 +32,7 @@
 		}
 		
 		function goPreviousPage(){
-			$state.go($rootScope.previousState);
+			$previousState.go();
 		}
 		
 		this.$onInit = function(){
@@ -40,6 +40,9 @@
 			apiService.get(String.format('/web/api/guest/{0}', vm.guestId), null,
 							function(response){
 								vm.item = response.data;
+								if (!(vm.item.birthDate == null))
+				                    vm.item.birthDate = new Date(vm.item.birthDate);
+								
 								vm.loadingGuestData = false;
 							},
 							function(error){

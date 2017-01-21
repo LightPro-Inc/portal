@@ -1,0 +1,20 @@
+<div class="col-md-12">	
+	<h3>Etat des chambres</h3>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-4" ng-repeat="item in vm.rooms">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">Porte {{item.number}} <span ng-if="item.isOccupied" class="badge badge-sm up" style="background-color:green;"><i class="fa fa-smile-o fa-1x"></i></span> <span class="badge badge-sm up" style="background-color:{{vm.getStatusColor(item)}};">{{item.status}}</span></h4>
+					</div>
+					<div class="panel-body">
+						<button type="button" class="btn btn-primary btn-sm" ng-click="vm.markCleanup(item)" ng-if="item.statusId == 'DIRTY'">Déclarer propre</button>
+						<button type="button" class="btn btn-primary btn-sm" ng-click="vm.markDirty(item)" ng-if="item.statusId == 'CLEANUP' || item.statusId == 'READY'">Déclarer sale</button>
+						<button type="button" class="btn btn-primary btn-sm" ng-click="vm.markOutOfService(item)" ng-if="item.statusId != 'OUTOFSERVICE'">Mettre hors service</button>
+						<button type="button" class="btn btn-primary btn-sm" ng-click="vm.markInService(item)" ng-if="item.statusId == 'OUTOFSERVICE'">Mettre en service</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

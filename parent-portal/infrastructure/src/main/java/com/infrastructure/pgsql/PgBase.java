@@ -63,7 +63,7 @@ public class PgBase implements Base {
 		List<Object> values = new ArrayList<Object>();
 		
 		try {
-			conn1 = getDs().getConnection();
+			conn1 = getDs().getConnection();			
 			pstmt = conn1.prepareStatement(query);
 			
 			for (int i = 0; i < params.size(); i++) {
@@ -123,7 +123,8 @@ public class PgBase implements Base {
 	@Override
 	public void commit() throws IOException {
 		try {
-			connection().commit();			
+			connection().commit();	
+			connection().setAutoCommit(true);			
 		} catch (SQLException e) {								
 			throw new IOException(e);
 		}

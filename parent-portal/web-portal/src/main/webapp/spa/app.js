@@ -136,6 +136,9 @@ if (!String.format) {
 	        })
             .state('main.hotel.planning', {
                 url:'/planning',
+                params:{
+                	startDate: null
+                },
                 templateUrl: 'modules/hotel/reception/planning/planningView.html',
                 controller: 'planningCtrl as vm',
                 requireAuthenticated: true
@@ -169,7 +172,13 @@ if (!String.format) {
 	            templateUrl: 'modules/hotel/gouvernance/nettoyage/nettoyageView.html',
 	            controller: 'nettoyageCtrl as vm',
 	            requireAuthenticated: true
-	        })	        	       
+	        })	 
+	        .state('main.hotel.maid', {
+	            url: '/maid',
+	            templateUrl: 'modules/hotel/gouvernance/maid/maidView.html',
+	            controller: 'maidCtrl as vm',
+	            requireAuthenticated: true
+	        })	
 	        .state('main.hotel.roomcategory', {
                 url:'/roomcategory',
                 templateUrl: 'modules/hotel/settings/roomCategory/roomCategoryView.html',
@@ -180,6 +189,12 @@ if (!String.format) {
                 url:'/room/{categoryId}',
                 templateUrl: 'modules/hotel/settings/room/roomView.html',
                 controller: 'roomCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.hotel.room-status', {
+                url:'/room-status',
+                templateUrl: 'modules/hotel/gouvernance/room-status/roomStatusView.html',
+                controller: 'roomStatusCtrl as vm',
                 requireAuthenticated: true
             })
             .state('main.stocks', {
@@ -298,6 +313,18 @@ if (!String.format) {
 	            url: '/product-pricing/{productId}',
 	            templateUrl: 'modules/sales/settings/product/productPricingView.html',
 	            controller: 'productPricingCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.quotation', {
+	            url: '/quotation',
+	            templateUrl: 'modules/sales/features/quotation/quotationView.html',
+	            controller: 'quotationCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	         .state('main.sales.edit-quotation', {
+	            url: '/edit-quotation/{quotationId}',
+	            templateUrl: 'modules/sales/features/quotation/editQuotationView.html',
+	            controller: 'editQuotationCtrl as vm',
 	            requireAuthenticated: true
 	        });
 	}
