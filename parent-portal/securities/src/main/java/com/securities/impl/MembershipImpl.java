@@ -71,4 +71,9 @@ public class MembershipImpl implements Membership {
 		
 		return value;
 	}
+
+	@Override
+	public User get(Object id) throws IOException {
+		return new UserImpl(base, id);
+	}
 }

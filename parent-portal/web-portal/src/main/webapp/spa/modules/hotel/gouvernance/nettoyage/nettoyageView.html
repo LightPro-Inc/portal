@@ -1,1 +1,41 @@
-Planning de nettoyage des chambres
+<style>
+    #external-events {
+        float: left;
+        padding: 0 10px;
+        border: 1px solid #ccc;
+        background: #eee;
+        text-align: left;
+    }
+        
+    #external-events h4 {
+        font-size: 16px;
+        margin-top: 0;
+        padding-top: 1em;
+    }
+        
+    #external-events .fc-event {
+        margin: 10px 0;
+        cursor: pointer;
+    }
+        
+    #external-events p {
+        margin: 1.5em 0;
+        font-size: 11px;
+        color: #666;
+    }
+</style>
+
+<div class="col-md-12">	
+	<h3>Planning d'entretien</h3>
+	<div class="row">
+		<div id='external-events' class="col-md-2">
+          <div id='external-events-listing'>
+            <h4>Personnel entretien</h4>
+            <div class='fc-event' id="{{item.id}}" ng-repeat="item in vm.maids">{{item.fullName}}</div>
+          </div>
+        </div>
+		<div class="col-md-10">
+			<div ui-calendar="vm.uiConfig.calendar" calendar="planningCalendar" ng-model="vm.eventSources"></div>
+		</div>
+	</div>
+</div>

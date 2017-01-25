@@ -143,6 +143,12 @@ if (!String.format) {
                 controller: 'planningCtrl as vm',
                 requireAuthenticated: true
             })
+            .state('main.hotel.day-occupation', {
+                url:'/day-occupation',
+                templateUrl: 'modules/hotel/reception/day-occupation/dayOccupationView.html',
+                controller: 'dayOccupationCtrl as vm',
+                requireAuthenticated: true
+            })
             .state('main.hotel.booking', {
 	            url: '/booking/{bookingId}',
 	            templateUrl: 'modules/hotel/reception/planning/editBookView.html',

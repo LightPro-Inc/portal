@@ -1,0 +1,16 @@
+<div class="modal-header">
+	<h4 class="modal-title">{{vm.title}}</h4>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-disabled="vm.dayJob.statusId == 'MAID_ABSENT' || vm.dayJob.isFuture" ng-click="vm.markAbsent()">Marquer absent</button>
+			<button type="button" class="btn btn-primary" ng-disabled="vm.dayJob.statusId == 'MAID_PRESENT' || vm.dayJob.isFuture" ng-click="vm.markPresent()">Marquer présent</button>
+			<button type="button" class="btn btn-danger" ng-click="vm.deleteItem()">Supprimer</button>
+		</div>
+	</div>	
+</div>
+<div class="modal-footer">	
+	<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+</div>
+

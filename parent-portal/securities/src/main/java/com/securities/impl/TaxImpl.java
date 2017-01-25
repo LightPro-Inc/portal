@@ -85,4 +85,9 @@ public class TaxImpl implements Tax {
 		
 		ds.set(params);
 	}
+
+	@Override
+	public double evaluateAmount(double amountHt) throws IOException {
+		return amountHt * (rate() / 100.0);
+	}
 }

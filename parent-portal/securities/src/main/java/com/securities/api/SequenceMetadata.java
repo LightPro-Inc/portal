@@ -50,4 +50,8 @@ public class SequenceMetadata implements DomainMetadata {
 	public String stepKey() {
 		return "step";
 	}	
+	
+	public String codeIdKey() {
+		return "codeid";
+	}	
 }

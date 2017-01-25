@@ -11,4 +11,5 @@ public interface Tax extends Recordable<UUID> {
 	int rate() throws IOException;
 	
 	void update(String name, String shortName, int rate) throws IOException;
+	double evaluateAmount(double amountHt) throws IOException;
 }

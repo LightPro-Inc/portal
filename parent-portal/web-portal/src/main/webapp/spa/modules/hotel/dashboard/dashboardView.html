@@ -1,7 +1,140 @@
 <div class="col-md-12">	
 	<h3>Tableau de bord</h3>
+	<div class="row m-b-md">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary" ng-click="vm.loadIndicators()"><i class="fa fa-refresh fa-2x"></i></button>
+            </div>
+        </div>
+    </div>
 	<div class="row">
+		<div class="col-md-4">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h4 class="panel-title">Taux d'occupation mensuel</h4>
+				</div>
+				<div class="panel-body">
+					<div ng-show="vm.monthRate.loadingData">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+					<div class="row" ng-show="!vm.monthRate.loadingData">
+						<div class="col-md-12">
+							<h5 class="text-center">{{vm.monthRate.periodFormatted}}</h5>
+							<h1 class="text-center">{{vm.monthRate.rate}} %</h1>
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer clearfix">
+					<div class="pull-right">
+						<button type="button" class="btn btn-primary btn-sm" ng-click="vm.selectMonthRatePeriod()">Définir intervalle</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h4 class="panel-title">Taux d'occupation hebdomadaire ({{vm.weekendRate.periodFormatted}})</h4>
+				</div>
+				<div class="panel-body">
+					<div ng-show="vm.weekLoadingData">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+					<div class="row" ng-show="!vm.weekLoadingData">
+						<div class="col-md-6">
+							<h5 class="text-center">Lundi - Jeudi</h5>
+							<h1 class="text-center">{{vm.weekWorkDayRate.rate}} %</h1>
+						</div>
+						<div class="col-md-6">
+							<h5 class="text-center">Vendredi - Dimanche</h5>
+							<h1 class="text-center">{{vm.weekendRate.rate}} %</h1>
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer clearfix">
+					<div class="pull-right">
+						<button type="button" class="btn btn-primary btn-sm" ng-click="vm.selectWeekRatePeriod()">Définir intervalle</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">Disponibilité des chambres</h4>
+				</div>
+				<div class="panel-body">
+					<div ng-show="vm.loadingRoomAvailability">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+					<div class="row" ng-show="!vm.loadingRoomAvailability">
+						<div class="col-md-6">
+							<h5 class="text-center">Libre</h5>
+							<h1 class="text-center">{{vm.numberOfFreeRooms}}</h1>
+						</div>
+						<div class="col-md-6">
+							<h5 class="text-center">Occupée</h5>
+							<h1 class="text-center">{{vm.numberOfRoomOccupied}}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="panel panel-danger">
+				<div class="panel-heading">
+					<h4 class="panel-title">Chambres sales</h4>
+				</div>
+				<div class="panel-body">
+					<div ng-show="vm.loadingRoomDirty">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+					<div class="row" ng-show="!vm.loadingRoomDirty">
+						<div class="col-md-12">
+							<h5 class="text-center">(En service)</h5>
+							<h1 class="text-center">{{vm.numberOfRoomDirty}}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
 		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">Occupations du jour</h4>
+				</div>
+				<div class="panel-body">
+					<div ng-show="vm.loadingDayOccupation">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+					<div class="row" ng-show="!vm.loadingDayOccupation">
+						<div class="col-md-4">
+							<h5 class="text-center">Client en recouche</h5>
+							<h1 class="text-center">{{vm.numberOfClientEnRechouche}}</h1>
+						</div>
+						<div class="col-md-4">
+							<h5 class="text-center">Client attendu</h5>
+							<h1 class="text-center">{{vm.numberOfClientAttendu}}</h1>
+						</div>
+						<div class="col-md-4">
+							<h5 class="text-center">Client arrivé</h5>
+							<h1 class="text-center">{{vm.numberOfClientArrive}}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--  <div class="col-md-12">
 		    <div class="panel panel-success">
 		        <div class="panel-heading clearfix">
 		            <h3 class="panel-title pull-left">Locations <span ng-if="!vm.loadingLocations" class="badge badge-sm up bg-danger" style="background-color:darkblue;">{{ vm.resumeStat.totalAmount | number }} FCFA</span></h3>
@@ -15,7 +148,7 @@
 		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Charger ventes..</label></div>
 		                <div class="col-xs-4"></div>
 		            </div>
-		            <div class="row" ng-if="!vm.loadingLocations">
+		            <div class="row" ng-if="!vm.loadingLocations">		            	
 			            <div class="col-md-offset-3 col-md-6" style="min-width:900px; overflow-x:auto; overflow-y:hidden">
 		                    <div fusioncharts
 		                         width="600"
@@ -25,9 +158,8 @@
 		                    </div>
 		                </div>               
 		            </div>
-		        </div>
-		        <div class="panel-footer">
-		
+		            
+		            -->
 		        </div>
 		    </div>
 		</div>

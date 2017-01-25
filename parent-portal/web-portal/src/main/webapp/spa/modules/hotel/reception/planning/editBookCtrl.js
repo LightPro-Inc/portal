@@ -130,7 +130,8 @@
 
         		apiService.post(String.format('/web/api/booking/{0}/confirm', vm.bookingId), null,
     					function(response){
-    						loadBooking();
+        					goPreviousPage();
+        					notificationService.displaySuccess("La réservation a été confirmée avec succès !");
     					},
     					function(error){
     						notificationService.displayError(error);
@@ -161,7 +162,7 @@
 
         		apiService.post(String.format('/web/api/booking/{0}/checkIn', vm.bookingId), null,
     					function(response){
-        					loadBooking();
+        					goPreviousPage();
         					notificationService.displaySuccess("L'hôte a été logé avec succès !");
     					},
     					function(error){
@@ -177,7 +178,7 @@
 
         		apiService.post(String.format('/web/api/booking/{0}/checkOut', vm.bookingId), null,
     					function(response){
-        					loadBooking();
+        					goPreviousPage();
         					notificationService.displaySuccess("La réservation a été clôturée avec succès !");
     					},
     					function(error){

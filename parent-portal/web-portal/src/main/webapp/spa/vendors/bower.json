@@ -42,13 +42,16 @@
     "ng-image-cropper": "https://npmcdn.com/angular-image-cropper/bower.zip",
     "angular-ui-router-default": "^0.0.6",
     "angular-jwt": "^0.1.8",
-    "angular-ui-sortable": "^0.16.1"
+    "angular-ui-sortable": "^0.16.1",
+    "angular-ui-calendar": "latest",
+    "fullcalendar": "2.8.0"
   },
   "resolutions": {
     "jquery": "^3.1.0",
     "angular": "1.5.8",
     "angular-ui-sortable": "~0.13.4",
-    "lodash": "~4.5.1"
+    "lodash": "~4.5.1",
+    "fullcalendar": "2.8.0"
   },
   "devDependencies": {
     "ui-router-extras": "^0.1.3"

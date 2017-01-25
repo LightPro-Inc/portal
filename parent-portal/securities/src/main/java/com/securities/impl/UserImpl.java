@@ -1,6 +1,7 @@
 package com.securities.impl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 import com.infrastructure.core.Horodate;
@@ -67,11 +68,6 @@ public class UserImpl implements User {
 	}
 
 	@Override
-	public void update(String firstName, String lastName, Sex sex) throws IOException {
-		this.identity.update(firstName, lastName, sex);		
-	}
-
-	@Override
 	public Horodate horodate() {
 		return new HorodateImpl(ds);
 	}
@@ -83,5 +79,40 @@ public class UserImpl implements User {
 	@Override
 	public boolean isPresent() throws IOException {
 		return base.domainsStore(dm).exists(identity.id());
+	}
+
+	@Override
+	public String address() throws IOException {
+		return identity.address();
+	}
+
+	@Override
+	public Date birthDate() throws IOException {
+		return identity.birthDate();
+	}
+
+	@Override
+	public String tel1() throws IOException {
+		return identity.tel1();
+	}
+
+	@Override
+	public String tel2() throws IOException {
+		return identity.tel2();
+	}
+
+	@Override
+	public String email() throws IOException {
+		return identity.email();
+	}
+
+	@Override
+	public String photo() throws IOException {
+		return identity.photo();
+	}
+
+	@Override
+	public void update(String firstName, String lastName, Sex sex, String address, Date birthDate, String tel1, String tel2, String email, String photo) throws IOException {
+		this.identity.update(firstName, lastName, sex, address, birthDate, tel1, tel2, email, photo);	
 	}
 }

@@ -1,0 +1,18 @@
+﻿<div class="panel panel-primary">
+    <div class="panel-heading">
+        Sélectionner une date
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <div style="display:inline-block; min-height:290px;">
+                <div uib-datepicker ng-model="vm.dateSelected" class="well well-sm" datepicker-options="vm.dateOptions" ng-model-options="{timezone:'+0000'}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer clearfix">
+        <div class="pull-right">            
+            <button type="button" class="btn btn-primary" ng-click="vm.validate()">OK</button>
+            <button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>
+        </div>
+    </div>
+</div>

@@ -15,7 +15,7 @@
 							$rootScope.repository = {
                                 loggedUser: {
                                     username: credentials.username,
-                                    /*fullName: userInfo.FullName,*/
+                                    id: response.data.idUser,
                                     tokens: response.data.tokens,
                                     rememberMe: credentials.rememberMe
                                 }

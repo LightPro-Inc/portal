@@ -10,6 +10,11 @@
   <artifactId>web</artifactId>
   <packaging>war</packaging>
   <dependencies>
+  	<dependency>
+	    <groupId>com.fasterxml.jackson.datatype</groupId>
+	    <artifactId>jackson-datatype-jsr310</artifactId>
+	    <version>2.6.5</version>
+	</dependency>
     <dependency>
 	    <groupId>io.jsonwebtoken</groupId>
 	    <artifactId>jjwt</artifactId>

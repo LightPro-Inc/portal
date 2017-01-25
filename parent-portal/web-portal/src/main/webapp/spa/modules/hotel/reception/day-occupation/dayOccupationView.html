@@ -1,0 +1,48 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Occupations du jour</h4>		
+		</div>
+		<div class="panel-body">
+			<div ng-show="vm.loadingData">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+			<div class="col-md-12" ng-show="!vm.loadingData">
+				<div class="row">
+					<div class="col-sm-10 center-block" style="float:none;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered shortMargin">
+                                <tr>
+                                	<th>N° de chambre</th>
+                                    <th>Capacité</th>
+                                    <th>Nombre de personnes</th>           
+                                    <th>Nom du client</th>
+                                    <th>Date de départ</th>    
+                                    <th>Statut</th>                       
+                                </tr>
+                                <tr ng-repeat="item in vm.items">                                    
+                                    <td class="shortPadding">{{item.room}}</td>
+                                    <td class="shortPadding">{{item.roomCapacity + ' Lit(s)'}}</td>
+                                    <td class="shortPadding">{{item.numberOfPeople}}</td>
+                                    <td class="shortPadding">{{item.guest}}</td>
+                                    <td class="shortPadding">{{item.checkoutDay | date:'dd/MM/yyyy'}}</td>
+                                    <td class="shortPadding">{{item.status}}</td>                                   
+                                </tr>
+                                <tr ng-if="vm.items.length == 0">
+	                                <td colspan="7" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+	                            </tr>
+                            </table>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+				
+		</div>
+	</div>
+</div>

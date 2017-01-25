@@ -131,4 +131,10 @@ public class SequenceImpl implements Sequence {
 	public boolean isPresent() throws IOException {
 		return base.domainsStore(dm).exists(id);
 	}
+
+	@Override
+	public SequenceReserved code() throws IOException {
+		int codeId = ds.get(dm.codeIdKey());
+		return SequenceReserved.get(codeId);				
+	}
 }
