@@ -132,7 +132,7 @@
 	    }
 	    
 	    $scope.$on('$destroy', function() { 
-	          $scope.stopLoadData();
+	          stopLoadData();
 	    });
 	    
 		this.$onInit = function(){
