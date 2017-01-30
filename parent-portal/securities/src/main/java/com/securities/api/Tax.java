@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.infrastructure.core.Recordable;
 
-public interface Tax extends Recordable<UUID> {
+public interface Tax extends Recordable<UUID, Tax> {
 	String name() throws IOException;	
 	String shortName() throws IOException;
 	int rate() throws IOException;

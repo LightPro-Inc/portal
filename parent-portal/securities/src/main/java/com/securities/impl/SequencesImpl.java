@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.ws.rs.NotFoundException;
 
+import com.common.utilities.convert.UUIDConvert;
 import com.infrastructure.core.HorodateMetadata;
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
@@ -61,7 +62,7 @@ public class SequencesImpl implements Sequences {
 		
 		List<DomainStore> results = ds.findDs(statement, params);
 		for (DomainStore domainStore : results) {
-			values.add(new SequenceImpl(this.base, domainStore.key())); 
+			values.add(build(UUIDConvert.fromObject(domainStore.key()))); 
 		}		
 		
 		return values;
@@ -126,12 +127,17 @@ public class SequencesImpl implements Sequences {
 	}
 
 	@Override
-	public boolean contains(Sequence item) throws IOException {
-		return ds.exists(item.id());
+	public boolean contains(Sequence item) {
+		try {
+			return ds.exists(item.id());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override
-	public Sequence build(Object id) {
+	public Sequence build(UUID id) {
 		return new SequenceImpl(this.base, id);
 	}
 }

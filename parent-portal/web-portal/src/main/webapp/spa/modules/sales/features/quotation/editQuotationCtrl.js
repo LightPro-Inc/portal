@@ -8,17 +8,21 @@
 		var vm = this;
 		
 		vm.quotationId = $stateParams.quotationId;
+		vm.markSend = markSend;
+		vm.markSold = markSold;
 		
 		vm.dateOptions = {
 	            formatYear: 'yy',
 	            startingDay: 1
 	        };
 
-	    vm.datepicker = { format: 'yyyy-MM-dd' };
-		
+	    vm.datepicker = { format: 'dd/MM/yyyy' };
+	    vm.expirationDatepicker = { format: 'dd/MM/yyyy' };
+	    
 		vm.cancel = cancel;
 		vm.saveItem = saveItem;
 		vm.openDatePicker = openDatePicker;
+		vm.openExpirationDatePicker = openExpirationDatePicker;
 		vm.searchCustomer = searchCustomer;
 		vm.modifyCustomer = modifyCustomer;
 		vm.addNewOrderProduct = addNewOrderProduct;
@@ -29,6 +33,9 @@
 		vm.getTotalAmountTtc = getTotalAmountTtc;
 		
 		function getTotalAmountHt(){
+			if(!(vm.item && vm.item.products))
+				return;
+			
 			var amount = 0;
 			
 			angular.forEach(vm.item.products, function(product){
@@ -39,6 +46,9 @@
 		}
 		
 		function getTotalAmountTtc(){
+			if(!(vm.item && vm.item.products))
+					return;
+			
 			var amount = 0;
 			
 			angular.forEach(vm.item.products, function(product){
@@ -49,6 +59,9 @@
 		}
 		
 		function getTotalTaxAmount(){
+			if(!(vm.item && vm.item.products))
+				return;
+			
 			var amount = 0;
 			
 			angular.forEach(vm.item.products, function(product){
@@ -80,7 +93,8 @@
                 controller: 'editOrderProductCtrl as vm',
                 resolve: {
                     data: {
-                    	item : item
+                    	item : item,
+                    	orderDate: vm.item.orderDate
                     }
                 }
             }).result.then(function (itemEdited) {
@@ -135,6 +149,13 @@
 
             vm.datepicker.opened = true;
         };
+        
+        function openExpirationDatePicker($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            vm.expirationDatepicker.opened = true;
+        };
 		
 		function saveItem() {
 			if(vm.isNewItem){
@@ -143,15 +164,17 @@
 				
 				return apiService.post(String.format('/web/api/quotation/'), vm.item,
 						function(response){
+							close();
 							notificationService.displaySuccess("Le dévis a été créé avec succès !");
 						},
-						function(error){
+						function(error){							
 							notificationService.displayError(error);
 						});
 			}else{
 				return apiService.put(String.format('/web/api/quotation/{0}', vm.item.id), vm.item,
 						function(response){
-					notificationService.displaySuccess("Le dévis a été modifié avec succès !");
+							close();
+							notificationService.displaySuccess("Le dévis a été modifié avec succès !");
 						},
 						function(error){
 							notificationService.displayError(error);
@@ -167,23 +190,65 @@
 			close();
 		}
 		
+		function markSend(){
+			$confirm({ text: String.format("Souhaitez-vous marquer envoyé le dévis {0} ?", vm.item.reference), title: "Marquer un devis envoyé", ok: 'Oui', cancel: 'Non' })
+        	.then(function () {
+
+        		apiService.post(String.format('/web/api/quotation/{0}/mark-send', vm.quotationId), {},
+    					function(response){
+    						close();
+    						notificationService.displaySuccess("Le dévis a été marqué envoyé avec succès !");
+    					},
+    					function(error){							
+    						notificationService.displayError(error);
+    					});
+        	}); 			
+		}
+		
+		function markSold(){
+			$confirm({ text: String.format("Souhaitez-vous confirmer la vente pour le dévis {0} ?", vm.item.reference), title: "Confirmation de vente", ok: 'Oui', cancel: 'Non' })
+        	.then(function () {
+
+        		apiService.post(String.format('/web/api/quotation/{0}/mark-sold', vm.quotationId), {},
+    					function(response){
+    						close();
+    						notificationService.displaySuccess("La confirmation de vente a été effectuée avec succès ! Pour poursuivre les opérations, rendez-vous dans le menu Bons de commande.");
+    					},
+    					function(error){							
+    						notificationService.displayError(error);
+    					});
+        	}); 			
+		}
+		
 		this.$onInit = function(){
 			
-			vm.isNewItem = vm.quotationId ? false : true;						
+			vm.isNewItem = vm.quotationId ? false : true;
 			
-			if(vm.isNewItem){							
-				vm.title = "Nouveau devis";	
-				vm.item = { products : []};
-			}else{														
-				apiService.get(String.format('/web/api/quotation/{0}', vm.quotationId), null, 
-						function(response){
-							vm.item = response.data;
-							vm.item.orderDate = new Date(vm.item.orderDate);
-							
-							vm.title = String.format("Modifier le devis {0}", vm.item.reference);
-						}
-				);
-			}	
+			apiService.get(String.format('/web/api/quotation/payment-condition'), {}, 
+					function(response){
+						vm.paymentConditions = response.data;
+
+						if(vm.isNewItem){							
+							vm.title = "Nouveau devis";	
+
+							vm.item = { products : [], orderDate: moment(new Date()).format('YYYY-MM-DD')};
+						}else{														
+							apiService.get(String.format('/web/api/quotation/{0}', vm.quotationId), null, 
+									function(response){
+										vm.item = response.data;
+
+										vm.title = String.format("Modifier le devis {0} ({1})", vm.item.reference, vm.item.status);
+										
+										apiService.get(String.format('/web/api/quotation/{0}/product', vm.quotationId), null, 
+												function(response1){
+													vm.item.products = response1.data;
+												}
+										);
+									}
+							);
+						}	
+					}
+			);
 		}
 	}
 	

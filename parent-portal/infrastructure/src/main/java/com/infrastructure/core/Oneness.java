@@ -1,8 +1,8 @@
 package com.infrastructure.core;
 
-import java.io.IOException;
-
-public interface Oneness<T> {
-	T id();
-	boolean isPresent() throws IOException;
+public interface Oneness<TKey, T> {
+	TKey id();
+	boolean isPresent();
+	boolean isEqual(T item);
+	boolean isNotEqual(T item);
 }

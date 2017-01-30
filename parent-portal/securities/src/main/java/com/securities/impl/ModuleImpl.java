@@ -16,11 +16,11 @@ import com.securities.api.ModuleMetadata;
 public class ModuleImpl implements Module {
 
 	private final transient Base base;
-	private final transient Object id;
+	private final transient String id;
 	private final transient ModuleMetadata dm;
 	private final transient DomainStore ds;
 	
-	public ModuleImpl(Base base, Object id){
+	public ModuleImpl(Base base, String id){
 		this.base = base;
 		this.id = id;
 		this.dm = dm();
@@ -29,7 +29,7 @@ public class ModuleImpl implements Module {
 	
 	@Override
 	public String id() {
-		return id.toString();
+		return id;
 	}
 
 	@Override
@@ -81,7 +81,22 @@ public class ModuleImpl implements Module {
 	}
 
 	@Override
-	public boolean isPresent() throws IOException {
-		return base.domainsStore(dm).exists(id);
+	public boolean isPresent() {
+		try {
+			return base.domainsStore(dm).exists(id);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isEqual(Module item) {
+		return this.id().equals(item.id());
+	}
+
+	@Override
+	public boolean isNotEqual(Module item) {
+		return !isEqual(item);
 	}
 }

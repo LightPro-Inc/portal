@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.infrastructure.core.Recordable;
 
-public interface Sequence extends Recordable<UUID> {
+public interface Sequence extends Recordable<UUID, Sequence> {
 	
 	String name() throws IOException;
 	String prefix() throws IOException;
@@ -21,10 +21,9 @@ public interface Sequence extends Recordable<UUID> {
 	public enum SequenceReserved {
 		
 		USER(0, "User"),
-		QUOTATION(1, "Devis"), 
-		PURCHASE_ORDER(2, "Bon de commande"), 
-		INVOICE(3, "Facture"),
-		PAYMENT(4, "Paiement");
+		PURCHASE_ORDER(1, "Devis et commande"), 
+		INVOICE(2, "Facture"),
+		PAYMENT(3, "Paiement");
 		
 		private final int id;
 		private final String name;

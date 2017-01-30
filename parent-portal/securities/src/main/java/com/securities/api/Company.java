@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.infrastructure.core.Recordable;
 
-public interface Company extends Recordable<UUID> {
+public interface Company extends Recordable<UUID, Company> {
 	
 	String denomination() throws IOException;
 	String rccm() throws IOException;

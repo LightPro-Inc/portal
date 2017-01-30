@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.infrastructure.core.Recordable;
 
-public interface MesureUnit extends Recordable<UUID> {
+public interface MesureUnit extends Recordable<UUID, MesureUnit> {
 	String shortName() throws IOException;
 	String fullName() throws IOException;
 	MesureUnitType type() throws IOException;

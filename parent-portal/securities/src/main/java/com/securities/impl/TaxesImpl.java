@@ -11,6 +11,7 @@ import javax.ws.rs.NotFoundException;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.common.utilities.convert.UUIDConvert;
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
@@ -47,10 +48,14 @@ public class TaxesImpl implements Taxes {
 		List<DomainStore> dss = ds.getAllOrdered(HorodateImpl.dm().dateCreatedKey(), OrderDirection.DESC);
 		
 		for (DomainStore domainStore : dss) {
-			items.add(new TaxImpl(this.base, domainStore.key()));
+			items.add(build(UUIDConvert.fromObject(domainStore.key())));
 		}
 		
 		return items;
+	}
+	
+	private Tax build(UUID id){
+		return new TaxImpl(base, id);
 	}
 
 	@Override

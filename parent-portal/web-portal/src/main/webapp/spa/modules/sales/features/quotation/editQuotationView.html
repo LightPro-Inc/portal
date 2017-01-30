@@ -14,36 +14,50 @@
 	            </div>
 	            <div ng-if="!vm.loadingMetadatas" class="row">
 	                <div class="col-sm-12">	                
-	                    <div class="form-group form-group-sm">
-	                    	<div class="row">
-		                    	<div class="col-sm-6">
-		                			<div class="row">
-		                				<label class="control-label col-sm-4" for="sourceLocation"><small style="color: red">*</small>&nbsp;&nbsp;Client</label>
-						                <div class="col-sm-8">						                	
-							                <div class="input-group">
-								                <input type="text" class="form-control" id="customer" name="customer" ng-model="vm.item.customer" placeholder="Rechercher un client" required required-message="'Client est un champ obligatoire'" disabled />
-		                                        <div class="input-group-btn">
-		                                        	<button ng-if="vm.item.customerId" type="button" class="btn btn-primary" ng-click="vm.modifyCustomer(vm.item.customerId)"><i class="fa fa-edit"></i></button>
-		                                            <button type="button" class="btn btn-primary" ng-click="vm.searchCustomer()"><i class="glyphicon glyphicon-search"></i></button>
-		                                        </div>
-		                                    </div>   
-						                </div>
-		                			</div>
-		                		</div>
-		                    	<div class="col-sm-6">
-		                            <div class="row">
-		                            	<label class="control-label col-sm-4" for="orderDate"><small style="color: red">*</small>&nbsp;&nbsp;Date d'expiration</label>                                
-		                                <div class="col-sm-8">
-		                                    <div class="input-group">
-		                                        <input type="text" class="form-control" id="orderDate" name="orderDate" ng-model="vm.item.orderDate" placeholder="Renseigner date" validate-on="blur" required required-message="'Date expiration est un champ obligatoire'" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" />
-		                                        <span class="input-group-btn">
-		                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
-		                                        </span>
-		                                    </div>                                    
-		                                </div>            
-		                            </div>                    
-		                        </div>
-		                    </div>
+	                    <div class="row">
+	                    	<div class="form-group form-group-sm col-sm-6">
+                   				<label class="control-label col-sm-5" for="sourceLocation"><small style="color: red">*</small>&nbsp;&nbsp;Client</label>
+				                <div class="col-sm-7">						                	
+					                <div class="input-group">
+						                <input type="text" class="form-control" id="customer" name="customer" ng-model="vm.item.customer" placeholder="Rechercher un client" required required-message="'Client est un champ obligatoire'" disabled />
+                                        <div class="input-group-btn">
+                                        	<button ng-if="vm.item.customerId" type="button" class="btn btn-primary" ng-click="vm.modifyCustomer(vm.item.customerId)"><i class="fa fa-edit"></i></button>
+                                            <button type="button" class="btn btn-primary" ng-click="vm.searchCustomer()"><i class="glyphicon glyphicon-search"></i></button>
+                                        </div>
+                                    </div>   
+				                </div>
+                   			</div>	  
+	                    	<div class="form-group form-group-sm col-sm-6">
+                    			<label class="control-label col-sm-4" for="orderDate"><small style="color: red">*</small>&nbsp;&nbsp;Date d'édition</label>                                
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="orderDate" name="orderDate" ng-model="vm.item.orderDate" placeholder="Renseigner une date" validate-on="blur" required required-message="'Date d'édition est un champ obligatoire'" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>                                    
+                                </div>    
+                    		</div>    
+	                        <div class="form-group form-group-sm col-sm-6">
+                    			<label class="control-label col-sm-5" for="paymentCondition"><small style="color: red">*</small>&nbsp;&nbsp;Condition de règlement</label>
+				                <div class="col-sm-7">						                	
+					                <select class="form-control" id="paymentCondition" name="paymentCondition" ng-model="vm.item.paymentConditionId" required validate-on="blur" required required-message="'Condition de règlement est un champ obligatoire'">
+					                	<option value="">-- Choisir une condition --</option>
+						                <option ng-selected="vm.item.paymentConditionId == option.id" ng-repeat="option in vm.paymentConditions" value="{{option.id}}">{{option.name}}</option>
+						            </select>   
+				                </div>
+                    		</div>
+	                    	<div class="form-group form-group-sm col-sm-6">
+                    			<label class="control-label col-sm-4" for="expirationDate"><small style="color: red">*</small>&nbsp;&nbsp;Date d'expiration</label>                                
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="expirationDate" name="expirationDate" ng-model="vm.item.expirationDate" placeholder="Renseigner une date" validate-on="blur" required required-message="'Date expiration est un champ obligatoire'" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.expirationDatepicker.opened" datepicker-options="vm.dateOptions" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.openExpirationDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>                                    
+                                </div>
+                    		</div> 
 	                    </div>
 		                <div class="row">
 		                	<div class="col-md-12">
@@ -68,10 +82,10 @@
 		                					<td class="shortMargin">{{item.product}}</td>
 		                					<td class="shortMargin">{{item.description}}</td>
 		                					<td class="shortMargin">{{item.quantity}}</td>
-		                					<td class="shortMargin">{{item.unitPrice}}</td>
-		                					<td class="shortMargin">{{item.reductionAmount}}</td>
+		                					<td class="shortMargin">{{item.unitPrice | number}}</td>
+		                					<td class="shortMargin">{{item.reductionAmount | number}}</td>
 		                					<td class="shortMargin">{{item.taxesDescription}}</td>
-		                					<td class="shortMargin">{{item.totalAmountHt}}</td>
+		                					<td class="shortMargin">{{item.totalAmountHt | number}}</td>
 		                					<td>
 		                						<button type="button" class="btn btn-primary btn-xs" ng-click="vm.modifyOrderProduct(item)"><i class="fa fa-pencil"></i></button>
 		                						<button type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteOrderProduct(item)"><i class="fa fa-trash-o"></i></button>
@@ -82,23 +96,23 @@
 			                            </tr>
 		                				<tr>
 		                					<td colspan="5" rowspan="3" class="text-center">
-		                						<textarea class="form-control" rows="5" cols="8" placeholder="Définir les termes et conditions"></textarea>
+		                						<textarea class="form-control" rows="5" cols="8" placeholder="Définir les termes et conditions" ng-model="vm.item.cgv"></textarea>
 		                					</td>
 			                                <td colspan="3">
 			                                	<label class="control-label pull-left">Montant hors-taxe : </label>
-			                                	<span class="pull-right">{{vm.getTotalAmountHt()}}</span>
+			                                	<span class="pull-right">{{vm.getTotalAmountHt() | number}} {{companyCurrency}}</span>
 			                                </td>
 			                            </tr>
 			                            <tr>
 			                                <td colspan="3">
 			                                	<label class="control-label pull-left">Taxes : </label>
-			                                	<span class="pull-right">{{vm.getTotalTaxAmount()}}</span>
+			                                	<span class="pull-right">{{vm.getTotalTaxAmount() | number}} {{companyCurrency}}</span>
 			                                </td>
 			                            </tr>
 			                            <tr>
 			                            	<td colspan="3">
 			                                	<label class="control-label pull-left">Total : </label>
-			                                	<span class="pull-right"><strong>{{vm.getTotalAmountTtc()}}</strong></span>
+			                                	<span class="pull-right"><strong>{{vm.getTotalAmountTtc() | number}} {{companyCurrency}}</strong></span>
 			                                </td>
 			                            </tr>
 		                			</tbody>
@@ -109,6 +123,10 @@
 	            </div>
 	        </div>
 	        <div class="panel-footer clearfix">
+	        	<div class="pull-left">
+	                <button type="button" class="btn btn-primary" ng-click="vm.markSend()" ng-if="vm.item.statusId == 1">Marquer envoyé</button>
+	                <button type="button" class="btn btn-primary" ng-click="vm.markSold()" ng-if="vm.item.statusId == 2">Confirmer la vente</button>
+	            </div>
 	            <div class="pull-right">
 	                <button type="submit" class="btn btn-primary">Enregistrer</button>
                     <button type="button" class="btn btn-default" ng-click="vm.cancel()">Annuler</button>

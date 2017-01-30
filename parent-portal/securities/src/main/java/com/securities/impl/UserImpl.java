@@ -20,7 +20,7 @@ public class UserImpl implements User {
 	private transient final UserMetadata dm;
 	private final transient DomainStore ds;
 	
-	public UserImpl(Base base, Object id){
+	public UserImpl(Base base, UUID id){
 		this.base = base;		
 		this.identity = new PersonImpl(this.base, id);
 		this.dm = dm();
@@ -77,8 +77,13 @@ public class UserImpl implements User {
 	}
 
 	@Override
-	public boolean isPresent() throws IOException {
-		return base.domainsStore(dm).exists(identity.id());
+	public boolean isPresent() {
+		try {
+			return base.domainsStore(dm).exists(identity.id());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override
@@ -114,5 +119,15 @@ public class UserImpl implements User {
 	@Override
 	public void update(String firstName, String lastName, Sex sex, String address, Date birthDate, String tel1, String tel2, String email, String photo) throws IOException {
 		this.identity.update(firstName, lastName, sex, address, birthDate, tel1, tel2, email, photo);	
+	}
+
+	@Override
+	public boolean isEqual(Person item) {
+		return this.id().equals(item.id());
+	}
+
+	@Override
+	public boolean isNotEqual(Person item) {
+		return !isEqual(item);
 	}
 }

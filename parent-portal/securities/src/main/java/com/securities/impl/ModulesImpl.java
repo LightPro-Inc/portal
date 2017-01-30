@@ -30,10 +30,14 @@ public class ModulesImpl implements Modules {
 		
 		List<DomainStore> results = ds.findDs(statement, new ArrayList<Object>());
 		for (DomainStore domainStore : results) {
-			values.add(new ModuleImpl(this.base, domainStore.key())); 
+			values.add(build(domainStore.key().toString())); 
 		}		
 		
 		return values;		
+	}
+	
+	private Module build(String id){
+		return new ModuleImpl(base, id);
 	}
 
 	@Override
@@ -45,7 +49,7 @@ public class ModulesImpl implements Modules {
 		
 		List<DomainStore> results = ds.findDs(statement, new ArrayList<Object>());
 		for (DomainStore domainStore : results) {
-			values.add(new ModuleImpl(this.base, domainStore.key())); 
+			values.add(build(domainStore.key().toString())); 
 		}		
 		
 		return values;		
@@ -53,7 +57,7 @@ public class ModulesImpl implements Modules {
 
 	@Override
 	public Module install(String moduleid) throws IOException {
-		Module module = new ModuleImpl(this.base, moduleid);
+		Module module = build(moduleid);
 		module.install();
 		
 		return module;
@@ -61,7 +65,7 @@ public class ModulesImpl implements Modules {
 
 	@Override
 	public Module uninstall(String moduleid) throws IOException {
-		Module module = new ModuleImpl(this.base, moduleid);
+		Module module = build(moduleid);
 		module.uninstall();
 		
 		return module;

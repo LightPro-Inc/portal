@@ -12,6 +12,8 @@
 		function save(){
 			apiService.put('/web/api/company', vm.company, 
 					function(response){
+						$rootScope.company = vm.company;
+						$rootScope.companyCurrency = vm.company.currencyShortName;
 						notificationService.displaySuccess("La mise à jour a été effectuée avec succès !");
 					}, function(error){
 						notificationService.displayError(error);

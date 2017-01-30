@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.ws.rs.NotFoundException;
 
+import com.common.utilities.convert.UUIDConvert;
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
@@ -37,10 +38,14 @@ public class MesureUnitsImpl implements MesureUnits {
 		
 		List<DomainStore> results = ds.getAllOrdered(HorodateImpl.dm().dateCreatedKey(), OrderDirection.DESC);
 		for (DomainStore domainStore : results) {
-			values.add(new MesureUnitImpl(this.base, domainStore.key())); 
+			values.add(build(UUIDConvert.fromObject(domainStore.key()))); 
 		}		
 		
 		return values;		
+	}
+	
+	private MesureUnit build(UUID id){
+		return new MesureUnitImpl(base, id);
 	}
 
 	@Override

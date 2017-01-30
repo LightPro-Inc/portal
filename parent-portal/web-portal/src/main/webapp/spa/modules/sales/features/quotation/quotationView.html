@@ -27,27 +27,35 @@
 					<div class="col-sm-6" ng-repeat="item in vm.items">
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading clearfix">
-	                            <strong class="pull-left">{{item.reference}}</strong>	
+	                            <strong class="pull-left">{{item.reference}} (<i>{{item.status}}</i>)</strong>	
 	                        </div>
 	                        <div class="panel-body">	                        	
 	                            <div class="table-responsive">
 	                                <table class="table table-condensed shortMargin">
 	                                	<tr>
-	                                        <td class="shortPadding">Date :</td>
-	                                        <td class="shortPadding"><i>{{item.orderDate | date:'dd/MM/yyyy HH:mm:ss'}}</i></td>
+	                                        <td class="shortPadding">Date d'édition:</td>
+	                                        <td class="shortPadding"><i>{{item.orderDate | date:'dd/MM/yyyy'}}</i></td>
+	                                    </tr>
+	                                	<tr>
+	                                        <td class="shortPadding">Date d'expiration:</td>
+	                                        <td class="shortPadding"><i>{{item.expirationDate | date:'dd/MM/yyyy'}}</i></td>
 	                                    </tr> 
 	                                	<tr>
 	                                        <td class="shortPadding">Montant hors taxes :</td>
-	                                        <td class="shortPadding"><i>{{item.totalAmountHt | number}}</i></td>
+	                                        <td class="shortPadding"><i>{{item.totalAmountHt | number}} {{companyCurrency}}</i></td>
 	                                    </tr>	
 	                                    <tr>
 	                                        <td class="shortPadding">Montant des taxes :</td>
-	                                        <td class="shortPadding"><i>{{item.totalTaxAmount}}</i></td>
+	                                        <td class="shortPadding"><i>{{item.totalTaxAmount | number}} {{companyCurrency}}</i></td>
 	                                    </tr>
 	                                    <tr>
 	                                        <td class="shortPadding">Montant TTC :</td>
-	                                        <td class="shortPadding"><i>{{item.totalAmountTtc}}</i></td>
-	                                    </tr>		  
+	                                        <td class="shortPadding"><i>{{item.totalAmountTtc | number}} {{companyCurrency}}</i></td>
+	                                    </tr>
+	                                    <tr>
+	                                        <td class="shortPadding">Nombre de produits :</td>
+	                                        <td class="shortPadding"><i>{{item.numberOfProducts}}</i></td>
+	                                    </tr>			  
 	                                    <tr>
 	                                        <td class="shortPadding">Client:</td>
 	                                        <td class="shortPadding"><i>{{item.customer}}</i></td>
@@ -55,13 +63,17 @@
 	                                    <tr>
 	                                        <td class="shortPadding">Vendeur:</td>
 	                                        <td class="shortPadding"><i>{{item.seller}}</i></td>
-	                                    </tr>                                                                 	                                                                        	                                    				                             
+	                                    </tr>                                                             	                                                                        	                                    				                             
 	                                </table>
 	                            </div>
 	                        </div>
 	                        <div class="panel-footer clearfix">
+	                        	<div class="pull-left">
+	                                <buton class="btn btn-danger btn-xs" ng-click="vm.cancelItem(item);" ng-if="item.statusId != 0">Annuler <i class="fa fa-trash-o pull-right"></i></buton>
+	                                <buton class="btn btn-danger btn-xs" ng-click="vm.reOpenItem(item);" ng-if="item.statusId == 0">Ré-ouvrir <i class="fa fa-trash-o pull-right"></i></buton>
+	                            </div>
 	                            <div class="pull-right">
-	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
+	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);" ng-if="item.statusId != 0">Modifier <i class="fa fa-pencil pull-right"></i></buton>
 	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
 	                            </div>
 	                        </div>

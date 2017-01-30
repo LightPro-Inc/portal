@@ -81,7 +81,10 @@ public class PgDomainsStore implements DomainsStore {
 	
 	@Override
 	public void set(Object key, Map<String, Object> params) throws IOException {
-		set(key, params, base.author());
+		if(base.keyExists("ownerid", dm.domainName()))
+			set(key, params, base.author());
+		else
+			set(key, params, null);
 	}
 
 	@Override
@@ -152,7 +155,7 @@ public class PgDomainsStore implements DomainsStore {
 		String statement;
 		
 		if(orderKey == null)
-			statement = String.format("SELECT %s FROM %s WHERE %s=?", dm.keyName(), dm.domainName());
+			statement = String.format("SELECT %s FROM %s WHERE %s=?", dm.keyName(), dm.domainName(), key);
 		else{
 			
 			if(direction == OrderDirection.ASC)

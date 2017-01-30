@@ -109,6 +109,11 @@
 		<artifactId>sales-api</artifactId>
 		<version>1.0</version>
 	</dependency>
+	<dependency>
+		<groupId>com.lightpro.app</groupId>
+		<artifactId>pdv-api</artifactId>
+		<version>1.0</version>
+	</dependency>
   </dependencies>
   <properties>
     <spring.version>4.3.3.RELEASE</spring.version>

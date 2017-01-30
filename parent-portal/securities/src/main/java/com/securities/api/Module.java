@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.infrastructure.core.Oneness;
 
-public interface Module extends Oneness<String> {
+public interface Module extends Oneness<String, Module> {
 	String name() throws IOException;
 	String description() throws IOException;
 	String url() throws IOException;

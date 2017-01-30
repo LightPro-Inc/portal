@@ -17,6 +17,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.lightpro.admin.rs.CompanyRs;
+import com.lightpro.admin.rs.DashboardToolsRs;
 import com.lightpro.admin.rs.MembershipRs;
 import com.lightpro.admin.rs.MesureUnitRs;
 import com.lightpro.admin.rs.PersonRs;
@@ -28,7 +29,10 @@ import com.lightpro.hotel.rs.MaidRs;
 import com.lightpro.hotel.rs.RoomCategoryRs;
 import com.lightpro.hotel.rs.RoomRs;
 import com.lightpro.sales.rs.CustomerRs;
+import com.lightpro.sales.rs.InvoiceRs;
+import com.lightpro.sales.rs.PaymentRs;
 import com.lightpro.sales.rs.ProductRs;
+import com.lightpro.sales.rs.PurchaseOrderRs;
 import com.lightpro.sales.rs.QuotationRs;
 import com.lightpro.stocks.rs.ArticleCategoryRs;
 import com.lightpro.stocks.rs.ArticleFamilyRs;
@@ -68,6 +72,7 @@ public class RestApplication extends ResourceConfig {
 		register(MesureUnitRs.class);
 		register(TaxRs.class);
 		register(PersonRs.class);
+		register(DashboardToolsRs.class);
 		
 		// 2 - hotel
 		register(RoomCategoryRs.class);		
@@ -91,6 +96,9 @@ public class RestApplication extends ResourceConfig {
 		register(ProductRs.class);
 		register(QuotationRs.class);
 		register(CustomerRs.class);
+		register(PurchaseOrderRs.class);
+		register(InvoiceRs.class);
+		register(PaymentRs.class);
 		
 		// register features
 		register(JacksonFeature.class);		

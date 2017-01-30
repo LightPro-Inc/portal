@@ -56,15 +56,13 @@ public class PgBase implements Base {
 	@Override
 	public List<Object> executeQuery(String query, List<Object> params) throws IOException {
 		
-		Connection conn1 = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		List<Object> values = new ArrayList<Object>();
 		
-		try {
-			conn1 = getDs().getConnection();			
-			pstmt = conn1.prepareStatement(query);
+		try {		
+			pstmt = connection().prepareStatement(query);
 			
 			for (int i = 0; i < params.size(); i++) {
 				pstmt.setObject(i+1, params.get(i));
@@ -79,11 +77,30 @@ public class PgBase implements Base {
             throw new IOException(ex);
         } finally{
         	DbUtils.closeQuietly(rs);
-            DbUtils.closeQuietly(pstmt);
-            DbUtils.closeQuietly(conn1);
+            DbUtils.closeQuietly(pstmt);            
         }
 		
 		return values;	
+	}
+	
+	public boolean keyExists(String key, String entityName) throws IOException {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {		
+		    conn = getDs().getConnection();
+			pstmt = conn.prepareStatement(String.format("SELECT %s FROM %s", key, entityName));					
+            rs = pstmt.executeQuery();    
+            return true;
+        } catch (final SQLException ex) {
+            return false;
+        } finally{
+        	DbUtils.closeQuietly(rs);
+            DbUtils.closeQuietly(pstmt); 
+            DbUtils.closeQuietly(conn);            
+        }
 	}
 
 	@Override
@@ -155,5 +172,19 @@ public class PgBase implements Base {
 	public void terminate() throws IOException {
 		DbUtils.closeQuietly(connection());
 		conn = null;
+	}
+	
+	@Override
+	public void finalize() throws Throwable {
+		
+		try {
+			if(conn != null && !conn.isClosed())
+				terminate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			super.finalize();
+		}
 	}
 }

@@ -28,7 +28,67 @@
             }
         };
     };
-
+    
+    app.directive("uibDatepickerPopup", uibDatepickerPopup);
+    
+    uibDatepickerPopup.$inject = ['dateFilter', 'uibDateParser', 'uibDatepickerPopupConfig'];
+    function uibDatepickerPopup(dateFilter, uibDateParser, uibDatepickerPopupConfig){
+    	return {
+    		restrict: 'A',
+            priority: 1,
+            require: 'ngModel',
+            link: function (scope, element, attr, ngModel) {
+                var dateFormat = attr.uibDatepickerPopup || uibDatepickerPopupConfig.datepickerPopup;
+                
+                ngModel.$formatters.push(function(value) {
+                	                	
+                	if(!value)
+                		return undefined;
+                	                	
+                    if (angular.isNumber(value) || angular.isString(value)) {
+                        return new Date(value);
+                    }
+                    
+                    return value;
+                });
+                
+                ngModel.$parsers.push(function(value) {
+                	
+                	if(!value)
+                		return undefined;
+                	
+                    if (angular.isDate(value)) {
+                        return moment(value).format("YYYY-MM-DD");
+                    }
+                    
+                    return value;
+                });
+                
+                ngModel.$validators.date = function(modelValue, viewValue) {
+                    var value = viewValue || modelValue;
+                    
+                    if (!attr.ngRequired && !value) {
+                        return true;
+                    }
+                    
+                    if (angular.isNumber(value)) {
+                        value = new Date(value);
+                    }
+                    if (!value) {
+                        return true;
+                    } else if (angular.isDate(value) && !isNaN(value)) {
+                        return true;
+                    } else if (angular.isString(value)) {
+                        var date = uibDateParser.parse(value, dateFormat);                        
+                        return !isNaN(date);
+                    } else {
+                        return false;
+                    }
+                };
+            }
+    	  };
+    }
+    	
     app.directive("appFilereader", appFilereader);
     
     appFilereader.$inject = ['$rootScope', '$q'];

@@ -1,0 +1,45 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body">	
+		<div class="form-group">			 
+			 <label class="control-label" for="invoice">Facture</label>
+		     <input type="text" class="form-control" ng-model="vm.invoice.reference" name="invoice" id="invoice" disabled>         
+		</div>
+		<div class="form-group">
+            <label class="control-label" for="paymentDate"><small style="color: red">*</small>&nbsp;&nbsp;Date de paiement</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="paymentDate" name="paymentDate" uib-datepicker-popup="{{vm.datepicker.format}}" ng-model="vm.item.paymentDate" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" placeholder="dd/MM/yyyy" 
+                required required-message="'Date de paiement est un champ obligatoire'" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+		<div class="form-group">
+			 <label class="control-label" for="object"><small style="color: red">*</small>&nbsp;&nbsp;Objet</label>
+	         <input type="text" class="form-control" ng-model="vm.item.object" name="object" id="object" placeholder="Renseigner l'objet" validate-on="blur" required required-message="'Objet est un champ obligatoire'">         
+		</div>	
+		<div class="form-group">
+			 <label class="control-label" for="leftAmountToPay">Montant à  payer</label>
+	         <input type="number" class="form-control" ng-model="vm.invoice.leftAmountToPay" name="leftAmountToPay" id="leftAmountToPay" placeholder="Renseigner un montant" disabled>         
+		</div>		
+		<div class="form-group">
+			 <label class="control-label" for="paidAmount"><small style="color: red">*</small>&nbsp;&nbsp;Montant versé</label>
+	         <input type="number" class="form-control" ng-model="vm.item.paidAmount" name="paidAmount" id="paidAmount" placeholder="Renseigner le montant" validate-on="blur" required required-message="'Montant est un champ obligatoire'">         
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="mode"><small style="color: red">*</small>&nbsp;&nbsp;Mode de paiement</label>
+			 <select class="form-control" name="mode" id="mode" ng-model="vm.item.modeId" validate-on="blur" required required-message="'Mode de paiement est un champ obligatoire'">
+			 	<option value="">-- Choisir un mode --</option>
+			 	<option ng-selected="vm.item.modeId == option.id" ng-repeat="option in vm.paymentModes" value="{{option.id}}">{{option.name}}</option>
+			 </select>	         
+		</div>						
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

@@ -332,6 +332,56 @@ if (!String.format) {
 	            templateUrl: 'modules/sales/features/quotation/editQuotationView.html',
 	            controller: 'editQuotationCtrl as vm',
 	            requireAuthenticated: true
+	        })
+	        .state('main.sales.purchase-order', {
+	            url: '/purchase-order',
+	            templateUrl: 'modules/sales/features/purchase-order/purchaseOrderView.html',
+	            controller: 'purchaseOrderCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.edit-purchase-order', {
+	            url: '/edit-purchase-order/{quotationId}',
+	            templateUrl: 'modules/sales/features/purchase-order/editPurchaseOrderView.html',
+	            controller: 'editPurchaseOrderCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.invoice', {
+	            url: '/invoice/{purchaseOrderId}',
+	            templateUrl: 'modules/sales/features/invoice/invoiceView.html',
+	            controller: 'invoiceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.edit-invoice', {
+	            url: '/edit-invoice/{invoiceId}',
+	            templateUrl: 'modules/sales/features/invoice/editInvoiceView.html',
+	            controller: 'editInvoiceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.payment', {
+	            url: '/payment/{invoiceId}',
+	            templateUrl: 'modules/sales/features/payment/paymentView.html',
+	            controller: 'paymentCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.pdv', {
+                abstract: true,
+                url:'/pdv',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/pdv/pdvView.html',      
+                        controller: 'pdvCtrl as vm'                  
+                    },                    
+                    'sideBarPdv@main.pdv' : {
+                        templateUrl: 'modules/pdv/side-bar/sideBarView.html',
+                        controller: 'pdvSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.pdv.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/pdv/dashboard/dashboardView.html',
+	            controller: 'pdvDashboardCtrl as vm',
+	            requireAuthenticated: true
 	        });
 	}
 	

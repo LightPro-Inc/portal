@@ -30,6 +30,8 @@
 		
 		this.$onInit = function(){
 
+			var isFirstCall = true;
+			
 			if(vm.isNewItem){
 				vm.item = {id:Guid.newGuid(), reductionAmount:0, unitPrice : 0, quantity: 1, totalTaxAmount: 0, totalAmountHt: 0, totalAmountTtc: 0};
 				vm.title = "Ajouter une ligne de produit";
@@ -46,8 +48,20 @@
 			);	
 			
 			$scope.$watchGroup(['vm.item.quantity', 'vm.item.reductionAmount', 'vm.item.productId'], function(newValues, oldValues, scope) {
-				  if(newValues[2]){
-					  apiService.post(String.format('/web/api/product/{0}/calculate-amount', newValues[2]), {quantity:newValues[0], reductionAmount:newValues[1], orderDate:new Date()},
+				  
+				  if(!vm.isNewItem && isFirstCall){
+					  isFirstCall = false;
+					  return;
+				  }
+				  
+				  isFirstCall = false;
+				  
+				  var quantity = newValues[0];
+				  var reductionAmount = newValues[1];
+				  var productId = newValues[2];
+				  
+				  if(productId){
+					  apiService.post(String.format('/web/api/product/{0}/calculate-amount', productId), {quantity:quantity, reductionAmount:reductionAmount, orderDate: data.orderDate},
 							  function(response){
 						  			vm.item.unitPrice = response.data.unitPrice;
 						  			vm.item.unitPriceApplied = response.data.unitPriceApplied;

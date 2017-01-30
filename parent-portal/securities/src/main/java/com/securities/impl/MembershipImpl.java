@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.common.utilities.convert.UUIDConvert;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.securities.api.Membership;
@@ -67,13 +68,13 @@ public class MembershipImpl implements Membership {
 		if(results.isEmpty())
 			value = new MembershipContext(null);
 		else
-			value = new MembershipContext(new UserImpl(this.base, results.get(0).key()));
+			value = new MembershipContext(new UserImpl(this.base, UUIDConvert.fromObject(results.get(0).key())));
 		
 		return value;
 	}
 
 	@Override
-	public User get(Object id) throws IOException {
+	public User get(UUID id) throws IOException {
 		return new UserImpl(base, id);
 	}
 }
