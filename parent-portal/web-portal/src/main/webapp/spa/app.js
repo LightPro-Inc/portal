@@ -363,6 +363,12 @@ if (!String.format) {
 	            controller: 'paymentCtrl as vm',
 	            requireAuthenticated: true
 	        })
+	        .state('main.sales.customer', {
+	            url: '/customer',
+	            templateUrl: 'modules/sales/features/customer/customerView.html',
+	            controller: 'customerCtrl as vm',
+	            requireAuthenticated: true
+	        })
 	        .state('main.pdv', {
                 abstract: true,
                 url:'/pdv',
