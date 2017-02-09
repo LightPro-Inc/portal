@@ -1,6 +1,7 @@
 package com.lightpro.admin.vm;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ final public class PersonVm {
 	}
 	
 	@JsonGetter
-	public Date getBirthDate() throws IOException {
+	public LocalDate getBirthDate() throws IOException {
 		return origin.birthDate();
 	}
 	

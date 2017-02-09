@@ -1,6 +1,7 @@
 package com.lightpro.admin.vm;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import com.securities.api.Module;
 
@@ -15,7 +16,7 @@ public class ModuleVm {
 		this.module = module;
 	}
 	
-	public String getId(){
+	public UUID getId(){
 		return this.module.id();
 	}
 	
@@ -23,11 +24,15 @@ public class ModuleVm {
 		return this.module.name();
 	}
 	
+	public String getShortName() throws IOException {
+		return this.module.shortName();
+	}
+	
 	public String getDescription() throws IOException {
 		return this.module.description();
 	}
 	
-	public String getUrl() throws IOException {
-		return this.module.url();
+	public int getTypeId() throws IOException {
+		return this.module.type().id();
 	}
 }

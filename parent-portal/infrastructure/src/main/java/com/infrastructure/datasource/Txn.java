@@ -1,6 +1,5 @@
 package com.infrastructure.datasource;
 
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 public final class Txn {
@@ -16,7 +15,7 @@ public final class Txn {
 			T result = callable.call();
 			base.commit();
 			return result;
-		} catch(IOException e){
+		} catch(Exception e){
 			base.rollback();
 			throw e;
 		}

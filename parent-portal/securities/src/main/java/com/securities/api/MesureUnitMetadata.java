@@ -38,4 +38,8 @@ public class MesureUnitMetadata implements DomainMetadata {
 	public String typeIdKey(){
 		return "typeid";
 	}
+	
+	public String companyIdKey(){
+		return "companyid";
+	}
 }

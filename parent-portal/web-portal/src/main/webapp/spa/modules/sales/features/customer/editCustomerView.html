@@ -11,9 +11,17 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Nom</label>
-                                    <input type="text" class="form-control" ng-model="vm.item.lastName" name="Name" id="Name" placeholder="Renseigner le nom"
-                                           validate-on="blur" required required-message="'Le Nom est un champ obligatoire'">
+                                    <label class="control-label" for="person"><small style="color: red">*</small>&nbsp;&nbsp;Nom</label>
+                                    <div class="input-group">
+						                <input type="text" class="form-control" id="person" name="person" ng-model="vm.item.lastName" placeholder="Renseigner le nom" required required-message="'Nom est un champ obligatoire'" />
+                                        <div class="input-group-btn" ng-if="vm.isNew">
+                                        	<button class="btn btn-danger" ng-show="vm.item.id" ng-click="vm.razPerson()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+                                            <button type="button" class="btn btn-primary" ng-click="vm.searchPerson()"><i class="glyphicon glyphicon-search"></i></button>                                            
+                                        </div>
+                                    </div>   
+	                                    
+                                    <!-- <input type="text" class="form-control" ng-model="vm.item.lastName" name="Name" id="Name" placeholder="Renseigner le nom"
+                                           validate-on="blur" required required-message="'Le Nom est un champ obligatoire'"> -->
                                 </div>
 
                                 <div class="col-sm-6 selectContainer">

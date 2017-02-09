@@ -11,6 +11,7 @@ public interface Base {
 	void commit() throws IOException;
 	void rollback() throws IOException;
 	void terminate() throws IOException;
+	Base build(String username) throws IOException;
 	
 	DomainsStore domainsStore(DomainMetadata dm);	
 	List<Object> executeQuery(String query, List<Object> params) throws IOException;

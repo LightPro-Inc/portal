@@ -46,7 +46,7 @@ if (!String.format) {
          })
          .state('main', {
                 abstract: true,
-                url:'/main',
+                url:'/main',                
                 views: {
                     '' : {
                         templateUrl: 'main/mainView.html',
@@ -388,6 +388,44 @@ if (!String.format) {
 	            templateUrl: 'modules/pdv/dashboard/dashboardView.html',
 	            controller: 'pdvDashboardCtrl as vm',
 	            requireAuthenticated: true
+	        })
+	        .state('main.pdv.pdv-settings', {
+	            url: '/pdv-settings',
+	            templateUrl: 'modules/pdv/settings/pdv-settings/pdvSettingsView.html',
+	            controller: 'pdvSettingsCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.pdv.pdv-product', {
+	            url: '/pdv-product/{pdvId}',
+	            templateUrl: 'modules/pdv/settings/pdv-settings/pdvProductView.html',
+	            controller: 'pdvProductCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('cashdesk', {
+	            url: '/cashdesk/{sessionId}',
+	            templateUrl: 'modules/pdv/features/cashdesk/cashdeskView.html',
+	            controller: 'cashdeskCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta', {
+                abstract: true,
+                url:'/compta',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/compta/comptaView.html',      
+                        controller: 'comptaCtrl as vm'                  
+                    },                    
+                    'sideBarCompta@main.compta' : {
+                        templateUrl: 'modules/compta/side-bar/sideBarView.html',
+                        controller: 'comptaSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.compta.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/compta/dashboard/dashboardView.html',
+	            controller: 'comptaDashboardCtrl as vm',
+	            requireAuthenticated: true
 	        });
 	}
 	
@@ -419,5 +457,11 @@ if (!String.format) {
         {
             stateChangeStartEvent();
         });
+        
+        $(document).ready(function() {
+	    	  $('[data-toggle=offcanvas]').click(function() {
+	    	    $('.row-offcanvas').toggleClass('active');
+	    	  });
+	    	});
 	}
 })();

@@ -11,7 +11,6 @@ import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.securities.api.Company;
 import com.securities.api.CompanyMetadata;
-import com.securities.api.Membership;
 import com.securities.api.MesureUnitTypes;
 import com.securities.api.MesureUnits;
 import com.securities.api.Modules;
@@ -29,8 +28,8 @@ public class CompanyImpl implements Company {
 	public CompanyImpl(final Base base, final UUID id) {
 		this.base = base;
 		this.id = id;
-		this.dm = dm();
-		this.ds = this.base.domainsStore(this.dm).createDs(id);		
+		this.dm = CompanyMetadata.create();
+		this.ds = this.base.domainsStore(this.dm).createDs(id);			
 	}
 
 	@Override
@@ -135,36 +134,27 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public Modules modules() {
-		return new ModulesImpl(this.base);
-	}
-
-	@Override
-	public Membership membership() {
-		return new MembershipImpl(this.base);
+		return new ModulesImpl(this.base, this);
 	}
 
 	@Override
 	public Persons persons() {
-		return new PersonsImpl(this.base);
+		return new PersonsImpl(this.base, this);
 	}
 
 	@Override
 	public Horodate horodate() {
 		return new HorodateImpl(ds);
-	}
-	
-	public static CompanyMetadata dm(){
-		return new CompanyMetadata();
-	}
+	}	
 
 	@Override
 	public Sequences sequences() {
-		return new SequencesImpl(this.base);
+		return new SequencesImpl(this.base, this);
 	}
 	
 	@Override
 	public MesureUnits mesureUnits() {
-		return new MesureUnitsImpl(this.base);
+		return new MesureUnitsImpl(this.base, this);
 	}
 	
 	@Override
@@ -174,18 +164,12 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public boolean isPresent() {
-		try {
-			return base.domainsStore(dm).exists(id);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return false;
+		return base.domainsStore(dm).exists(id);
 	}
 
 	@Override
 	public Taxes taxes() {
-		return new TaxesImpl(this.base);
+		return new TaxesImpl(this.base, this);
 	}
 
 	@Override

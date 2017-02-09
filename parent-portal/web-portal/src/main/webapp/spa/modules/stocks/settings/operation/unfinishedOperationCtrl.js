@@ -34,7 +34,7 @@
         }
         
         function close() {
-        	$previousState.go();
+        	$state.go('main.stocks.warehouse-operation-type', {warehouseId: vm.type.warehouseId});
         }
 
         function loadItems(){

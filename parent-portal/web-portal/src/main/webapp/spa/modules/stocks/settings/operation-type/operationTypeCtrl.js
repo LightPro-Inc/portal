@@ -3,8 +3,8 @@
 	
 	app.controller('operationTypeCtrl', operationTypeCtrl);
 	
-	operationTypeCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$stateParams', '$state', '$rootScope', '$previousState'];
-	function operationTypeCtrl(apiService, $uibModal, $confirm, notificationService, $stateParams, $state, $rootScope, $previousState){
+	operationTypeCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$stateParams', '$state', '$rootScope', '$previousState', 'utilityService'];
+	function operationTypeCtrl(apiService, $uibModal, $confirm, notificationService, $stateParams, $state, $rootScope, $previousState, utilityService){
 		var vm = this;
 		
 		vm.warehouseId = $stateParams.warehouseId;
@@ -15,8 +15,12 @@
 		vm.clearSearch = clearSearch;
 		vm.search = search;
 		vm.deleteItem = deleteItem;		
-		vm.goPreviousPage = goPreviousPage;
 		vm.showUnfinishedOperations = showUnfinishedOperations;
+		vm.warehouseChanged = warehouseChanged;
+		
+		function warehouseChanged(warehouseId){
+			search();
+		}
 		
 		function addNewOperation(type){
 			$state.go('main.stocks.edit-operation', {operationTypeId: type.id});
@@ -93,15 +97,8 @@
 		            }	
 			};
 			            
-			vm.loadingData = true;
-			
-			var url;
-			if(vm.warehouseId)
-				url = String.format('/web/api/warehouse/{0}/operation-type/search', vm.warehouseId);
-			else
-				url = '/web/api/operation-type/search';
-					
-			apiService.get(url, config, 
+			vm.loadingData = true;	
+			apiService.get(String.format('/web/api/warehouse/{0}/operation-type/search', vm.warehouseId), config, 
 					function(result){					
 						vm.loadingData = false;
 			            vm.totalCount = result.data.totalCount;
@@ -114,22 +111,19 @@
 					});			
 		}
 		
-		function goPreviousPage(){
-			$previousState.go();
-		}
-		
 		this.$onInit = function(){
 			vm.pageSize = 4;
 			
-			search();	
-			
-			if(vm.warehouseId){
-				apiService.get(String.format('/web/api/warehouse/{0}', vm.warehouseId), null, 
-						function(response){
-							vm.warehouse = response.data;
-						}
-				);
-			}			
+			apiService.get(String.format('/web/api/warehouse'), {}, 
+					function(response){
+						vm.warehouses = response.data;
+						
+						if(!vm.warehouseId && vm.warehouses.length > 0)
+							vm.warehouseId = vm.warehouses[0].id;
+						
+						warehouseChanged(vm.warehouseId);
+					}
+			);				
 		}
 	}
 	

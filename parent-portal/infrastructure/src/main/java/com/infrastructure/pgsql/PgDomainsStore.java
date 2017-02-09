@@ -88,7 +88,7 @@ public class PgDomainsStore implements DomainsStore {
 	}
 
 	@Override
-	public boolean exists(Object key) throws IOException {
+	public boolean exists(Object key) {
 		return exists(dm.keyName(), key);
 	}
 
@@ -180,11 +180,16 @@ public class PgDomainsStore implements DomainsStore {
 	}
 
 	@Override
-	public boolean exists(Object key, Object keyValue) throws IOException {
+	public boolean exists(Object key, Object keyValue) {
 		String statement = String.format("SELECT * FROM %s WHERE %s=?", dm.domainName(), key);		
-		List<Object> values = this.base.executeQuery(statement, Arrays.asList(keyValue));
-		
-		return !values.isEmpty();
+		List<Object> values;
+		try {
+			values = this.base.executeQuery(statement, Arrays.asList(keyValue));
+			return !values.isEmpty();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;		
 	}
 
 	@Override

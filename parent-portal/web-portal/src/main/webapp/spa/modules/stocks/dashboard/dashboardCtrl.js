@@ -8,6 +8,15 @@
 		var vm = this;
 
 		vm.getStockColor = getStockColor;
+		vm.warehouseChanged = warehouseChanged;
+		
+		function warehouseChanged(warehouseId){
+			apiService.get(String.format('/web/api/warehouse/{0}/stock', warehouseId), {}, 
+					function(response){						
+						vm.stocks = response.data;
+					}
+			);
+		}
 		
 		function getStockColor(stockLocation) {
 	        switch (stockLocation.alertId) {
@@ -22,17 +31,6 @@
 	        }
 	    }
 		
-		$scope.$watch('vm.warehouseId', function () {
-			if(!vm.warehouseId)
-				return;
-			
-			apiService.get(String.format('/web/api/warehouse/{0}/stock', vm.warehouseId), {}, 
-					function(response){						
-						vm.stocks = response.data;
-					}
-			);
-        });
-		
 		this.$onInit = function(){
 			
 			apiService.get(String.format('/web/api/warehouse'), {}, 
@@ -40,7 +38,10 @@
 						vm.warehouses = response.data;	
 						
 						if(vm.warehouses.length > 0)
+						{
 							vm.warehouseId = vm.warehouses[0].id;
+							warehouseChanged(vm.warehouseId);
+						}
 					}
 			);				
 		}

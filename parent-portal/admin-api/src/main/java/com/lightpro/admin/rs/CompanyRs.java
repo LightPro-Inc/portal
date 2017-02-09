@@ -19,11 +19,15 @@ import javax.ws.rs.core.Response;
 import com.lightpro.admin.cmd.CompanyEdited;
 import com.lightpro.admin.vm.CompanyVm;
 import com.lightpro.admin.vm.ModuleVm;
+import com.securities.api.Module;
+import com.securities.api.ModuleType;
+import com.securities.api.Secured;
 
 @Path("/company")
 public class CompanyRs extends AdminBaseRs {
 
 	@GET
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getOwner() throws IOException {	
 		
@@ -32,12 +36,13 @@ public class CompanyRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						return Response.ok(new CompanyVm(company())).build();						
+						return Response.ok(new CompanyVm(currentCompany())).build();						
 					}
 				});			
 	}
 	
 	@GET
+	@Secured
 	@Path("/modulesAvailable")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getModulesAvailable() throws IOException {		
@@ -47,7 +52,7 @@ public class CompanyRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<ModuleVm> modulesVm = company().modules().availables()
+						List<ModuleVm> modulesVm = currentCompany().modules().availables()
 								.stream()
 						 		.map(m -> new ModuleVm(m))
 						 		.collect(Collectors.toList());
@@ -58,6 +63,7 @@ public class CompanyRs extends AdminBaseRs {
 	}
 	
 	@GET
+	@Secured
 	@Path("/modulesInstalled")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getModulesInstalled() throws IOException {	
@@ -67,7 +73,7 @@ public class CompanyRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<ModuleVm> modulesVm = company().modules().installed()
+						List<ModuleVm> modulesVm = currentCompany().modules().installed()
 								.stream()
 						 		.map(m -> new ModuleVm(m))
 						 		.collect(Collectors.toList());		
@@ -78,16 +84,19 @@ public class CompanyRs extends AdminBaseRs {
 	}
 	
 	@POST
-	@Path("/module/{id}/install")
+	@Secured
+	@Path("/module/{moduleType}/install")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response installModule(@PathParam("id") String id) throws IOException {
+	public Response installModule(@PathParam("moduleType") int moduleTypeId) throws IOException {
 		
 		return createHttpResponse(
 				new Callable<Response>(){
 					@Override
 					public Response call() throws IOException {
 						
-						company().modules().install(id);
+						ModuleType type = ModuleType.get(moduleTypeId);
+						Module module = currentCompany().modules().get(type);
+						currentCompany().modules().install(module);
 						
 						return Response.status(Response.Status.OK).build();	
 					}
@@ -95,16 +104,19 @@ public class CompanyRs extends AdminBaseRs {
 	}
 	
 	@POST
-	@Path("/module/{id}/uninstall")
+	@Secured
+	@Path("/module/{moduleTypeId}/uninstall")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response uninstallModule(@PathParam("id") String id) throws IOException {
+	public Response uninstallModule(@PathParam("moduleType") int moduleTypeId) throws IOException {
 		
 		return createHttpResponse(
 				new Callable<Response>(){
 					@Override
 					public Response call() throws IOException {
 						
-						company().modules().uninstall(id);
+						ModuleType type = ModuleType.get(moduleTypeId);
+						Module module = currentCompany().modules().get(type);
+						currentCompany().modules().uninstall(module);
 						
 						return Response.status(Response.Status.OK).build();
 					}
@@ -112,6 +124,7 @@ public class CompanyRs extends AdminBaseRs {
 	}
 	
 	@PUT
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response update(final CompanyEdited cmd) throws IOException {
 		
@@ -120,7 +133,7 @@ public class CompanyRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						company().update(cmd.getDenomination(), 
+						currentCompany().update(cmd.getDenomination(), 
 									     cmd.rccm(), 
 									     cmd.ncc(), 
 									     cmd.siegeSocial(), 

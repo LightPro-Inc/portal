@@ -18,11 +18,14 @@ import javax.ws.rs.core.Response;
 
 import com.lightpro.admin.cmd.TaxEdited;
 import com.lightpro.admin.vm.TaxVm;
+import com.securities.api.Secured;
 import com.securities.api.Tax;
 
 @Path("/tax")
 public class TaxRs extends AdminBaseRs {
+	
 	@GET
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAll() throws IOException {	
 		
@@ -31,7 +34,7 @@ public class TaxRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<TaxVm> items = company().taxes().all()
+						List<TaxVm> items = currentCompany().taxes().all()
 													 .stream()
 											 		 .map(m -> new TaxVm(m))
 											 		 .collect(Collectors.toList());
@@ -42,6 +45,7 @@ public class TaxRs extends AdminBaseRs {
 	}
 	
 	@GET
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getSingle(@PathParam("id") UUID id) throws IOException {	
@@ -51,7 +55,7 @@ public class TaxRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						TaxVm item = new TaxVm(company().taxes().get(id));
+						TaxVm item = new TaxVm(currentCompany().taxes().get(id));
 
 						return Response.ok(item).build();
 					}
@@ -59,6 +63,7 @@ public class TaxRs extends AdminBaseRs {
 	}
 	
 	@POST
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response add(TaxEdited cmd) throws IOException {
 		
@@ -67,7 +72,7 @@ public class TaxRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						company().taxes().add(cmd.name(), cmd.shortName(), cmd.rate());
+						currentCompany().taxes().add(cmd.name(), cmd.shortName(), cmd.rate());
 						
 						return Response.status(Response.Status.OK).build();
 					}
@@ -75,6 +80,7 @@ public class TaxRs extends AdminBaseRs {
 	}
 	
 	@PUT
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response update(@PathParam("id") final UUID id, final TaxEdited cmd) throws IOException {
@@ -84,7 +90,7 @@ public class TaxRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Tax item = company().taxes().get(id);
+						Tax item = currentCompany().taxes().get(id);
 						item.update(cmd.name(), cmd.shortName(), cmd.rate());
 						
 						return Response.status(Response.Status.OK).build();
@@ -93,6 +99,7 @@ public class TaxRs extends AdminBaseRs {
 	}
 	
 	@DELETE
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response delete(@PathParam("id") final UUID id) throws IOException {
@@ -102,8 +109,8 @@ public class TaxRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Tax item = company().taxes().get(id);
-						company().taxes().delete(item);
+						Tax item = currentCompany().taxes().get(id);
+						currentCompany().taxes().delete(item);
 						
 						return Response.status(Response.Status.OK).build();
 					}

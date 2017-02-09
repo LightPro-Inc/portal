@@ -17,7 +17,7 @@
 					apiService.post(String.format('/web/api/purchase-order/{0}/invoice/final', vm.purchaseOrderId), {},
 	    					function (response){
 								$uibModalInstance.close(response.data);
-	    						notificationService.displaySuccess("La facture a été créée en mode Brouillon !");   
+	    						notificationService.displaySuccess("La facture a été créée avec succès !");   
 	    					}, 
 	    					function(error){
 	    						notificationService.displayError(error);

@@ -1,7 +1,7 @@
 package com.securities.impl;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -10,6 +10,7 @@ import com.infrastructure.core.Horodate;
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
+import com.securities.api.Company;
 import com.securities.api.Person;
 import com.securities.api.PersonMetadata;
 import com.securities.api.Sex;
@@ -65,12 +66,7 @@ public class PersonImpl implements Person {
 
 	@Override
 	public boolean isPresent() {
-		try {
-			return base.domainsStore(dm).exists(id);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
+		return base.domainsStore(dm).exists(id);
 	}
 
 	@Override
@@ -79,8 +75,9 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public Date birthDate() throws IOException {
-		return ds.get(dm.birthDateKey());
+	public LocalDate birthDate() throws IOException {
+		java.sql.Date date = ds.get(dm.birthDateKey());
+		return date == null ? null : date.toLocalDate();
 	}
 
 	@Override
@@ -104,7 +101,7 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public void update(String firstName, String lastName, Sex sex, String address, Date birthDate, String tel1, String tel2, String email, String photo) throws IOException {
+	public void update(String firstName, String lastName, Sex sex, String address, LocalDate birthDate, String tel1, String tel2, String email, String photo) throws IOException {
 		if (firstName == null || firstName.isEmpty()) {
             throw new IllegalArgumentException("Invalid firstName : it can't be empty!");
         }
@@ -118,7 +115,7 @@ public class PersonImpl implements Person {
 		params.put(dm.lastNameKey(), lastName);
 		params.put(dm.sexKey(), sex.name());
 		params.put(dm.addressKey(), address);
-		params.put(dm.birthDateKey(), birthDate == null ? null : new java.sql.Timestamp(birthDate.getTime()));
+		params.put(dm.birthDateKey(), birthDate == null ? null : java.sql.Date.valueOf(birthDate));
 		params.put(dm.tel1Key(), tel1);
 		params.put(dm.tel2Key(), tel2);
 		params.put(dm.emailKey(), email);
@@ -135,5 +132,11 @@ public class PersonImpl implements Person {
 	@Override
 	public boolean isNotEqual(Person item) {
 		return !isEqual(item);
+	}
+
+	@Override
+	public Company company() throws IOException {
+		UUID companyId = ds.get(dm.companyIdKey());
+		return new CompanyImpl(base, companyId);
 	}
 }

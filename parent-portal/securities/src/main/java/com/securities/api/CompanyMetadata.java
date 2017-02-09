@@ -8,7 +8,7 @@ public class CompanyMetadata implements DomainMetadata {
 	private final transient String keyName;
 	
 	public CompanyMetadata(){
-		this.domainName = "company";
+		this.domainName = "companies";
 		this.keyName = "id";
 	}
 	
@@ -73,5 +73,9 @@ public class CompanyMetadata implements DomainMetadata {
 	
 	public String currencyShortName(){
 		return "currencyshortname";
+	}
+	
+	public static CompanyMetadata create(){
+		return new CompanyMetadata();
 	}
 }

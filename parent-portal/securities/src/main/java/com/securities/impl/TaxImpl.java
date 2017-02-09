@@ -11,6 +11,7 @@ import com.infrastructure.core.Horodate;
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
+import com.securities.api.Company;
 import com.securities.api.Tax;
 import com.securities.api.TaxMetadata;
 
@@ -40,12 +41,7 @@ public class TaxImpl implements Tax {
 
 	@Override
 	public boolean isPresent() {
-		try {
-			return base.domainsStore(dm).exists(id);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
+		return base.domainsStore(dm).exists(id);
 	}
 
 	@Override
@@ -103,5 +99,11 @@ public class TaxImpl implements Tax {
 	@Override
 	public boolean isNotEqual(Tax item) {
 		return !isEqual(item);
+	}
+
+	@Override
+	public Company company() throws IOException {
+		UUID companyId = ds.get(dm.companyIdKey());
+		return new CompanyImpl(base, companyId);
 	}
 }

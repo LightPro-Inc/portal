@@ -1,8 +1,8 @@
 package com.infrastructure.core;
 
-public interface Oneness<TKey, T> {
+public interface Oneness<TKey, TEntity> {
 	TKey id();
 	boolean isPresent();
-	boolean isEqual(T item);
-	boolean isNotEqual(T item);
+	boolean isEqual(TEntity item);
+	boolean isNotEqual(TEntity item);
 }

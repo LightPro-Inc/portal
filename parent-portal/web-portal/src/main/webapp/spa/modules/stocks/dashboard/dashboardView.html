@@ -5,7 +5,7 @@
        	   <div class="form-group form-group-sm">
 	       	   <label class="control-label col-sm-4" for="warehouse">Entrepôt</label>
 	           <div class="col-sm-8">
-		           	<select class="form-control" id="warehouse" name="warehouse" ng-model="vm.warehouseId">
+		           	<select class="form-control" id="warehouse" name="warehouse" ng-model="vm.warehouseId" ng-change="vm.warehouseChanged(vm.warehouseId)">
 		                <option ng-repeat="option in vm.warehouses" value="{{option.id}}">{{option.name}}</option>
 		            </select>
 	           </div>

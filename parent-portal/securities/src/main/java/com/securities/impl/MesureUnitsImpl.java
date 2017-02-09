@@ -15,6 +15,7 @@ import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.infrastructure.datasource.DomainsStore;
 import com.infrastructure.datasource.Base.OrderDirection;
+import com.securities.api.Company;
 import com.securities.api.MesureUnit;
 import com.securities.api.MesureUnitMetadata;
 import com.securities.api.MesureUnits;
@@ -24,11 +25,13 @@ public class MesureUnitsImpl implements MesureUnits {
 	private final transient Base base;
 	private final transient MesureUnitMetadata dm;
 	private final transient DomainsStore ds;
+	private final transient Company company;
 	
-	public MesureUnitsImpl(final Base base){
+	public MesureUnitsImpl(final Base base, final Company company){
 		this.base = base;
 		this.dm = MesureUnitImpl.dm();
 		this.ds = base.domainsStore(dm);
+		this.company = company;
 	}
 	
 	@Override
@@ -36,7 +39,7 @@ public class MesureUnitsImpl implements MesureUnits {
 		
 		List<MesureUnit> values = new ArrayList<MesureUnit>();	
 		
-		List<DomainStore> results = ds.getAllOrdered(HorodateImpl.dm().dateCreatedKey(), OrderDirection.DESC);
+		List<DomainStore> results = ds.getAllByKeyOrdered(dm.companyIdKey(), company.id(), HorodateImpl.dm().dateCreatedKey(), OrderDirection.DESC);
 		for (DomainStore domainStore : results) {
 			values.add(build(UUIDConvert.fromObject(domainStore.key()))); 
 		}		
@@ -67,26 +70,28 @@ public class MesureUnitsImpl implements MesureUnits {
 		params.put(dm.shortNameKey(), shortName);
 		params.put(dm.fullNameKey(), fullName);
 		params.put(dm.typeIdKey(), typeId);
+		params.put(dm.companyIdKey(), company.id());
 		
 		UUID id = UUID.randomUUID();
 		ds.set(id, params);
 		
-		return new MesureUnitImpl(this.base, id);		
+		return build(id);		
 	}
 
 	@Override
 	public void delete(MesureUnit unit) throws IOException {
-		ds.delete(unit.id());
+		if(unit.company().isEqual(company))
+			ds.delete(unit.id());
 	}
 
 	@Override
 	public MesureUnit get(UUID id) throws IOException {
 		
 		MesureUnit unit = getOrDefault(id);
-		if(unit == null)
+		if(unit == null || (unit.isPresent() && unit.company().isNotEqual(company)))
 			throw new NotFoundException("L'unité de mesure n'a pas été trouvée !");
 		
-		return new MesureUnitImpl(this.base, id);
+		return build(id); 
 	}
 
 	@Override
@@ -95,7 +100,7 @@ public class MesureUnitsImpl implements MesureUnits {
 		if(!ds.exists(id))
 			return null;
 		
-		return new MesureUnitImpl(this.base, id);
+		return build(id);
 	}
 
 	@Override

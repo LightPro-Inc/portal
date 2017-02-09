@@ -17,11 +17,13 @@ import javax.ws.rs.core.Response;
 
 import com.lightpro.admin.vm.DayVm;
 import com.lightpro.admin.vm.MonthVm;
+import com.securities.api.Secured;
 
 @Path("/dashboard-tool")
 public class DashboardToolsRs extends AdminBaseRs {
 	
 	@GET
+	@Secured
 	@Path("/year/{year}/month/{month}/day")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getDays(@PathParam("year") final int year, @PathParam("month") final int month) throws IOException {	
@@ -54,6 +56,7 @@ public class DashboardToolsRs extends AdminBaseRs {
 	}	
 	
 	@GET
+	@Secured
 	@Path("/month")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getMonths() throws IOException {	
@@ -85,6 +88,7 @@ public class DashboardToolsRs extends AdminBaseRs {
 	}	
 	
 	@GET
+	@Secured
 	@Path("/year/work")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getYearsWork() throws IOException {	
@@ -105,6 +109,7 @@ public class DashboardToolsRs extends AdminBaseRs {
 	}
 	
 	@GET
+	@Secured
 	@Path("/day/today")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getToday() throws IOException {	

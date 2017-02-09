@@ -38,4 +38,8 @@ public class UserMetadata implements DomainMetadata {
 	public String isLockedKey() {
 		return "islocked";
 	}	
+	
+	public String saltKey() {
+		return "salt";
+	}	
 }

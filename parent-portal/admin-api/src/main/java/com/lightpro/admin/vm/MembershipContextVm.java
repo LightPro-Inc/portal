@@ -1,5 +1,6 @@
 package com.lightpro.admin.vm;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -23,12 +24,12 @@ public class MembershipContextVm {
 	}
 	
 	@JsonGetter
-	public String getTokens(){
-		return membershipContext.tokens();
+	public String getToken() throws IOException {
+		return membershipContext.token();
 	}
 	
 	@JsonGetter
 	public UUID getIdUser(){
-		return membershipContext.idUser();
+		return membershipContext.userId();
 	}
 }

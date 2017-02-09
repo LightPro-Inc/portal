@@ -35,7 +35,6 @@ public interface Company extends Recordable<UUID, Company> {
 	
 	void changeLogo(String logo) throws IOException;	
 	Modules modules();	
-	Membership membership();	
 	Persons persons();
 	Sequences sequences();
 	MesureUnits mesureUnits();

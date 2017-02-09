@@ -17,6 +17,7 @@ import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.infrastructure.datasource.DomainsStore;
 import com.infrastructure.datasource.Base.OrderDirection;
+import com.securities.api.Company;
 import com.securities.api.Tax;
 import com.securities.api.TaxMetadata;
 import com.securities.api.Taxes;
@@ -26,19 +27,23 @@ public class TaxesImpl implements Taxes {
 	private final transient Base base;
 	private final transient TaxMetadata dm;
 	private final transient DomainsStore ds;
+	private final transient Company company;
 	
-	public TaxesImpl(final Base base){
+	public TaxesImpl(final Base base, final Company company){
 		this.base = base;
 		this.dm = TaxImpl.dm();
 		this.ds = base.domainsStore(dm);
+		this.company = company;
 	}
 	
 	@Override
 	public Tax get(UUID id) throws IOException {
-		if(!ds.exists(id))
+		Tax item = build(id);
+		
+		if(!item.isPresent() || !item.company().isEqual(company))
 			throw new NotFoundException("La taxe n'a pas été trouvé !");
 		
-		return new TaxImpl(this.base, id);
+		return build(id);
 	}
 
 	@Override
@@ -77,15 +82,17 @@ public class TaxesImpl implements Taxes {
 		params.put(dm.nameKey(), name);
 		params.put(dm.shortNameKey(), shortName);
 		params.put(dm.rateKey(), rate);
+		params.put(dm.companyIdKey(), company.id());
 		
 		UUID id = UUID.randomUUID();
 		ds.set(id, params);
 		
-		return new TaxImpl(this.base, id);
+		return build(id);
 	}
 
 	@Override
 	public void delete(Tax item) throws IOException {
+		if(item.isPresent() && item.company().isEqual(company))
 		ds.delete(item.id());
 	}
 }

@@ -1,5 +1,5 @@
 package com.infrastructure.core;
 
-public interface Recordable<T, G> extends Oneness<T, G> {	
+public interface Recordable<TKey, TEntity> extends Oneness<TKey, TEntity> {	
 	Horodate horodate();	
 }

@@ -87,7 +87,7 @@
                 vm.saveLabel = "Modifier";
 
                 if (!(vm.item.birthDate == null))
-                    vm.Item.birthDate = new Date(vm.item.birthDate);
+                    vm.item.birthDate = new Date(vm.item.birthDate);
             }
         }
     }

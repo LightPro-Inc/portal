@@ -15,6 +15,7 @@ public interface Sequence extends Recordable<UUID, Sequence> {
 	long nextNumber() throws IOException;
 	String generate() throws IOException;
 	SequenceReserved code() throws IOException;
+	Company company() throws IOException;
 	
 	void update(String name, String prefix, String suffix, int size, int step, long nextNumber) throws IOException;
 	
@@ -23,7 +24,8 @@ public interface Sequence extends Recordable<UUID, Sequence> {
 		USER(0, "User"),
 		PURCHASE_ORDER(1, "Devis et commande"), 
 		INVOICE(2, "Facture"),
-		PAYMENT(3, "Paiement");
+		PAYMENT(3, "Paiement"),
+		PDV_SESSION(4, "Pdv session");
 		
 		private final int id;
 		private final String name;

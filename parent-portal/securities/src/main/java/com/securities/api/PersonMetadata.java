@@ -62,4 +62,8 @@ public class PersonMetadata implements DomainMetadata {
 	public String photoKey() {
 		return "photo";
 	}
+	
+	public String companyIdKey() {
+		return "companyid";
+	}
 }

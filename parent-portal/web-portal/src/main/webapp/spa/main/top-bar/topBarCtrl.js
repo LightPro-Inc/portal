@@ -9,6 +9,11 @@
 
 		var vm = this;
 		vm.logout = logout;
+		vm.isActive = isActive;
+		
+		function isActive(module){
+			return $state.includes(module.parentUrl);
+		}
 		
 		function logout() {
 			membershipService.logout();
@@ -19,6 +24,10 @@
 			apiService.get("/web/api/company/modulesInstalled", null,
 					function(response){
 						vm.modulesInstalled = response.data;
+						angular.forEach(vm.modulesInstalled, function(module){
+							module.url = String.format("main.{0}.dashboard", module.shortName);
+							module.parentUrl = String.format("main.{0}", module.shortName);							
+						});
 					}
 			);				
 		}		

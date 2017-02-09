@@ -1,21 +1,50 @@
-package com.infrastructure.core;
+package com.securities.api;
 
-import java.util.UUID;
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.Response.Status;
 
+import com.infrastructure.core.ErrorMessage;
+import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.Txn;
 import com.infrastructure.pgsql.PgBase;
+import com.securities.impl.MembershipImpl;
 
 public abstract class BaseRs {
-		
-	protected transient PgBase base;
 	
-	public BaseRs(){
-		UUID author = UUID.fromString("08cc7ef0-dd5d-4afa-a2f7-b733bd89c985");
-		base = new PgBase(author);
+	private @Context SecurityContext securityContext;
+	
+	protected Membership membership() throws IOException {
+		return new MembershipImpl(base());	
+	}
+	
+	protected Company currentCompany() throws IOException {
+		return currentUserOrDefault().company();
+	}
+	
+	protected User currentUserOrDefault() throws IOException {
+		Membership membership = new MembershipImpl(base());	
+				
+		if(securityContext.getUserPrincipal() == null)
+			return membership.get("admin");					
+			
+		return membership.get(securityContext.getUserPrincipal().getName());
+	}
+
+	protected Base base() throws IOException {
+		Base base = new PgBase();
+		
+		if(securityContext.getUserPrincipal() == null)
+			return base;
+		else
+		{
+			String username = securityContext.getUserPrincipal().getName();
+			return base.build(username);
+		}
 	}
 	
 	protected Response createNonTransactionalHttpResponse(Callable<Response> callable){	
@@ -50,7 +79,7 @@ public abstract class BaseRs {
 		
 		try
 		{							
-			response = new Txn(base).call(
+			response = new Txn(base()).call(
 					new Callable<Response>(){
 						@Override
 						public Response call() throws Exception {

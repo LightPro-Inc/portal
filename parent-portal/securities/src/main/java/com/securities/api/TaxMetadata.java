@@ -38,4 +38,8 @@ public class TaxMetadata implements DomainMetadata {
 	public String rateKey() {
 		return "rate";
 	}	
+	
+	public String companyIdKey() {
+		return "companyid";
+	}
 }

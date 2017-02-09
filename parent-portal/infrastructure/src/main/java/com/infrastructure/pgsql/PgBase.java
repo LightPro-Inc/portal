@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import com.common.utilities.convert.UUIDConvert;
 import com.infrastructure.core.DomainMetadata;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainsStore;
@@ -25,7 +27,12 @@ public class PgBase implements Base {
 	private transient UUID author;
 	private static transient DataSource origin;
 
-	public PgBase(UUID author) {
+	public PgBase(){
+		// default user
+		author = UUID.fromString("08cc7ef0-dd5d-4afa-a2f7-b733bd89c985");
+	}
+	
+	private PgBase(UUID author) {
         this.author = author;
     }
 	
@@ -186,5 +193,16 @@ public class PgBase implements Base {
 		} finally {
 			super.finalize();
 		}
+	}
+
+	@Override
+	public Base build(String username) throws IOException {
+		String statement = String.format("SELECT id FROM users WHERE username=?");
+		List<Object> values = executeQuery(statement, Arrays.asList(username));
+		
+		if(values.isEmpty())
+			throw new IllegalArgumentException("User not found !");
+		
+		return new PgBase(UUIDConvert.fromObject(values.get(0)));
 	}
 }

@@ -53,5 +53,9 @@ public class SequenceMetadata implements DomainMetadata {
 	
 	public String codeIdKey() {
 		return "codeid";
+	}
+	
+	public String companyIdKey() {
+		return "companyid";
 	}	
 }

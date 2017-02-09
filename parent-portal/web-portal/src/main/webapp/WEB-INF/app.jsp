@@ -14,10 +14,6 @@
     	</script>
 	</head>
 	<body>
-		<div class="container-fluid">
-			<div class="row">
-				<div ui-view></div>					
-			</div>		
-		</div>		
+		<div ui-view></div>	
 	</body>
 </html>

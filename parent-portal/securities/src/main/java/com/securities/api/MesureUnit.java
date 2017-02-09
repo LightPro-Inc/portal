@@ -9,5 +9,6 @@ public interface MesureUnit extends Recordable<UUID, MesureUnit> {
 	String shortName() throws IOException;
 	String fullName() throws IOException;
 	MesureUnitType type() throws IOException;
+	Company company() throws IOException;
 	void update(String shortName, String fullName, String typeId) throws IOException;
 }

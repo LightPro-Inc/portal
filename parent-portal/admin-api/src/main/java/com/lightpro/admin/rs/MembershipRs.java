@@ -14,6 +14,7 @@ import com.lightpro.admin.cmd.Credentials;
 import com.lightpro.admin.cmd.NewUser;
 import com.lightpro.admin.vm.MembershipContextVm;
 import com.securities.api.MembershipContext;
+import com.securities.api.Secured;
 
 /**
  * @author oob
@@ -23,14 +24,15 @@ import com.securities.api.MembershipContext;
 public class MembershipRs extends AdminBaseRs {
 	
 	@POST
+	@Secured
 	@Path("/register")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response register(final NewUser newUser) throws IOException {
 		
-		company().membership().register(newUser.firstName(), 
-				    		newUser.lastName(), 
-				    		newUser.username(), 
-				    		newUser.password());
+		membership().register(  newUser.firstName(), 
+					    		newUser.lastName(), 
+					    		newUser.username(), 
+					    		newUser.password());
 		
 		return Response.status(Response.Status.CREATED).build();
 	}	
@@ -40,14 +42,14 @@ public class MembershipRs extends AdminBaseRs {
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response logon(final Credentials credentials)  throws IOException {
 
-		MembershipContext memberContext = company().membership().validateUser(credentials.username(), 
-																  credentials.password());
+		MembershipContext memberContext = membership().validateUser(credentials.username(), credentials.password());
 		
 		return Response.ok(new MembershipContextVm(memberContext))
 					   .build();
 	}
 	
 	@POST
+	@Secured
 	@Path("{username}/logout")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response logout(@PathParam("username") final String username)  throws IOException {

@@ -15,11 +15,13 @@ import javax.ws.rs.core.Response;
 import com.infrastructure.core.PaginationSet;
 import com.lightpro.admin.vm.PersonVm;
 import com.securities.api.Persons;
+import com.securities.api.Secured;
 
 @Path("/person")
 public class PersonRs extends AdminBaseRs {
 	
 	@GET
+	@Secured
 	@Path("/search")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response search( @QueryParam("page") int page, 
@@ -31,7 +33,7 @@ public class PersonRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Persons container = company().persons();
+						Persons container = currentCompany().persons();
 						
 						List<PersonVm> itemsVm = container.find(page, pageSize, filter).stream()
 															 .map(m -> new PersonVm(m))

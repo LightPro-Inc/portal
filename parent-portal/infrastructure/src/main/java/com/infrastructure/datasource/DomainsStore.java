@@ -21,8 +21,8 @@ public interface DomainsStore {
 	List<DomainStore> getAllByKey(String key, Object keyValue) throws IOException;
 	List<DomainStore> getAllByKeyOrdered(String key, Object keyValue, String orderKey, OrderDirection direction) throws IOException;
 	void set(Object key, Map<String, Object> params) throws IOException;
-	boolean exists(Object key) throws IOException;		
-	boolean exists(Object key, Object keyValue) throws IOException;
+	boolean exists(Object key);		
+	boolean exists(Object key, Object keyValue);
 	void delete(Object key) throws IOException;
 	
 	void execute(String statement, List<Object> params) throws IOException;

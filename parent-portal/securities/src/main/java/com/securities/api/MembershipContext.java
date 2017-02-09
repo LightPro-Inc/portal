@@ -1,31 +1,37 @@
 package com.securities.api;
 
+import java.io.IOException;
 import java.util.UUID;
 
+import com.securities.impl.EncryptionImpl;
+
 public class MembershipContext {
-	private transient final User user;	
+	private transient final User user;
+	private transient final Encryption encryption;
 	
-	public MembershipContext(User user){
+	public MembershipContext(final User user){
 		this.user = user;
+		this.encryption = new EncryptionImpl();
 	}
 	
 	public boolean isValid(){
 		return this.user != null;
 	}
 	
-	public UUID idUser(){
-		return isValid() ? this.user.id() : null;
+	public UUID userId(){
+		return this.isValid() ? user.id() : null;
 	}
 	
-	public String tokens(){
-		if(isValid())
-			return generateTokens();
-		else
-			return "";
+	public User user (){
+		return user;
 	}
 	
-	private String generateTokens(){
-		return "";
-	}
+	public String token() throws IOException {
+		String token = "";
 		
+		if(isValid())
+			token = encryption.generateToken(this.user);
+		
+		return token;
+	}	
 }

@@ -3,7 +3,7 @@ body, html, .row-offcanvas {
 }
 
 body {
-    padding-top: 0;
+    padding-top: 60px;
     background-color: whitesmoke;
 }
 
@@ -30,9 +30,8 @@ body {
 }
 
 #sidebar {
-    width: inherit;
+	width: 220px;
     min-width: 220px;
-    max-width: 220px;
     background-color: #f5f5f5;
     float: left;
     height: 100%;

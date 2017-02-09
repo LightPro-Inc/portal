@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import com.infrastructure.core.PaginationSet;
 import com.lightpro.admin.cmd.SequenceEdited;
 import com.lightpro.admin.vm.SequenceVm;
+import com.securities.api.Secured;
 import com.securities.api.Sequence;
 import com.securities.api.Sequences;
 
@@ -27,6 +28,7 @@ import com.securities.api.Sequences;
 public class SequenceRs extends AdminBaseRs {
 	
 	@GET
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getAll() throws IOException {	
 		
@@ -35,7 +37,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<SequenceVm> items = company().sequences().all()
+						List<SequenceVm> items = currentCompany().sequences().all()
 														 .stream()
 												 		 .map(m -> new SequenceVm(m))
 												 		 .collect(Collectors.toList());
@@ -46,6 +48,7 @@ public class SequenceRs extends AdminBaseRs {
 	}
 	
 	@GET
+	@Secured
 	@Path("/search")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response search( @QueryParam("page") int page, 
@@ -57,7 +60,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Sequences container = company().sequences();
+						Sequences container = currentCompany().sequences();
 						
 						List<SequenceVm> itemsVm = container.find(page, pageSize, filter).stream()
 															 .map(m -> new SequenceVm(m))
@@ -73,6 +76,7 @@ public class SequenceRs extends AdminBaseRs {
 	}
 	
 	@GET
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getSingle(@PathParam("id") UUID id) throws IOException {	
@@ -82,7 +86,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						SequenceVm item = new SequenceVm(company().sequences().get(id));
+						SequenceVm item = new SequenceVm(currentCompany().sequences().get(id));
 
 						return Response.ok(item).build();
 					}
@@ -90,6 +94,7 @@ public class SequenceRs extends AdminBaseRs {
 	}
 	
 	@POST
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response add(SequenceEdited cmd) throws IOException {
 		
@@ -98,7 +103,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						company().sequences().add(cmd.name(), cmd.prefix(), cmd.suffix(), cmd.size(), cmd.step(), cmd.nextNumber());
+						currentCompany().sequences().add(cmd.name(), cmd.prefix(), cmd.suffix(), cmd.size(), cmd.step(), cmd.nextNumber());
 						
 						return Response.status(Response.Status.OK).build();
 					}
@@ -106,6 +111,7 @@ public class SequenceRs extends AdminBaseRs {
 	}
 	
 	@PUT
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response update(@PathParam("id") final UUID id, final SequenceEdited cmd) throws IOException {
@@ -115,7 +121,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Sequence item = company().sequences().get(id);
+						Sequence item = currentCompany().sequences().get(id);
 						item.update(cmd.name(), cmd.prefix(), cmd.suffix(), cmd.size(), cmd.step(), cmd.nextNumber());
 						
 						return Response.status(Response.Status.OK).build();
@@ -124,6 +130,7 @@ public class SequenceRs extends AdminBaseRs {
 	}
 	
 	@DELETE
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response delete(@PathParam("id") final UUID id) throws IOException {
@@ -133,8 +140,8 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Sequence item = company().sequences().get(id);
-						company().sequences().delete(item);
+						Sequence item = currentCompany().sequences().get(id);
+						currentCompany().sequences().delete(item);
 						
 						return Response.status(Response.Status.OK).build();
 					}

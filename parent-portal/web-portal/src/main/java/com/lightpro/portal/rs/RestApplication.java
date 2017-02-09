@@ -28,6 +28,8 @@ import com.lightpro.hotel.rs.GuestRs;
 import com.lightpro.hotel.rs.MaidRs;
 import com.lightpro.hotel.rs.RoomCategoryRs;
 import com.lightpro.hotel.rs.RoomRs;
+import com.lightpro.pdv.rs.PdvRs;
+import com.lightpro.pdv.rs.SessionRs;
 import com.lightpro.sales.rs.CustomerRs;
 import com.lightpro.sales.rs.InvoiceRs;
 import com.lightpro.sales.rs.PaymentRs;
@@ -50,6 +52,9 @@ import com.lightpro.stocks.rs.WarehouseRs;
  */
 public class RestApplication extends ResourceConfig {
 	public RestApplication(){		
+		
+		register(new AuthenticationFilter());
+		
 		ObjectMapper mapper = new ObjectMapper();
 		JavaTimeModule javaTimeModule = new JavaTimeModule();
 		// Hack time module to allow 'Z' at the end of string (i.e. javascript json's) 
@@ -99,6 +104,10 @@ public class RestApplication extends ResourceConfig {
 		register(PurchaseOrderRs.class);
 		register(InvoiceRs.class);
 		register(PaymentRs.class);
+		
+		// 5 - pdv
+		register(PdvRs.class);
+		register(SessionRs.class);
 		
 		// register features
 		register(JacksonFeature.class);		

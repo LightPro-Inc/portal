@@ -20,12 +20,14 @@ import com.lightpro.admin.cmd.MesureUnitEdited;
 import com.lightpro.admin.vm.MesureUnitTypeVm;
 import com.lightpro.admin.vm.MesureUnitVm;
 import com.securities.api.MesureUnit;
+import com.securities.api.Secured;
 import com.securities.impl.MesureUnitTypeImpl;
 
 @Path("/mesure-unit")
 public class MesureUnitRs extends AdminBaseRs {
 		
 	@GET
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getMesureUnits() throws IOException {	
 		
@@ -34,7 +36,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<MesureUnitVm> items = company().mesureUnits().items()
+						List<MesureUnitVm> items = currentCompany().mesureUnits().items()
 								 .stream()
 						 		 .map(m -> new MesureUnitVm(m))
 						 		 .collect(Collectors.toList());
@@ -45,6 +47,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}	
 	
 	@GET
+	@Secured
 	@Path("/type")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getMesureUnitTypes() throws IOException {	
@@ -54,7 +57,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<MesureUnitTypeVm> items = company().mesureUnitTypes().all()
+						List<MesureUnitTypeVm> items = currentCompany().mesureUnitTypes().all()
 															 .stream()
 													 		 .map(m -> new MesureUnitTypeVm(m))
 													 		 .collect(Collectors.toList());
@@ -65,6 +68,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}	
 	
 	@GET
+	@Secured
 	@Path("/time")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getMesureUnitTimes() throws IOException {	
@@ -75,7 +79,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					public Response call() throws IOException {
 						
 						
-						List<MesureUnitVm> items = company().mesureUnits().find(MesureUnitTypeImpl.TIME)
+						List<MesureUnitVm> items = currentCompany().mesureUnits().find(MesureUnitTypeImpl.TIME)
 														 .stream()
 												 		 .map(m -> new MesureUnitVm(m))
 												 		 .collect(Collectors.toList());
@@ -86,6 +90,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}	
 	
 	@GET
+	@Secured
 	@Path("/quantity")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getMesureUnitQuantities() throws IOException {	
@@ -96,7 +101,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					public Response call() throws IOException {
 						
 						
-						List<MesureUnitVm> items = company().mesureUnits().find(MesureUnitTypeImpl.QUANTITY)
+						List<MesureUnitVm> items = currentCompany().mesureUnits().find(MesureUnitTypeImpl.QUANTITY)
 														 .stream()
 												 		 .map(m -> new MesureUnitVm(m))
 												 		 .collect(Collectors.toList());
@@ -107,6 +112,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}
 	
 	@GET
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getMesureUnit(@PathParam("id") UUID id) throws IOException {	
@@ -116,7 +122,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						MesureUnitVm item = new MesureUnitVm(company().mesureUnits().get(id));
+						MesureUnitVm item = new MesureUnitVm(currentCompany().mesureUnits().get(id));
 
 						return Response.ok(item).build();
 					}
@@ -124,6 +130,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}
 	
 	@POST
+	@Secured
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response add(final MesureUnitEdited cmd) throws IOException {
 		
@@ -132,7 +139,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						company().mesureUnits().add( cmd.shortName(), cmd.fullName(), cmd.typeId());
+						currentCompany().mesureUnits().add( cmd.shortName(), cmd.fullName(), cmd.typeId());
 						
 						return Response.status(Response.Status.OK).build();
 					}
@@ -140,6 +147,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}
 	
 	@PUT
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response update(@PathParam("id") final UUID id, final MesureUnitEdited cmd) throws IOException {
@@ -149,7 +157,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						MesureUnit mesureUnit = company().mesureUnits().get(cmd.id());						
+						MesureUnit mesureUnit = currentCompany().mesureUnits().get(cmd.id());						
 						mesureUnit.update(cmd.shortName(), cmd.fullName(), cmd.typeId());
 						
 						return Response.status(Response.Status.OK).build();
@@ -158,6 +166,7 @@ public class MesureUnitRs extends AdminBaseRs {
 	}
 	
 	@DELETE
+	@Secured
 	@Path("/{id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response delete(@PathParam("id") final UUID id) throws IOException {
@@ -167,8 +176,8 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						MesureUnit mesureUnit = company().mesureUnits().get(id);
-						company().mesureUnits().delete(mesureUnit);
+						MesureUnit mesureUnit = currentCompany().mesureUnits().get(id);
+						currentCompany().mesureUnits().delete(mesureUnit);
 						
 						return Response.status(Response.Status.OK).build();
 					}

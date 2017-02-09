@@ -9,7 +9,7 @@
         var vm = this;
 
         // Data
-        vm.dateSelected = data.date;
+        vm.dateSelected = angular.copy(data.date);
         vm.dateOptions = {
             formatYear: 'yy',
             startingDay: 1

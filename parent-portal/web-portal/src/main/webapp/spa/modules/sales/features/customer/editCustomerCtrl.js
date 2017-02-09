@@ -3,8 +3,8 @@
 
     app.controller('editCustomerCtrl', editCustomerCtrl);
 
-    editCustomerCtrl.$inject = ['data', '$uibModalInstance', '$timeout', 'apiService', 'notificationService', 'webcamService', '$scope'];
-    function editCustomerCtrl(data, $uibModalInstance, $timeout, apiService, notificationService, webcamService, $scope) {
+    editCustomerCtrl.$inject = ['data', '$uibModal', '$uibModalInstance', '$timeout', 'apiService', 'notificationService', 'webcamService', '$scope'];
+    function editCustomerCtrl(data, $uibModal, $uibModalInstance, $timeout, apiService, notificationService, webcamService, $scope) {
 
         var vm = this;
 
@@ -26,7 +26,27 @@
         // Function
         vm.openDatePicker = openDatePicker;
         vm.captureAnImage = captureAnImage;
+        vm.searchPerson = searchPerson;
+        vm.razPerson = razPerson;
+        
+        function razPerson(){
+        	vm.item = {sex : 'M'};
+        }
+        
+        function searchPerson() {
+        	$uibModal.open({
+                templateUrl: 'main/person/personSearchView.html',
+                controller: 'personSearchCtrl as vm',
+                resolve: {
+                    data: { }
+                }
+            }).result.then(function (personSelected) {
+            	vm.item = personSelected;           	
+            }, function () {
 
+            });  
+        }
+        
         function captureAnImage() {
             webcamService.captureImage(vm.imgWidth, vm.imgHeight)
                          .result
@@ -37,6 +57,7 @@
 
         function saveItem() {
             if (vm.isNew) {
+            	console.log(vm.item);
                 apiService.post('/web/api/customer', vm.item,
                 registerItemCompleted,
                 saveItemLoadFailed);

@@ -8,9 +8,12 @@ import java.util.List;
  * @author oob
  *
  */
+
 public interface Modules {
+	List<Module> subscribed() throws IOException;
 	List<Module> availables() throws IOException;
 	List<Module> installed() throws IOException;
-	Module install(String moduleid) throws IOException;
-	Module uninstall(String moduleid) throws IOException;
+	void install(Module module) throws IOException;
+	void uninstall(Module module) throws IOException;
+	Module get(ModuleType type) throws IOException;
 }

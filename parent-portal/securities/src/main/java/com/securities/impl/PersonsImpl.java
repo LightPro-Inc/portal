@@ -1,8 +1,9 @@
 package com.securities.impl;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.infrastructure.datasource.DomainsStore;
+import com.securities.api.Company;
 import com.securities.api.Person;
 import com.securities.api.PersonMetadata;
 import com.securities.api.Persons;
@@ -25,11 +27,13 @@ public class PersonsImpl implements Persons {
 	private final transient Base base;
 	private final transient PersonMetadata dm;
 	private final transient DomainsStore ds;
+	private final transient Company company;
 	
-	public PersonsImpl(final Base base){
+	public PersonsImpl(final Base base, Company company){
 		this.base = base;		
 		this.dm = PersonImpl.dm();
 		this.ds = base.domainsStore(dm);
+		this.company = company;
 	}
 	
 	@Override
@@ -74,6 +78,7 @@ public class PersonsImpl implements Persons {
 		String statement = String.format("SELECT COUNT(%s) FROM %s WHERE concat(%s,' ', %s) ILIKE ?  OR concat(%s, ' ', %s) ILIKE ?", dm.keyName(), dm.domainName(), dm.firstNameKey(), dm.lastNameKey(), dm.lastNameKey(), dm.firstNameKey());
 		
 		List<Object> params = new ArrayList<Object>();
+		filter = (filter == null) ? "" : filter;
 		params.add("%" + filter + "%");
 		params.add("%" + filter + "%");
 		
@@ -83,12 +88,7 @@ public class PersonsImpl implements Persons {
 
 	@Override
 	public boolean contains(Person item) {
-		try {
-			return ds.exists(item.id());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
+		return ds.exists(item.id());
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class PersonsImpl implements Persons {
 	}
 
 	@Override
-	public Person add(String firstName, String lastName, Sex sex, String address, Date birthDate, String tel1, String tel2, String email, String photo) throws IOException {
+	public Person add(String firstName, String lastName, Sex sex, String address, LocalDate birthDate, String tel1, String tel2, String email, String photo) throws IOException {
 		
 		if (firstName == null || firstName.isEmpty()) {
             throw new IllegalArgumentException("Invalid firstName : it can't be empty!");
@@ -127,15 +127,28 @@ public class PersonsImpl implements Persons {
 		params.put(dm.lastNameKey(), lastName);
 		params.put(dm.sexKey(), sex.name());
 		params.put(dm.addressKey(), address);
-		params.put(dm.birthDateKey(), birthDate);
+		params.put(dm.birthDateKey(), birthDate == null ? null : java.sql.Date.valueOf(birthDate));
 		params.put(dm.tel1Key(), tel1);
 		params.put(dm.tel2Key(), tel2);
 		params.put(dm.emailKey(), email);
 		params.put(dm.photoKey(), photo);
+		params.put(dm.companyIdKey(), company.id());
 		
 		UUID id = UUID.randomUUID();
 		ds.set(id, params);
 		
 		return build(id);
+	}
+
+	@Override
+	public Person defaultPerson() throws IOException {
+		String statement = String.format("SELECT %s FROM %s WHERE %s=? AND %s=?", dm.keyName(), dm.domainName(), dm.addressKey(), dm.companyIdKey());
+		
+		List<Object> values = base.domainsStore(dm).find(statement, Arrays.asList("CLI", company.id()));
+		if(values.isEmpty())
+		{
+			return add("inconnu", "Client", Sex.M, "CLI", null, null, null, null, null);
+		}else
+			return build(UUIDConvert.fromObject(values.get(0)));		
 	}
 }
