@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.lightpro.admin.cmd.ActivateModule;
 import com.lightpro.admin.cmd.CompanyEdited;
 import com.lightpro.admin.vm.CompanyVm;
 import com.lightpro.admin.vm.ModuleVm;
@@ -83,6 +84,27 @@ public class CompanyRs extends AdminBaseRs {
 				});			
 	}
 	
+	@GET
+	@Secured
+	@Path("/modulesUsed")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getModulesUsed() throws IOException {	
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						List<ModuleVm> modulesVm = currentCompany().modules().used()
+								.stream()
+						 		.map(m -> new ModuleVm(m))
+						 		.collect(Collectors.toList());		
+
+						return Response.ok(modulesVm).build();			
+					}
+				});			
+	}
+	
 	@POST
 	@Secured
 	@Path("/module/{moduleType}/install")
@@ -114,9 +136,30 @@ public class CompanyRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
+						
 						ModuleType type = ModuleType.get(moduleTypeId);
 						Module module = currentCompany().modules().get(type);
 						currentCompany().modules().uninstall(module);
+						
+						return Response.status(Response.Status.OK).build();
+					}
+				});			
+	}
+	
+	@POST
+	@Secured
+	@Path("/module/{moduleType}/activate")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response activateModule(@PathParam("moduleType") final int moduleTypeId, final ActivateModule cmd) throws IOException {
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						ModuleType type = ModuleType.get(moduleTypeId);
+						Module module = currentCompany().modules().get(type);
+						currentCompany().modules().activate(module, cmd.active());
 						
 						return Response.status(Response.Status.OK).build();
 					}

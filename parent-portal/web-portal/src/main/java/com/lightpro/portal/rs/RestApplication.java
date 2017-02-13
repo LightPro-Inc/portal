@@ -23,6 +23,9 @@ import com.lightpro.admin.rs.MesureUnitRs;
 import com.lightpro.admin.rs.PersonRs;
 import com.lightpro.admin.rs.SequenceRs;
 import com.lightpro.admin.rs.TaxRs;
+import com.lightpro.compta.rs.AccountChartRs;
+import com.lightpro.compta.rs.AccountRs;
+import com.lightpro.compta.rs.JournalRs;
 import com.lightpro.hotel.rs.BookingRs;
 import com.lightpro.hotel.rs.GuestRs;
 import com.lightpro.hotel.rs.MaidRs;
@@ -108,6 +111,11 @@ public class RestApplication extends ResourceConfig {
 		// 5 - pdv
 		register(PdvRs.class);
 		register(SessionRs.class);
+		
+		// 5 - compta
+		register(AccountChartRs.class);
+		register(AccountRs.class);
+		register(JournalRs.class);
 		
 		// register features
 		register(JacksonFeature.class);		

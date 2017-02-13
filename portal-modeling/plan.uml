@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_iURWoO60EeagsLQhcBgxfw" name="NewModel">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_Z5Ig4O61EeagsLQhcBgxfw" name="AccountChart">
+    <ownedOperation xmi:id="_fNMbgO61EeagsLQhcBgxfw" name="name"/>
+    <ownedOperation xmi:id="_f6OgoO61EeagsLQhcBgxfw" name="codeDigits"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_d0VyMO61EeagsLQhcBgxfw" name="Account">
+    <ownedOperation xmi:id="_icgQIO61EeagsLQhcBgxfw" name="code"/>
+    <ownedOperation xmi:id="_jKMckO61EeagsLQhcBgxfw" name="name"/>
+    <ownedOperation xmi:id="_kJmEEO61EeagsLQhcBgxfw" name="type"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_myq_IO61EeagsLQhcBgxfw" name="MoveLine">
+    <ownedOperation xmi:id="_pjqgEO61EeagsLQhcBgxfw" name="debit"/>
+    <ownedOperation xmi:id="_qScRoO61EeagsLQhcBgxfw" name="credit"/>
+    <ownedOperation xmi:id="_rVzMEO61EeagsLQhcBgxfw" name="partner"/>
+    <ownedOperation xmi:id="_s2sXEO61EeagsLQhcBgxfw" name="reference"/>
+    <ownedOperation xmi:id="_t1HHIO61EeagsLQhcBgxfw" name="object"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_wGvykO61EeagsLQhcBgxfw" name="Move">
+    <ownedOperation xmi:id="_ydWdkO61EeagsLQhcBgxfw" name="reference"/>
+    <ownedOperation xmi:id="_zkdPkO61EeagsLQhcBgxfw" name="status"/>
+    <ownedOperation xmi:id="_0sP-EO61EeagsLQhcBgxfw" name="date"/>
+    <ownedOperation xmi:id="_1oI-kO61EeagsLQhcBgxfw" name="amount"/>
+    <ownedOperation xmi:id="_2-WjkO61EeagsLQhcBgxfw" name="object"/>
+    <ownedOperation xmi:id="_4llAEO61EeagsLQhcBgxfw" name="partner"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_7on6UO61EeagsLQhcBgxfw" memberEnd="_7oohYO61EeagsLQhcBgxfw _7oqWku61EeagsLQhcBgxfw" navigableOwnedEnd="_7oqWku61EeagsLQhcBgxfw">
+    <ownedEnd xmi:id="_7oohYO61EeagsLQhcBgxfw" name="moves" type="_wGvykO61EeagsLQhcBgxfw" association="_7on6UO61EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7oqWkO61EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7oqWke61EeagsLQhcBgxfw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_7oqWku61EeagsLQhcBgxfw" name="moveLines" type="_myq_IO61EeagsLQhcBgxfw" aggregation="composite" association="_7on6UO61EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_7oq9oO61EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_7orksO61EeagsLQhcBgxfw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_852RoO61EeagsLQhcBgxfw" memberEnd="_852Roe61EeagsLQhcBgxfw _854G0u61EeagsLQhcBgxfw" navigableOwnedEnd="_854G0u61EeagsLQhcBgxfw">
+    <ownedEnd xmi:id="_852Roe61EeagsLQhcBgxfw" name="moveLines" type="_myq_IO61EeagsLQhcBgxfw" association="_852RoO61EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_854G0O61EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_854G0e61EeagsLQhcBgxfw" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_854G0u61EeagsLQhcBgxfw" name="accounts" type="_d0VyMO61EeagsLQhcBgxfw" association="_852RoO61EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_855U8O61EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_855U8e61EeagsLQhcBgxfw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_9n2nIO61EeagsLQhcBgxfw" memberEnd="_9n2nIe61EeagsLQhcBgxfw _9n31Qe61EeagsLQhcBgxfw" navigableOwnedEnd="_9n31Qe61EeagsLQhcBgxfw">
+    <ownedEnd xmi:id="_9n2nIe61EeagsLQhcBgxfw" name="accountCharts" type="_Z5Ig4O61EeagsLQhcBgxfw" association="_9n2nIO61EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9n3OMO61EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9n31QO61EeagsLQhcBgxfw" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_9n31Qe61EeagsLQhcBgxfw" name="accounts" type="_d0VyMO61EeagsLQhcBgxfw" aggregation="composite" association="_9n2nIO61EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9n64kO61EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9n64ke61EeagsLQhcBgxfw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_CpVkAO62EeagsLQhcBgxfw" name="Journal">
+    <ownedOperation xmi:id="_EG35AO62EeagsLQhcBgxfw" name="name"/>
+    <ownedOperation xmi:id="_FB7MAO62EeagsLQhcBgxfw" name="type"/>
+    <ownedOperation xmi:id="_GCn0AO62EeagsLQhcBgxfw" name="code"/>
+    <ownedOperation xmi:id="_G2RegO62EeagsLQhcBgxfw" name="defaultDebit"/>
+    <ownedOperation xmi:id="_ITMvgO62EeagsLQhcBgxfw" name="defaultCredit"/>
+    <ownedOperation xmi:id="_J26lAO62EeagsLQhcBgxfw" name="sequence"/>
+    <ownedOperation xmi:id="_MmZDAO62EeagsLQhcBgxfw" name="isJournalUser"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_SoxcMO62EeagsLQhcBgxfw" memberEnd="_SoxcMe62EeagsLQhcBgxfw _SoyqUe62EeagsLQhcBgxfw" navigableOwnedEnd="_SoyqUe62EeagsLQhcBgxfw">
+    <ownedEnd xmi:id="_SoxcMe62EeagsLQhcBgxfw" name="journals" type="_CpVkAO62EeagsLQhcBgxfw" association="_SoxcMO62EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SoyDQO62EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SoyqUO62EeagsLQhcBgxfw" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_SoyqUe62EeagsLQhcBgxfw" name="moves" type="_wGvykO61EeagsLQhcBgxfw" association="_SoxcMO62EeagsLQhcBgxfw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SoyqUu62EeagsLQhcBgxfw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SoyqU-62EeagsLQhcBgxfw" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+</uml:Model>

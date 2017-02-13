@@ -118,5 +118,22 @@ public class ModulesImpl implements Modules {
 						return null;						
 					}))
 				     .collect(Collectors.toList());		
+	}
+
+	@Override
+	public void activate(Module module, boolean active) throws IOException {
+		module.activate(active);
+	}	
+
+	@Override
+	public List<Module> used() throws IOException {
+		List<Module> items = new ArrayList<Module>();
+		
+		for (Module module : installed()) {
+			if(module.isActive())
+				items.add(module);
+		}
+		
+		return items;
 	}	
 }

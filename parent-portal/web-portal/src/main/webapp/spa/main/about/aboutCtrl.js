@@ -6,8 +6,6 @@
 	aboutCtrl.$inject = [];
 	function aboutCtrl(){
 
-	    var vm = this;
-
-	    vm.appVersion = appVersion;		
+	    var vm = this;	
 	}
 })(angular.module('lightpro'));

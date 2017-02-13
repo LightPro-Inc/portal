@@ -1,6 +1,8 @@
 package com.infrastructure.pgsql;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import javax.sql.DataSource;
@@ -40,22 +43,59 @@ public class PgBase implements Base {
 		return author;
 	}
 		
-	synchronized private static DataSource getDs() {
+	synchronized private static DataSource getDs() throws IOException {
 
     	if(origin == null){
-    		HikariConfig config = new HikariConfig();
-    		config.setJdbcUrl("jdbc:postgresql://localhost:5432/lightpro_db");
-    		config.setUsername("openpg");
-    		config.setPassword("openpgpwd");
-    		config.setDriverClassName("org.postgresql.Driver");
-    		config.addDataSourceProperty("cachePrepStmts", "true");
-    		config.addDataSourceProperty("prepStmtCacheSize", "250");
-    		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-    		config.setMaximumPoolSize(100);
-    		config.setConnectionTimeout(34000);
-    		config.setMaxLifetime(60000);
+    		
+    		InputStream inputStreamSettings = null;
+    		InputStream inputStreamConfig = null;
+    		
+    		try {
+    			Properties settings = new Properties();
+    			String settingsFileName = "settings.properties";
+    			
+    			inputStreamSettings = PgBase.class.getClassLoader().getResourceAsStream(settingsFileName);    			
+    			
+    			if(inputStreamSettings != null) {
+    				settings.load(inputStreamSettings);
+    			}else{
+    				throw new FileNotFoundException(String.format("Settings file '%s' not found !", settingsFileName));
+    			}
+    			
+    			Properties config = new Properties();
+    			String configFileName = settings.getProperty("mode") + "_config.properties";
+    	    	inputStreamConfig = PgBase.class.getClassLoader().getResourceAsStream(configFileName);
+    			
+    	    	if(inputStreamConfig != null) {
+    	    		config.load(inputStreamConfig);
+    			}else{
+    				throw new FileNotFoundException(String.format("Config file '%s' not found !", configFileName));
+    			}
+    	    	
+    			HikariConfig configDb = new HikariConfig();
+    			configDb.setJdbcUrl(config.getProperty("url"));
+    			configDb.setUsername(config.getProperty("username"));
+    			configDb.setPassword(config.getProperty("password"));
+    			configDb.setDriverClassName(config.getProperty("driver"));
+    			configDb.addDataSourceProperty("cachePrepStmts", config.getProperty("cachePrepStmts"));
+    			configDb.addDataSourceProperty("prepStmtCacheSize", config.getProperty("prepStmtCacheSize"));
+    			configDb.addDataSourceProperty("prepStmtCacheSqlLimit", config.getProperty("prepStmtCacheSqlLimit"));
+    			configDb.setMaximumPoolSize(Integer.parseInt(config.getProperty("maximumPoolSize")));
+    			configDb.setConnectionTimeout(Long.parseLong(config.getProperty("connectionTimeout")));
+    			configDb.setMaxLifetime(Long.parseLong(config.getProperty("maxLifetime")));
 
-            return origin = new HikariDataSource(config);
+                origin = new HikariDataSource(configDb);                                
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(inputStreamSettings != null)
+					inputStreamSettings.close();
+				
+				if(inputStreamConfig != null)
+					inputStreamConfig.close();
+			}
+    		
+    		return origin;
     	}else
     		return origin;        
     }
@@ -63,13 +103,15 @@ public class PgBase implements Base {
 	@Override
 	public List<Object> executeQuery(String query, List<Object> params) throws IOException {
 		
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		List<Object> values = new ArrayList<Object>();
 		
 		try {		
-			pstmt = connection().prepareStatement(query);
+			conn = connection();
+			pstmt = conn.prepareStatement(query);
 			
 			for (int i = 0; i < params.size(); i++) {
 				pstmt.setObject(i+1, params.get(i));
@@ -84,7 +126,10 @@ public class PgBase implements Base {
             throw new IOException(ex);
         } finally{
         	DbUtils.closeQuietly(rs);
-            DbUtils.closeQuietly(pstmt);            
+            DbUtils.closeQuietly(pstmt);
+            
+            if(!inTransaction())
+            	terminate(); 
         }
 		
 		return values;	
@@ -97,7 +142,7 @@ public class PgBase implements Base {
 		ResultSet rs = null;
 		
 		try {		
-		    conn = getDs().getConnection();
+		    conn = connection();
 			pstmt = conn.prepareStatement(String.format("SELECT %s FROM %s", key, entityName));					
             rs = pstmt.executeQuery();    
             return true;
@@ -106,17 +151,31 @@ public class PgBase implements Base {
         } finally{
         	DbUtils.closeQuietly(rs);
             DbUtils.closeQuietly(pstmt); 
-            DbUtils.closeQuietly(conn);            
+            
+            if(!inTransaction())
+            	terminate();            
         }
+	}
+	
+	private boolean inTransaction() {
+		try {
+			return !conn.getAutoCommit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 	@Override
 	public void executeUpdate(String query, List<Object> params) throws IOException {
 		
+		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
-        try {        	
-        	pstmt = connection().prepareStatement(query);
+        try {     
+        	conn = connection();
+        	pstmt = conn.prepareStatement(query);
         	
         	for (int i = 0; i < params.size(); i++) {
 				pstmt.setObject(i+1, params.get(i));
@@ -127,6 +186,9 @@ public class PgBase implements Base {
             throw new IOException(ex);
         }finally{
         	DbUtils.closeQuietly(pstmt);
+        	
+        	if(!inTransaction())
+        		terminate(); 
         }
 	}
 
@@ -147,8 +209,8 @@ public class PgBase implements Base {
 	@Override
 	public void commit() throws IOException {
 		try {
-			connection().commit();	
-			connection().setAutoCommit(true);			
+			conn.commit();	
+			conn.setAutoCommit(true);			
 		} catch (SQLException e) {								
 			throw new IOException(e);
 		}
@@ -157,7 +219,7 @@ public class PgBase implements Base {
 	@Override
 	public void rollback() throws IOException {
 		try {
-			connection().rollback();
+			conn.rollback();
 
 		} catch (SQLException e) {						
 			throw new IOException(e);
@@ -176,23 +238,9 @@ public class PgBase implements Base {
 	}
 
 	@Override
-	public void terminate() throws IOException {
-		DbUtils.closeQuietly(connection());
+	public void terminate() throws IOException {		
+		DbUtils.closeQuietly(conn);
 		conn = null;
-	}
-	
-	@Override
-	public void finalize() throws Throwable {
-		
-		try {
-			if(conn != null && !conn.isClosed())
-				terminate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			super.finalize();
-		}
 	}
 
 	@Override

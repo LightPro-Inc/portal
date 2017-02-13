@@ -35,4 +35,8 @@ public class ModuleVm {
 	public int getTypeId() throws IOException {
 		return this.module.type().id();
 	}
+	
+	public boolean getActive() throws IOException {
+		return this.module.isActive();
+	}
 }

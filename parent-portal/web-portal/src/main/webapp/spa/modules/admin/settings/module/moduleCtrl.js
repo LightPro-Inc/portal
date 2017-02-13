@@ -9,6 +9,7 @@
 		
 		vm.installModule = installModule;
 		vm.uninstallModule = uninstallModule;
+		vm.activateModule = activateModule;
 		
 		function installModule(module){
 			$confirm({ text: String.format("Souhaitez-vous installer le module {0} ?", module.name), title: 'Installer un module', ok: 'Oui', cancel: 'Non' })
@@ -41,6 +42,28 @@
     						
     						notificationService.displaySuccess("Le module " + module.name + " a été désinstallé avec succès !");
     						$rootScope.$broadcast('modules-configured', { });
+    					},
+    					function(error){
+    						notificationService.displayError(error);
+    					}
+    			);
+        	});  					
+		}
+		
+		function activateModule(item){
+			var title = item.active ? String.format("Souhaitez-vous désactiver le module {0} ?", item.name) : String.format("Souhaitez-vous activer le module {0} ?", item.name);
+			
+			$confirm({ text: title, title: "Activation d'un module", ok: 'Oui', cancel: 'Non' })
+        	.then(function () {
+
+        		apiService.post("/web/api/company/module/" + item.typeId + "/activate", {active : !item.active},
+    					function(response){
+        					loadInstalled();
+    						
+        					var msg = item.active ? String.format("Le module {0} a été désactivé avec succès !", item.name) : String.format("Le module {0} a été activé avec succès !", item.name)
+            				notificationService.displaySuccess(msg);
+    						
+        					$rootScope.$broadcast('modules-configured', { });
     					},
     					function(error){
     						notificationService.displayError(error);

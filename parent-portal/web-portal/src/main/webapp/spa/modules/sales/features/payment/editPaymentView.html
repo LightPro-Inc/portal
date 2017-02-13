@@ -31,9 +31,9 @@
 		</div>
 		<div class="form-group">
 			 <label class="control-label" for="mode"><small style="color: red">*</small>&nbsp;&nbsp;Mode de paiement</label>
-			 <select class="form-control" name="mode" id="mode" ng-model="vm.item.modeId" validate-on="blur" required required-message="'Mode de paiement est un champ obligatoire'">
+			 <select class="form-control" name="mode" id="mode" ng-model="vm.item.modeId" ng-options="v.id as v.name for v in vm.paymentModes"
+			 	validate-on="blur" required required-message="'Mode de paiement est un champ obligatoire'">
 			 	<option value="">-- Choisir un mode --</option>
-			 	<option ng-selected="vm.item.modeId == option.id" ng-repeat="option in vm.paymentModes" value="{{option.id}}">{{option.name}}</option>
 			 </select>	         
 		</div>						
 	</div>

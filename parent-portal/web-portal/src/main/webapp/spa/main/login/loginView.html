@@ -1,6 +1,6 @@
 <div class="row">
 	<form class="form-signin" role="form" novalidate angular-validator name="userLoginForm" angular-validator-submit="vm.login()">
-		<h3 class="form-signin-heading">LightPro <span class="badge badge-sm up bg-danger" style="background-color:green;" ng-if="configServer.TestMode">Test</span></h3>
+		<h3 class="form-signin-heading">LightPro <span class="badge badge-sm up" style="background-color:green;">{{modeText}}</span></h3>
 		<div class="form-group">
 			<label for="inputUsername" class="sr-only">Pseudo</label>
 			<input type="text" id="inputUsername" name="inputUsername" class="form-control" autocomplete="off" ng-model="vm.credentials.username" placeholder="Pseudo" validate-on="blur" required required-message="'Peusdo est obligatoire'">

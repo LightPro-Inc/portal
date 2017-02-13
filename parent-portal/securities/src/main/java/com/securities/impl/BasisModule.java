@@ -21,13 +21,14 @@ public class BasisModule implements Module {
 	private final transient UUID id;
 	private final transient ModuleInstalledMetadata dmInst;
 	private final transient ModuleSubscribedMetadata dmSub;
-	private final transient DomainStore dsSub;
+	private final transient DomainStore dsSub, dsInst;
 	
 	public BasisModule(final Base base, final UUID id){
 		this.base = base;
 		this.id = id;
 		this.dmInst = ModuleInstalledMetadata.create();
 		this.dmSub = ModuleSubscribedMetadata.create();
+		this.dsInst = base.domainsStore(dmInst).createDs(id);
 		this.dsSub = base.domainsStore(dmSub).createDs(id);
 	}
 	
@@ -128,5 +129,20 @@ public class BasisModule implements Module {
 	@Override
 	public String shortName() throws IOException {
 		return type().shortName();
+	}
+
+	@Override
+	public boolean isActive() {
+		try {
+			return dsInst.get(dmInst.activatedKey());
+		} catch (IOException e) {			 
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public void activate(boolean active) throws IOException {
+		dsInst.set(dmInst.activatedKey(), active);		
 	}
 }

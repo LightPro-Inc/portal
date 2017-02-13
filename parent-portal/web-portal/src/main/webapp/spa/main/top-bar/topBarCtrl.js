@@ -20,8 +20,8 @@
 		    $state.go('login');
 		}
 
-		function loadInstalled(){
-			apiService.get("/web/api/company/modulesInstalled", null,
+		function loadUsed(){
+			apiService.get("/web/api/company/modulesUsed", {},
 					function(response){
 						vm.modulesInstalled = response.data;
 						angular.forEach(vm.modulesInstalled, function(module){
@@ -33,11 +33,11 @@
 		}		
 		
 		$rootScope.$on('modules-configured', function(event, args) {
-			loadInstalled();
+			loadUsed();
 		});
 		
 		this.$onInit = function () {
-			loadInstalled();					
+			loadUsed();					
 		}
 	}
 

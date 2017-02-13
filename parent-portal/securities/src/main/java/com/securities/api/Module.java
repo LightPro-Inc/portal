@@ -11,10 +11,13 @@ public interface Module extends Recordable<UUID, Module> {
 	String shortName() throws IOException;
 	String description() throws IOException;
 	ModuleType type() throws IOException;
-	Company company() throws IOException;
-	void install() throws IOException;
-	void uninstall() throws IOException;
+	Company company() throws IOException;	
 	boolean isSubscribed();
 	boolean isAvailable();
 	boolean isInstalled();
+	boolean isActive();
+	
+	void install() throws IOException;
+	void uninstall() throws IOException;
+	void activate(boolean active) throws IOException;
 }

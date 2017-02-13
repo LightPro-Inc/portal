@@ -3,10 +3,10 @@
 
     app.factory('apiService', apiService);
 
-    apiService.$inject = ['$http', '$state', 'notificationService', '$rootScope'];
+    apiService.$inject = ['$http', '$state', 'notificationService', '$rootScope', 'rootUrl'];
 
-    function apiService($http, $state, notificationService, $rootScope) {
-
+    function apiService($http, $state, notificationService, $rootScope, rootUrl) {
+    	
         var service = {
             get: get,
             post: post,
@@ -16,6 +16,7 @@
         };
 
         function buildReport(url, data, success, failure) {
+        	url = url.replace("/web", rootUrl);
             return $http.post(url, data, { responseType: "arraybuffer" }).
                           success(function (data) {
                               if(success)
@@ -30,6 +31,7 @@
         }
 
         function get(url, config, success, failure) {
+        	url = url.replace("/web", rootUrl);
             return $http.get(url, config, null)
                     .then(function (result) {
                         if(success)
@@ -48,6 +50,7 @@
         }
 
         function post(url, data, success, failure) {
+        	url = url.replace("/web", rootUrl);
             return $http.post(url, data, null)
                     .then(function (result) {
                         if(success)
@@ -66,6 +69,7 @@
         }
         
         function put(url, data, success, failure) {
+        	url = url.replace("/web", rootUrl);
             return $http.put(url, data, null)
                     .then(function (result) {
                         if(success)
@@ -84,6 +88,7 @@
         }
         
         function remove(url, data, success, failure) {
+        	url = url.replace("/web", rootUrl);
             return $http.delete(url, data, null)
                     .then(function (result) {
                         if(success)

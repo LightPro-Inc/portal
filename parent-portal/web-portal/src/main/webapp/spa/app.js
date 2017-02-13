@@ -20,6 +20,9 @@ if (!String.format) {
 	config.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider', '$provide', 'localStorageServiceProvider'];
 	function config($stateProvider, $urlRouterProvider, $httpProvider, $provide, localStorageServiceProvider){
 
+		var rootUrl = $("#linkRoot").attr("href");
+        $provide.constant('rootUrl', rootUrl);
+        
 		localStorageServiceProvider.setPrefix("lightpro");
 		
 		$provide.decorator('$uibModal', function ($delegate) {
@@ -426,11 +429,26 @@ if (!String.format) {
 	            templateUrl: 'modules/compta/dashboard/dashboardView.html',
 	            controller: 'comptaDashboardCtrl as vm',
 	            requireAuthenticated: true
+	        })
+	        .state('main.compta.chart', {
+	            url: '/chart',
+	            templateUrl: 'modules/compta/settings/chart/chartView.html',
+	            controller: 'chartCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.journal', {
+	            url: '/journal',
+	            templateUrl: 'modules/compta/settings/journal/journalView.html',
+	            controller: 'journalCtrl as vm',
+	            requireAuthenticated: true
 	        });
 	}
 	
 	run.$inject = ['$rootScope', '$state', 'membershipService', 'localStorageService', '$base64'];
 	function run($rootScope, $state, membershipService, localStorageService, $base64){		
+		
+		$rootScope.modeText = modeText;
+		$rootScope.appVersion = appVersion;
 		
 		var repositoryData = localStorageService.get('repository');		
 		$rootScope.repository = repositoryData ? JSON.parse($base64.decode(repositoryData)) : {};
