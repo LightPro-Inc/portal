@@ -12,7 +12,7 @@
 	    	<ul class="nav navbar-nav">
 		        <li ui-sref-active="active"><a ui-sref=".dashboard">Tableau de bord</a></li>    
 		        <li ng-class="{ active : vm.isActive(module) }" ng-repeat="module in vm.modulesInstalled"><a ui-sref="{{module.url}}">{{module.name}}</a></li>
-		        <li ui-sref-active="{'active': '.settings'}"><a ui-sref=".settings.enterprise">Configuration</a></li>
+		        <li ui-sref-active="{'active': '.settings'}"><a ui-sref=".settings.my-account">Configuration</a></li>
 		        <li ui-sref-active="active"><a ui-sref=".about">A propos</a></li>     
 		    </ul>
 		    <ul class="nav navbar-nav navbar-right">   
@@ -22,7 +22,7 @@
 		                    <img ng-src="{{repository.loggedUser.photo ? repository.loggedUser.photo : 'content/images/a0.jpg'}}" alt="...">
 		                    <i class="on md b-white bottom"></i>
 		                </span>
-		                <span class="hidden-sm hidden-md">User Admin</span> <b class="caret"></b>
+		                <span class="hidden-sm hidden-md">{{repository.loggedUser.username}}</span> <b class="caret"></b>
 		            </a>
 		            <!-- dropdown -->
 		            <ul class="dropdown-menu animated fadeInRight w">

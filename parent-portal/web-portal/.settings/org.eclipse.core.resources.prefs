@@ -9,11 +9,16 @@ encoding//src/main/webapp/spa/modules/admin/settings/enterprise/enterpriseView.h
 encoding//src/main/webapp/spa/modules/admin/settings/mesure-unit/editMesureUnitView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/mesure-unit/mesureUnitView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/module/moduleView.html=UTF-8
+encoding//src/main/webapp/spa/modules/admin/settings/my-account/myAccountView.html=UTF-8
+encoding//src/main/webapp/spa/modules/admin/settings/profile/editProfileView.html=UTF-8
+encoding//src/main/webapp/spa/modules/admin/settings/profile/profileView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/sequence/editSequenceView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/sequence/sequenceView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/side-bar/sideBarView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/tax/editTaxView.html=UTF-8
 encoding//src/main/webapp/spa/modules/admin/settings/tax/taxView.html=UTF-8
+encoding//src/main/webapp/spa/modules/admin/settings/user/editUserView.html=UTF-8
+encoding//src/main/webapp/spa/modules/admin/settings/user/userView.html=UTF-8
 encoding//src/main/webapp/spa/modules/compta/comptaView.html=UTF-8
 encoding//src/main/webapp/spa/modules/compta/dashboard/dashboardView.html=UTF-8
 encoding//src/main/webapp/spa/modules/compta/settings/chart/chartView.html=UTF-8

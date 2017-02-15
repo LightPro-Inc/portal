@@ -38,7 +38,7 @@
                             success(result);
                     }, function (error) {
                         if (error.status == '401') {
-                            notificationService.displayError('Authentication required.');
+                            notificationService.displayError(error);
                             $state.go('login');
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
@@ -57,8 +57,10 @@
                             success(result);
                     }, function (error) {
                         if (error.status == '401') {
-                            notificationService.displayError('Authentication required.');
+                            notificationService.displayError(error);
                             $state.go('login');
+                        } else if(error.status == '400') {
+                        	notificationService.displayInfo(error);
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
                         }
@@ -76,12 +78,13 @@
                             success(result);
                     }, function (error) {
                         if (error.status == '401') {
-                            notificationService.displayError('Authentication required.');
+                            notificationService.displayError(error);
                             $state.go('login');
+                        } else if(error.status == '400') {
+                        	notificationService.displayInfo(error);
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
-                        }
-                        else if (failure) {
+                        } else if (failure) {
                             failure(error);
                         }
                     });
@@ -95,8 +98,10 @@
                             success(result);
                     }, function (error) {
                         if (error.status == '401') {
-                            notificationService.displayError('Authentication required.');
+                            notificationService.displayError(error);
                             $state.go('login');
+                        } else if(error.status == '400') {
+                        	notificationService.displayInfo(error);
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
                         }

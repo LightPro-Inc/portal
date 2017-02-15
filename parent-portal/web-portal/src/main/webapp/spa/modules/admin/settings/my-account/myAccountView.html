@@ -1,0 +1,86 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title">Mon compte - {{vm.item.fullUsername}}</h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Nom</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.lastName" name="Name" id="Name" placeholder="Renseigner le nom"
+                                           validate-on="blur" required required-message="'Le Nom est un champ obligatoire'">
+                                </div>
+
+                                <div class="col-sm-6 selectContainer">
+                                    <label class="control-label" for="FirstName"><small style="color: red">*</small>&nbsp;&nbsp;Prénom</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.firstName" name="FirstName" id="FirstName" placeholder="Renseigner le prénom" validate-on="blur" required required-message="'Le Prénom est un champ obligatoire'">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="dateOfBirth">Date de naissance</label>
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" id="dateOfBirth" name="dateOfBirth" uib-datepicker-popup="{{vm.datepicker.format}}" ng-model="vm.item.birthDate" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" placeholder="dd/MM/yyyy" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+
+                                <div class="col-sm-6 selectContainer">
+                                    <label class="control-label" for="Addresse">Adresse</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.address" name="Addresse" id="Addresse" placeholder="Renseigner l'adresse">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="Tel1">Tel 1</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.tel1" name="Tel1" id="Tel1" placeholder="Renseigner le téléphone 1">
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="Tel2">Tel 2</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.tel2" name="Tel2" id="Tel2" placeholder="Renseigner le téléphone 2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="email">Adresse mail</label>
+                                    <input type="email" class="form-control" ng-model="vm.item.email" id="email" name="email" placeholder="Renseigner l'adresse mail">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="Photo">Photo</label>
+                            <div class="col-md-12">
+                                <img ng-src="{{vm.item.photo}}" style="width:150px;height:auto" />
+                                <span class="pull-left">(jpeg, png)</span>
+                                <input id="Photo" name="Photo" type="file" image="vm.photo" accept="image/*" class="input-sm" style="width:135px" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpeg" ng-image-compress />
+                                <button type="button" class="btn btn-primary btn-sm" ng-click="vm.captureAnImage()">Capturer une image</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer clearfix">
+            <span>(*) champ obligatoire</span>
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary" click-once>Enregistrer modifications</button>             
+                <button type="button" class="btn btn-primary" ng-click="vm.changePassword()">Changer mot de passe</button>
+            </div>
+        </div>
+    </div>
+</form>

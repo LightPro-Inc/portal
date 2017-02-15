@@ -87,6 +87,12 @@ if (!String.format) {
                     }
                 }            
             })
+            .state('main.settings.my-account', {
+                url:'/my-account',
+                templateUrl: 'modules/admin/settings/my-account/myAccountView.html',
+                controller: 'myAccountCtrl as vm',
+                requireAuthenticated: true
+            })
             .state('main.settings.enterprise', {
                 url:'/enterprise',
                 templateUrl: 'modules/admin/settings/enterprise/enterpriseView.html',
@@ -97,6 +103,27 @@ if (!String.format) {
                 url:'/module',
                 templateUrl: 'modules/admin/settings/module/moduleView.html',
                 controller: 'moduleCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings.profile', {
+                url:'/profile',
+                templateUrl: 'modules/admin/settings/profile/profileView.html',
+                controller: 'profileCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings.user', {
+                url:'/user',
+                templateUrl: 'modules/admin/settings/user/userView.html',
+                controller: 'userCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.settings.edit-user', {
+                url: '/edit-user',
+                params: {
+                    itemId: null,
+                },
+                templateUrl: 'modules/admin/settings/user/editUserView.html',
+                controller: 'editUserCtrl as vm',
                 requireAuthenticated: true
             })
             .state('main.settings.sequence', {
@@ -450,11 +477,7 @@ if (!String.format) {
 		$rootScope.modeText = modeText;
 		$rootScope.appVersion = appVersion;
 		
-		var repositoryData = localStorageService.get('repository');		
-		$rootScope.repository = repositoryData ? JSON.parse($base64.decode(repositoryData)) : {};
-        if ($rootScope.repository.loggedUser) {            
-            membershipService.initializeAfterLogin($rootScope.repository);
-        }
+		membershipService.setAuthenticationIfAlreadyLogged();
         
         var stateChangeStartEvent = $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState, fromParams) {
             

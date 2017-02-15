@@ -2,10 +2,16 @@ package com.securities.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.ws.rs.NotFoundException;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.common.utilities.convert.UUIDConvert;
 import com.infrastructure.core.HorodateMetadata;
@@ -95,5 +101,73 @@ public class CompaniesImpl implements Companies {
 	@Override
 	public Company build(UUID id) {
 		return new CompanyImpl(this.base, id);
+	}
+
+	@Override
+	public Company add(String denomination, 
+					   String shortName, 
+					   String rccm, 
+					   String ncc, 
+					   String siegeSocial, 
+					   String bp,
+					   String tel, 
+					   String fax, 
+					   String email, 
+					   String webSite, 
+					   String logo, 
+					   String currencyName,
+					   String currencyShortName) throws IOException {
+		
+		if(StringUtils.isBlank(denomination))
+			throw new IllegalArgumentException("La dénomination ne doit pas être vide!");
+		
+		if(StringUtils.isBlank(shortName))
+			throw new IllegalArgumentException("Le nom court ne doit être renseigné !");
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(dm.denominationKey(), denomination);
+		params.put(dm.shortName(), shortName);
+		params.put(dm.rccmKey(), rccm);
+		params.put(dm.nccKey(), ncc);
+		params.put(dm.siegeSocialKey(), siegeSocial);
+		params.put(dm.bpKey(), bp);
+		params.put(dm.telKey(), tel);
+		params.put(dm.faxKey(), fax);
+		params.put(dm.emailKey(), email);
+		params.put(dm.webSiteKey(), webSite);
+		params.put(dm.logoKey(), logo);
+		params.put(dm.currencyNameKey(), currencyName);
+		params.put(dm.currencyShortName(), currencyShortName);
+		
+		UUID id = UUID.randomUUID();
+		ds.set(id, params);
+		
+		return build(id);
+	}
+
+	@Override
+	public Company get(String shortName) throws IOException {
+		String statement = String.format("SELECT %s FROM %s WHERE %s=?", dm.keyName(), dm.domainName(), dm.shortName());
+		Optional<Object> idOpt = ds.getFirst(statement, Arrays.asList(shortName));
+		
+		if(!idOpt.isPresent())
+			throw new IllegalArgumentException("L'entreprise n'a pas été trouvée !");
+		
+		return build(UUIDConvert.fromObject(idOpt.get()));
+	}
+
+	@Override
+	public boolean isPresent(String shortName) {
+		
+		String statement = String.format("SELECT %s FROM %s WHERE %s=?", dm.keyName(), dm.domainName(), dm.shortName());
+		Optional<Object> idOpt;
+		
+		try {
+			idOpt = ds.getFirst(statement, Arrays.asList(shortName));
+			return idOpt.isPresent();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

@@ -1,0 +1,16 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="form-group">
+			 <label class="control-label" for="name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+	         <input type="text" class="form-control" ng-model="vm.item.name" name="name" id="name" placeholder="Renseigner le libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+		</div>						
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

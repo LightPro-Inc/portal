@@ -177,6 +177,7 @@ public class CompanyRs extends AdminBaseRs {
 					public Response call() throws IOException {
 						
 						currentCompany().update(cmd.getDenomination(), 
+										 cmd.shortName(),
 									     cmd.rccm(), 
 									     cmd.ncc(), 
 									     cmd.siegeSocial(), 

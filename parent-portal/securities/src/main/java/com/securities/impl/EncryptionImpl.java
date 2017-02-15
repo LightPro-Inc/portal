@@ -6,13 +6,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.securities.api.Encryption;
-import com.securities.api.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -78,16 +78,16 @@ public class EncryptionImpl implements Encryption {
 	}
 
 	@Override
-	public String generateToken(User user) throws IOException {
+	public String generateToken(String fullUsername, UUID userId, String hashedPassword, UUID companyId) throws IOException {
 		
 		Map<String, Object> claims = new HashMap<String, Object>();
-		claims.put("username", user.username());
-		claims.put("password", user.hashedPassword());
-		claims.put("companyId", user.company().id());
+		claims.put("fullUsername", fullUsername);
+		claims.put("password", hashedPassword);
+		claims.put("companyId", companyId);
 		
 		return Jwts.builder()
-				  .setSubject(user.username())
-				  .setId(user.id().toString())
+				  .setSubject(fullUsername)
+				  .setId(userId.toString())
 				  .setClaims(claims)
 				  .signWith(SignatureAlgorithm.HS512, stringToSecretKey(keyStr))
 				  .compact();

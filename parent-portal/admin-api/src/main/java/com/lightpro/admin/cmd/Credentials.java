@@ -4,21 +4,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Credentials {
 
-	private final String username;
+	private final String fullUsername;
 	private final String password;
 	
 	public Credentials(){
 		throw new UnsupportedOperationException("#Credentials()");
 	}
 	
-	public Credentials(@JsonProperty("username") final String username, 
+	public Credentials(@JsonProperty("fullUsername") final String fullUsername, 
 					   @JsonProperty("password") final String password){
-		this.username = username;
+		this.fullUsername = fullUsername;
 		this.password = password;
 	}
 	
-	public String username(){
-		return username;
+	public String fullUsername(){
+		return fullUsername;
 	}
 	
 	public String password(){

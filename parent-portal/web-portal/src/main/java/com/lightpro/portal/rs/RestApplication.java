@@ -21,6 +21,7 @@ import com.lightpro.admin.rs.DashboardToolsRs;
 import com.lightpro.admin.rs.MembershipRs;
 import com.lightpro.admin.rs.MesureUnitRs;
 import com.lightpro.admin.rs.PersonRs;
+import com.lightpro.admin.rs.ProfileRs;
 import com.lightpro.admin.rs.SequenceRs;
 import com.lightpro.admin.rs.TaxRs;
 import com.lightpro.compta.rs.AccountChartRs;
@@ -81,6 +82,7 @@ public class RestApplication extends ResourceConfig {
 		register(TaxRs.class);
 		register(PersonRs.class);
 		register(DashboardToolsRs.class);
+		register(ProfileRs.class);
 		
 		// 2 - hotel
 		register(RoomCategoryRs.class);		

@@ -3,49 +3,70 @@
 	
 	app.factory('membershipService', membershipService);
 	
-	membershipService.$inject = ['$rootScope', 'apiService', 'notificationService', 'localStorageService', '$base64', '$http'];
-	function membershipService($rootScope, apiService, notificationService, localStorageService, $base64, $http){
+	membershipService.$inject = ['$rootScope', 'apiService', 'notificationService', 'localStorageService', '$base64', '$http', '$state'];
+	function membershipService($rootScope, apiService, notificationService, localStorageService, $base64, $http, $state){
 		
 		function login(credentials, completed){
 			apiService.post('/web/api/membership/authenticate', credentials, 
 					function(response){
+										
+						$rootScope.repository = {
+							loggedUser : {
+		                            username: credentials.fullUsername,
+		                            id: response.data.idUser,
+		                            token: response.data.token		                            
+		                        },
+		                    rememberMe: credentials.rememberMe,
+	                        domain: response.data.domain
+	                    };		
 						
-						if(response.data.isValid){
-							
-							$rootScope.repository = {
-                                loggedUser: {
-                                    username: credentials.username,
-                                    id: response.data.idUser,
-                                    token: response.data.token,
-                                    rememberMe: credentials.rememberMe
-                                }
-														
-                            };														
-							
-							initializeAfterLogin($rootScope.repository);
-						}
+						saveRepository($rootScope.repository);
+						setAuthentication($rootScope.repository.loggedUser);
 						
 						completed(response);
 					},
 					loginFailed);
 		}
 		
-		function loginFailed(response){
-			notificationService.displayError(response.data);
+		function loginFailed(error){
+			notificationService.displayError(error);
 		}
 		
-		function initializeAfterLogin(repository){	
-			$http.defaults.headers.common['Authorization'] = 'Bearer ' + repository.loggedUser.token;
+		function saveRepository(repository){
+			var repositoryToSave = angular.copy(repository);
 			
-			if(repository.loggedUser.rememberMe){
-				localStorageService.set('repository', $base64.encode(JSON.stringify(repository)));
-			}
+			if(!repositoryToSave.rememberMe)
+				repositoryToSave.loggedUser = undefined;
+			
+			localStorageService.set('repository', $base64.encode(JSON.stringify(repositoryToSave)));
+		}
+		
+		function setAuthentication(loggedUser){	
+			$http.defaults.headers.common['Authorization'] = 'Bearer ' + loggedUser.token;			
+		}
+		
+		function setAuthenticationIfAlreadyLogged(){
+			
+			var repositoryData = localStorageService.get('repository');		
+			$rootScope.repository = repositoryData ? JSON.parse($base64.decode(repositoryData)) : {};
+	        
+			if ($rootScope.repository.rememberMe) {            
+	            setAuthentication($rootScope.repository.loggedUser);
+	        }
 		}
 		
 		function logout(){		
 			apiService.post(String.format('/web/api/membership/{0}/logout', $rootScope.repository.loggedUser.username), {});
+			$rootScope.repository.loggedUser = undefined;
+			$rootScope.repository.rememberMe = false;
+			
+			saveRepository($rootScope.repository);
+		}
+		
+		function simpleLogout(){		
 			$rootScope.repository = {};
 			localStorageService.remove('repository');
+			$state.go('login');
 		}
 		
 		function isUserLoggedIn() {
@@ -55,8 +76,9 @@
 		return {
 			login: login,
 			logout: logout,
-			initializeAfterLogin: initializeAfterLogin,
-			isUserLoggedIn: isUserLoggedIn
+			setAuthenticationIfAlreadyLogged: setAuthenticationIfAlreadyLogged,
+			isUserLoggedIn: isUserLoggedIn,
+			simpleLogout: simpleLogout
 		};
 	}
 })(angular.module('common.core'));

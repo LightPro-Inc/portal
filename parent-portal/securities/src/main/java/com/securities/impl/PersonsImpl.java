@@ -50,12 +50,13 @@ public class PersonsImpl implements Persons {
 	public List<Person> find(int page, int pageSize, String filter) throws IOException {
 		List<Person> values = new ArrayList<Person>();
 			
-		String statement = String.format("SELECT %s FROM %s WHERE concat(%s,' ', %s) ILIKE ?  OR concat(%s, ' ', %s) ILIKE ? ORDER BY %s DESC LIMIT ? OFFSET ?", dm.keyName(), dm.domainName(), dm.firstNameKey(), dm.lastNameKey(), dm.lastNameKey(), dm.firstNameKey(), HorodateImpl.dm().dateCreatedKey());
+		String statement = String.format("SELECT %s FROM %s WHERE (concat(%s,' ', %s) ILIKE ?  OR concat(%s, ' ', %s) ILIKE ?) AND %s=? ORDER BY %s DESC LIMIT ? OFFSET ?", dm.keyName(), dm.domainName(), dm.firstNameKey(), dm.lastNameKey(), dm.lastNameKey(), dm.firstNameKey(), dm.companyIdKey(), HorodateImpl.dm().dateCreatedKey());
 		
 		List<Object> params = new ArrayList<Object>();
 		filter = (filter == null) ? "" : filter;
 		params.add("%" + filter + "%");
 		params.add("%" + filter + "%");
+		params.add(company.id());
 		
 		if(pageSize > 0){
 			params.add(pageSize);
@@ -75,12 +76,13 @@ public class PersonsImpl implements Persons {
 
 	@Override
 	public int totalCount(String filter) throws IOException {		
-		String statement = String.format("SELECT COUNT(%s) FROM %s WHERE concat(%s,' ', %s) ILIKE ?  OR concat(%s, ' ', %s) ILIKE ?", dm.keyName(), dm.domainName(), dm.firstNameKey(), dm.lastNameKey(), dm.lastNameKey(), dm.firstNameKey());
+		String statement = String.format("SELECT COUNT(%s) FROM %s WHERE (concat(%s,' ', %s) ILIKE ?  OR concat(%s, ' ', %s) ILIKE ?) AND %s=?", dm.keyName(), dm.domainName(), dm.firstNameKey(), dm.lastNameKey(), dm.lastNameKey(), dm.firstNameKey(), dm.companyIdKey());
 		
 		List<Object> params = new ArrayList<Object>();
 		filter = (filter == null) ? "" : filter;
 		params.add("%" + filter + "%");
 		params.add("%" + filter + "%");
+		params.add(company.id());
 		
 		List<Object> results = ds.find(statement, params);
 		return Integer.parseInt(results.get(0).toString());			
@@ -88,7 +90,12 @@ public class PersonsImpl implements Persons {
 
 	@Override
 	public boolean contains(Person item) {
-		return ds.exists(item.id());
+		try {
+			return ds.exists(item.id()) && item.company().isEqual(company);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override
@@ -98,14 +105,15 @@ public class PersonsImpl implements Persons {
 
 	@Override
 	public void delete(Person item) throws IOException {
-		ds.delete(item.id());
+		if(contains(item))
+			ds.delete(item.id());
 	}
 
 	@Override
 	public Person get(UUID id) throws IOException {
 		Person item = build(id);
 		
-		if(!item.isPresent())
+		if(!contains(item))
 			throw new NotFoundException("La personne n'a pas été trouvé !");
 		
 		return item;
@@ -150,5 +158,10 @@ public class PersonsImpl implements Persons {
 			return add("inconnu", "Client", Sex.M, "CLI", null, null, null, null, null);
 		}else
 			return build(UUIDConvert.fromObject(values.get(0)));		
+	}
+
+	@Override
+	public Company company() throws IOException {
+		return company;
 	}
 }

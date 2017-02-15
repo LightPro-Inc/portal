@@ -8,6 +8,7 @@ import com.infrastructure.core.Recordable;
 public interface Company extends Recordable<UUID, Company> {
 	
 	String denomination() throws IOException;
+	String shortName() throws IOException;
 	String rccm() throws IOException;
 	String ncc() throws IOException;
 	String siegeSocial() throws IOException;
@@ -20,7 +21,8 @@ public interface Company extends Recordable<UUID, Company> {
 	String currencyName() throws IOException;
 	String currencyShortName() throws IOException;
 	
-	Company update( String denomination, 
+	Company update( String denomination,
+					String shortName,
 		            String rccm, 
 		            String ncc, 
 		            String siegeSocial, 
@@ -36,8 +38,12 @@ public interface Company extends Recordable<UUID, Company> {
 	void changeLogo(String logo) throws IOException;	
 	Modules modules();	
 	Persons persons();
+	Persons personNotUsers();
+	Persons personUsers();
 	Sequences sequences();
 	MesureUnits mesureUnits();
 	MesureUnitTypes mesureUnitTypes();
 	Taxes taxes();
+	Profiles profiles();
+	Membership membership();
 }

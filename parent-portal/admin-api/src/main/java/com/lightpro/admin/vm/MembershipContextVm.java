@@ -19,17 +19,17 @@ public class MembershipContextVm {
     }
 	
 	@JsonGetter
-	public boolean getIsValid(){
-		return membershipContext.isValid();
-	}
-	
-	@JsonGetter
 	public String getToken() throws IOException {
 		return membershipContext.token();
 	}
 	
 	@JsonGetter
 	public UUID getIdUser(){
-		return membershipContext.userId();
+		return membershipContext.user().id();
+	}
+	
+	@JsonGetter
+	public String getDomain() throws IOException{
+		return String.format("@%s", membershipContext.user().company().shortName());
 	}
 }

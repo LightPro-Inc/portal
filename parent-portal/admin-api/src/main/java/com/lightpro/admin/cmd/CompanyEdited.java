@@ -9,6 +9,7 @@ public class CompanyEdited {
 	
 	private final UUID id;
 	private final String denomination;
+	private final String shortName;
 	private final String rccm;
 	private final String ncc;
 	private final String siegeSocial;
@@ -26,8 +27,9 @@ public class CompanyEdited {
 	}
 	
 	@JsonCreator
-	public CompanyEdited(@JsonProperty("id") final UUID id,
-						  @JsonProperty("denomination") final String denomination, 
+	public CompanyEdited( @JsonProperty("id") final UUID id,
+						  @JsonProperty("denomination") final String denomination,
+						  @JsonProperty("shortName") final String shortName,
 						  @JsonProperty("rccm") final String rccm,
 						  @JsonProperty("ncc") final String ncc,
 						  @JsonProperty("siegeSocial") final String siegeSocial,
@@ -42,6 +44,7 @@ public class CompanyEdited {
 		
 		this.id = id;
 		this.denomination = denomination;
+		this.shortName = shortName;
 		this.rccm = rccm;
 		this.ncc = ncc;
 		this.siegeSocial = siegeSocial;
@@ -104,5 +107,9 @@ public class CompanyEdited {
 	
 	public String currencyShortName(){
 		return currencyShortName;
+	}
+	
+	public String shortName(){
+		return shortName;
 	}
 }

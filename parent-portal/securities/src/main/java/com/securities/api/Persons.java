@@ -11,4 +11,5 @@ import com.infrastructure.core.Updatable;
 public interface Persons extends AdvancedQueryable<Person, UUID>, Updatable<Person> {
 	Person add(String firstName, String lastName, Sex sex, String address, LocalDate birthDate, String tel1, String tel2, String email, String photo) throws IOException;
 	Person defaultPerson() throws IOException;
+	Company company() throws IOException;
 }

@@ -42,4 +42,8 @@ public class UserMetadata implements DomainMetadata {
 	public String saltKey() {
 		return "salt";
 	}	
+	
+	public String profileIdKey() {
+		return "profileid";
+	}
 }

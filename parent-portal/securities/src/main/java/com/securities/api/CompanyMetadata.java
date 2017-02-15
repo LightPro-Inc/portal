@@ -75,6 +75,10 @@ public class CompanyMetadata implements DomainMetadata {
 		return "currencyshortname";
 	}
 	
+	public String shortName(){
+		return "shortname";
+	}
+	
 	public static CompanyMetadata create(){
 		return new CompanyMetadata();
 	}

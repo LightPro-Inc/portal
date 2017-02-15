@@ -51,7 +51,7 @@
             webcamService.captureImage(vm.imgWidth, vm.imgHeight)
                          .result
                          .then(function (imgUrl) {
-                             vm.Item.Photo = imgUrl;
+                             vm.item.photo = imgUrl;
                          });
         }
 

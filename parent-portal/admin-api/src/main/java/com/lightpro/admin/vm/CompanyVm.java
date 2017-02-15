@@ -81,4 +81,9 @@ public class CompanyVm {
 	public String getCurrencyShortName() throws IOException {
 		return company.currencyShortName();
 	}
+	
+	@JsonGetter
+	public String getShortName() throws IOException {
+		return company.shortName();
+	}
 }

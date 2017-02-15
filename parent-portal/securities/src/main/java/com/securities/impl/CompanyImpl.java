@@ -5,16 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.infrastructure.core.Horodate;
 import com.infrastructure.core.impl.HorodateImpl;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.securities.api.Company;
 import com.securities.api.CompanyMetadata;
+import com.securities.api.Membership;
 import com.securities.api.MesureUnitTypes;
 import com.securities.api.MesureUnits;
 import com.securities.api.Modules;
 import com.securities.api.Persons;
+import com.securities.api.Profiles;
 import com.securities.api.Sequences;
 import com.securities.api.Taxes;
 
@@ -88,7 +92,8 @@ public class CompanyImpl implements Company {
 	}
 
 	@Override
-	public Company update( String denomination, 
+	public Company update( String denomination,
+						   String shortName,
 						   String rccm, 
 						   String ncc,
 					   	   String siegeSocial, 
@@ -101,11 +106,15 @@ public class CompanyImpl implements Company {
 				   	   	   String currencyName,
 				   	   	   String currencyShortName) throws IOException {
 		
-		if(denomination.isEmpty())
+		if(StringUtils.isBlank(denomination))
 			throw new IllegalArgumentException("La dénomination ne doit pas être vide!");
+		
+		if(StringUtils.isBlank(shortName))
+			throw new IllegalArgumentException("Le nom court ne doit être renseigné !");
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(dm.denominationKey(), denomination);
+		params.put(dm.shortName(), shortName);
 		params.put(dm.rccmKey(), rccm);
 		params.put(dm.nccKey(), ncc);
 		params.put(dm.siegeSocialKey(), siegeSocial);
@@ -190,5 +199,30 @@ public class CompanyImpl implements Company {
 	@Override
 	public boolean isNotEqual(Company item) {
 		return !isEqual(item);
+	}
+
+	@Override
+	public String shortName() throws IOException {
+		return ds.get(dm.shortName());
+	}
+
+	@Override
+	public Profiles profiles() {
+		return new ProfilesImpl(base, this);
+	}
+
+	@Override
+	public Membership membership() {
+		return new MembershipImpl(base, this);
+	}
+
+	@Override
+	public Persons personNotUsers() {
+		return new PersonNotUsers(base, persons(), membership());
+	}	
+
+	@Override
+	public Persons personUsers() {
+		return new PersonUsers(base, persons(), membership());
 	}
 }

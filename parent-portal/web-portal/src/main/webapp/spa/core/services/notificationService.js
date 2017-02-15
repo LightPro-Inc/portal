@@ -30,7 +30,17 @@
 		}
 
 		function displaySuccess(message, title){
-			return toastr.success(message, title);
+			if(Array.isArray(message)){
+				message.forEach(function(msg){
+				    toastr.success(msg, title);
+				});
+			}else{				
+				if(typeof(message) === 'object' && message.data){
+					return toastr.success(message.data.message, message.data.title);
+				}else{
+					return toastr.success(message, title);
+				}			    
+			}
 		}
 
 		function displayError(error, title) {
@@ -48,11 +58,31 @@
 		}
 
 		function displayWarning(message, title) {
-		    return toastr.warning(message, title);
+			if(Array.isArray(message)){
+				message.forEach(function(msg){
+				    toastr.warning(msg, title);
+				});
+			}else{				
+				if(typeof(message) === 'object' && message.data){
+					return toastr.warning(message.data.message, message.data.title);
+				}else{
+					return toastr.warning(message, title);
+				}			    
+			}
 		}
 
 		function displayInfo(message, title) {
-		    return toastr.info(message, title);
+			if(Array.isArray(message)){
+				message.forEach(function(msg){
+				    toastr.info(msg, title);
+				});
+			}else{				
+				if(typeof(message) === 'object' && message.data){
+					return toastr.info(message.data.message, message.data.title);
+				}else{
+					return toastr.info(message, title);
+				}			    
+			}
 		}
 
 		return service;		

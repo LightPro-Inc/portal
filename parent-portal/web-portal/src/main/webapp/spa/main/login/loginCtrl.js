@@ -3,17 +3,32 @@
 
 	app.controller('loginCtrl', loginCtrl);
 
-	loginCtrl.$inject = [ 'notificationService', '$state', '$timeout', 'apiService', 'membershipService'];
+	loginCtrl.$inject = [ 'notificationService', '$state', '$timeout', 'apiService', 'membershipService', '$rootScope'];
 
-	function loginCtrl(notificationService, $state, $timeout, apiService, membershipService) {
+	function loginCtrl(notificationService, $state, $timeout, apiService, membershipService, $rootScope) {
 
 		var vm = this;
 		vm.login = login;
 		vm.credentials = {};
 
 		function login() {
-			membershipService.login(vm.credentials, function(response){
-				loginCompleted(response)
+			
+			var credentials = angular.copy(vm.credentials);
+			
+			var hasLoginDomain = credentials.fullUsername.split("@").length >= 2;
+			
+			if(!hasLoginDomain)
+			{
+				if($rootScope.repository.domain == undefined){
+					notificationService.displayInfo("Format pseudo accepté : pseudo@nom-domaine-entreprise !");
+					return;
+				}else {
+					credentials.fullUsername += $rootScope.repository.domain;
+				}				
+			}
+			
+			membershipService.login(credentials, function(response){
+				loginCompleted(response);
 			});			
 		}
 
@@ -22,13 +37,8 @@
 		}
 
 		function loginCompleted(result){
-		    if (result.data.isValid) {
-		        notificationService.displaySuccess('Bienvenue ' + vm.credentials.username);
-		        routeToHomePage();		        
-			}
-			else {
-				notificationService.displayError("Pseudo ou mot de passe invalide. Réessayez, s'il vous plait.");
-			}
+			notificationService.displaySuccess('Bienvenue ' + vm.credentials.fullUsername);
+	        routeToHomePage();
 		}
 	}
 

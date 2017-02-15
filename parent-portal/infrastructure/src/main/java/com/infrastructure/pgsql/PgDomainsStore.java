@@ -180,7 +180,7 @@ public class PgDomainsStore implements DomainsStore {
 	}
 
 	@Override
-	public boolean exists(Object key, Object keyValue) {
+	public boolean exists(String key, Object keyValue) {
 		String statement = String.format("SELECT * FROM %s WHERE %s=?", dm.domainName(), key);		
 		List<Object> values;
 		try {
@@ -208,5 +208,34 @@ public class PgDomainsStore implements DomainsStore {
 	public Optional<DomainStore> getFirstDs(String statement, List<Object> params) throws IOException {
 		List<DomainStore> results = findDs(statement, params);		
 		return results.stream().findFirst();
+	}
+
+	@Override
+	public boolean exists(String key1, Object value1, String key2, Object value2) {
+		String statement = String.format("SELECT * FROM %s WHERE %s=? AND %s=?", dm.domainName(), key1, key2);		
+		List<Object> values;
+		try {
+			values = this.base.executeQuery(statement, Arrays.asList(value1, value2));
+			return !values.isEmpty();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;	
+	}
+
+	@Override
+	public List<Object> findPagined(String statement, List<Object> params, int page, int pageSize) throws IOException {
+		
+		statement += " LIMIT ? OFFSET ?";
+		
+		if(pageSize > 0){
+			params.add(pageSize);
+			params.add((page - 1) * pageSize);
+		}else{
+			params.add(null);
+			params.add(0);
+		}
+		
+		return find(statement, params);
 	}
 }

@@ -2,6 +2,7 @@ package com.lightpro.portal.rs;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.UUID;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotAuthorizedException;
@@ -13,12 +14,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
+import com.infrastructure.datasource.Base;
 import com.infrastructure.pgsql.PgBase;
-import com.securities.api.Membership;
+import com.securities.api.Company;
 import com.securities.api.Secured;
 import com.securities.api.User;
+import com.securities.impl.CompaniesImpl;
 import com.securities.impl.EncryptionImpl;
-import com.securities.impl.MembershipImpl;
 
 import io.jsonwebtoken.Claims;
 import net.jawr.web.util.StringUtils;
@@ -58,14 +60,16 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	private void validateToken(ContainerRequestContext requestContext, String token) throws Exception {
 						
 		Claims claims = new EncryptionImpl().claims(token);
-		String username = claims.get("username", String.class);
+		String fullUsername = claims.get("fullUsername", String.class);
 		String hashedPassword = claims.get("password", String.class);
+		UUID companyId = UUID.fromString(claims.get("companyId", String.class));
+
+		Base base = new PgBase();
+		Company company = new CompaniesImpl(base).get(companyId);
+		User user = company.membership().getByFullUsername(fullUsername);
 		
-		Membership membership = new MembershipImpl(new PgBase());
-		User user = membership.get(username);
-		
-		if(!user.hashedPassword().equals(hashedPassword))
-			throw new Exception("Username or password is invalid !");
+		if(!user.hashedPassword().equals(hashedPassword) || user.isLocked())
+			throw new Exception("Authentification requise !");
 		
 		requestContext.setSecurityContext(new SecurityContext() {
 
@@ -76,7 +80,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 		            @Override
 		            public String getName() {
-		            	return username;
+		            	return fullUsername;
 		            }
 		        };
 		    }

@@ -53,7 +53,21 @@
 			};
 			            
 			vm.loadingData = true;
-			apiService.get('/web/api/person/search', config, 
+			
+			var url = null;
+            switch (data.filter) {
+                case 'personUser':
+                    url = '/web/api/person/user/search';
+                    break;
+                case 'personNotUser':
+                    url = '/web/api/person/not-user/search';
+                    break;
+                default:    
+                    url = '/web/api/person/search';
+                    break;
+            }
+            
+			apiService.get(url, config, 
 					function(result){					
 						vm.loadingData = false;
 			            vm.totalCount = result.data.totalCount;

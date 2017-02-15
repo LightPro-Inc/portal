@@ -10,6 +10,7 @@ import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.DomainStore;
 import com.securities.api.Company;
 import com.securities.api.Person;
+import com.securities.api.Profile;
 import com.securities.api.Sex;
 import com.securities.api.User;
 import com.securities.api.UserMetadata;
@@ -135,5 +136,28 @@ public class UserImpl implements User {
 	@Override
 	public Company company() throws IOException {
 		return identity.company();
+	}
+
+	@Override
+	public String fullUsername() throws IOException {
+		return String.format("%s@%s", username(), company().shortName());
+	}
+
+	@Override
+	public Profile profile() throws IOException {
+		UUID profileId = ds.get(dm.profileIdKey());
+		return new ProfileImpl(base, profileId);
+	}
+
+	@Override
+	public void changeProfile(Profile profile) throws IOException {
+		
+		if(!profile.isPresent())
+			throw new IllegalArgumentException("Le nouveau profil de l'utilisateur doit être renseigné !");	
+		
+		if(profile.isEqual(profile()))
+			return;
+		
+		ds.set(dm.profileIdKey(), profile.id());
 	}
 }
