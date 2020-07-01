@@ -1,0 +1,145 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title " style="padding-top: 7.5px;">Correspondance ({{vm.reconcile.auxiliaryAccount}})</h4>
+		</div>
+		<div class="panel-body">			
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-sm-6">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading clearfix">
+	                            <strong class="pull-left">Factures</strong>
+								<div class="input-group col-md-8 pull-right">
+					                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.searchInvoices(0)" ng-model="vm.filterInvoice" class="form-control input-sm" placeholder="Rechercher référence...">
+					                <div class="input-group-btn">
+					                    <button class="btn btn-primary" ng-click="vm.searchInvoices()"><i class="glyphicon glyphicon-search"></i></button>
+					                    <button class="btn btn-primary" ng-click="vm.clearInvoices()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+					                </div>
+					            </div>
+	                        </div>
+	                        <div class="panel-body">
+	                        	<div ng-show="vm.loadingInvoice">
+					                <div class="col-xs-4"></div>
+					                <div class="col-xs-4">
+					                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+					                </div>
+					                <div class="col-xs-4"></div>
+					            </div>
+					            <div class="text-center" ng-if="vm.invoices.length == 0 && !vm.loadingInvoice">
+				                    <span style="color: orangered"><i>Aucun résultat.</i></td>
+				                </div>
+	                            <div class="table-responsive" ng-show="!vm.loadingInvoice">
+	                                <table class="table table-condensed shortMargin">
+	                                	<tr ng-repeat="item in vm.invoices">
+	                                        <td class="shortPadding"><i uib-tooltip="{{item.object}}">{{item.object | limitTo: 25}}{{item.object.length > 25 ? '...' : ''}}</i></td>
+	                                        <td class="shortPadding"><i>{{item.credit | companyCurrency}}</i></td>
+	                                        <td class="shortPadding">
+	                                        	<div class="pull-right">
+	                                                <button class="btn btn-primary btn-xs" ng-disabled="vm.loadingInvoice" ng-click="vm.addInvoice(item)">Ajouter <i class="glyphicon glyphicon-plus"></i></button>
+	                                            </div>
+	                                        </td>
+	                                    </tr> 	                                                   	                                               				                                  
+	                                </table>
+	                            </div>
+	                        </div>
+	                        <div class="panel-footer clearfix">
+	                            <label class="label label-danger">Total : {{vm.totalCountInvoice}} éléments - {{vm.pagesCountInvoice}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCountInvoice" ng-model="vm.currentPageInvoice" items-per-page="vm.pageSizeInvoice" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCountInvoice" max-size="3" ng-change="vm.pageChangedInvoice()"></ul>
+								</div>			
+	                        </div>
+	                    </div>
+	                </div>	
+	                <div class="col-sm-6">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading clearfix">
+	                            <strong class="pull-left">Règlements</strong>
+								<div class="input-group col-md-8 pull-right">
+					                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.searchPayments(0)" ng-model="vm.filterPayment" class="form-control input-sm" placeholder="Rechercher référence, origine...">
+					                <div class="input-group-btn">
+					                    <button class="btn btn-primary" ng-click="vm.searchPayments()"><i class="glyphicon glyphicon-search"></i></button>
+					                    <button class="btn btn-primary" ng-click="vm.clearPayments()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+					                </div>
+					            </div>
+	                        </div>
+	                        <div class="panel-body">
+	                        	<div ng-show="vm.loadingPayment">
+					                <div class="col-xs-4"></div>
+					                <div class="col-xs-4">
+					                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+					                </div>
+					                <div class="col-xs-4"></div>
+					            </div>
+					            <div class="text-center" ng-if="vm.payments.length == 0 && !vm.loadingPayment">
+				                    <span style="color: orangered"><i>Aucun résultat.</i></td>
+				                </div>
+	                            <div class="table-responsive" ng-show="!vm.loadingPayment">
+	                                <table class="table table-condensed shortMargin">
+	                                	<tr ng-repeat="item in vm.payments">	                                		
+	                                		<td class="shortPadding"><i uib-tooltip="{{item.object}}">{{item.object | limitTo: 25}}{{item.object.length > 25 ? '...' : ''}}</i></td>
+	                                		<td class="shortPadding"><i>{{item.debit | companyCurrency}}</i></td>	                        
+	                                        <td class="shortPadding">
+	                                        	<div class="pull-right">
+	                                                <button class="btn btn-primary btn-xs" ng-disabled="vm.loadingPayment" ng-click="vm.addPayment(item)">Ajouter <i class="glyphicon glyphicon-plus"></i></button>
+	                                            </div>
+	                                        </td>
+	                                    </tr> 	                                                   	                                               				                                  
+	                                </table>
+	                            </div>
+	                        </div>
+	                        <div class="panel-footer clearfix">
+	                            <label class="label label-danger">Total : {{vm.totalCountPayment}} éléments - {{vm.pagesCountPayment}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCountPayment" ng-model="vm.currentPagePayment" items-per-page="vm.pageSizePayment" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCountPayment" max-size="3" ng-change="vm.pageChangedPayment()"></ul>
+								</div>			
+	                        </div>
+	                    </div>
+	                </div>    
+	                <div class="col-sm-12">
+		                    <div class="panel panel-default">
+		                        <div class="panel-heading clearfix">
+		                            <strong>{{vm.reconcile.auxiliaryAccount}} (<i>{{vm.reconcile.isLettred ? 'Lettrée' : 'Non lettrée'}}</i>)</strong>
+		                        </div>
+		                        <div class="panel-body">
+		                            <div class="table-responsive">
+		                                <table class="table table-condensed shortMargin">	                                                   
+		                                    <thead>
+		                                    	<tr>
+		                                    		<th>Libellé de l'opération</th>
+		                                    		<th>Débit</th>
+		                                    		<th>Crédit</th>
+		                                    		<th></th>
+		                                    	</tr>
+		                                    </thead>  
+		                                    <tbody>
+		                                    	<tr ng-repeat="line in vm.reconcile.lines">
+		                                    		<td class="shortPadding">{{line.object}}</td>
+		                                    		<td class="shortPadding text-right"><span ng-if="line.debit > 0">{{line.debit | companyCurrency}}</span></td>
+		                                    		<td class="shortPadding text-right"><span ng-if="line.credit > 0">{{line.credit | companyCurrency}}</span></td>
+		                                    		<td><button class="btn btn-primary btn-xs" ng-click="vm.removeLine(line)">Retirer <i class="fa fa-trash-o"></i></button></td>
+		                                    	</tr>
+		                                    	<tr>
+		                                    		<td></td>
+		                                    		<td class="shortPadding text-right"><strong>{{vm.reconcile.debit | companyCurrency}}</strong></td>
+		                                    		<td class="shortPadding text-right"><strong>{{vm.reconcile.credit | companyCurrency}}</strong></td>
+		                                    		<td></td>
+		                                    	</tr>
+		                                    </tbody>       				                                 
+		                                </table>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>           
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<div class="pull-left">
+                <button ng-show="!vm.reconcile.isLettred" class="btn btn-primary btn-xs" ng-disabled="vm.reconcile.debit!=vm.reconcile.credit" ng-click="vm.lettrer(vm.reconcile)">Lettrer <i class="fa fa-pencil"></i></button>									                                                               
+                <button ng-show="vm.reconcile.isLettred" class="btn btn-primary btn-xs" ng-click="vm.delettrer(vm.reconcile)">Delettrer <i class="fa fa-pencil"></i></button>
+            </div>
+			<button class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>	
+		</div>
+	</div>
+</div>

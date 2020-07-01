@@ -73,4 +73,208 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SoyqU-62EeagsLQhcBgxfw" value="*"/>
     </ownedEnd>
   </packagedElement>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_UxJgwMybEeeMyo7NjZMvJA" name="MethodCalculEnum">
+    <ownedLiteral xmi:id="_caPZEMybEeeMyo7NjZMvJA" name="Lineaire">
+      <specification xmi:type="uml:LiteralInteger" xmi:id="_caPZEcybEeeMyo7NjZMvJA"/>
+    </ownedLiteral>
+    <ownedLiteral xmi:id="_eq9egMybEeeMyo7NjZMvJA" name="Degressif">
+      <specification xmi:type="uml:LiteralInteger" xmi:id="_eq-FkMybEeeMyo7NjZMvJA" value="1"/>
+    </ownedLiteral>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_5EaCAMycEeeMyo7NjZMvJA" name="ImmoTypeComptaParameter">
+    <ownedOperation xmi:id="_7yD7EMycEeeMyo7NjZMvJA" name="journal"/>
+    <ownedOperation xmi:id="_8e-rcMycEeeMyo7NjZMvJA" name="modeleSaisie"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="__RXTgMycEeeMyo7NjZMvJA" name="ImmoType">
+    <ownedOperation xmi:id="_9IIoEMyaEeeMyo7NjZMvJA" name="libelle"/>
+    <ownedOperation xmi:id="_A0YQUMybEeeMyo7NjZMvJA" name="nbreAmortissements"/>
+    <ownedOperation xmi:id="_Med44MybEeeMyo7NjZMvJA" name="dureePeriodeEnMois"/>
+    <ownedOperation xmi:id="_lc6TcMybEeeMyo7NjZMvJA" name="methodeCalcul"/>
+    <ownedOperation xmi:id="_ycjZsMybEeeMyo7NjZMvJA" name="prorataTemporis"/>
+    <ownedOperation xmi:id="__YS3YMybEeeMyo7NjZMvJA" name="notes"/>
+    <ownedOperation xmi:id="_cZYqIM1vEeeMyo7NjZMvJA" name="comptaParameter"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_KGg4IMydEeeMyo7NjZMvJA" name="Immobilisation">
+    <generalization xmi:id="_D9EYMMyeEeeMyo7NjZMvJA" general="__RXTgMycEeeMyo7NjZMvJA"/>
+    <ownedOperation xmi:id="_g67rIMydEeeMyo7NjZMvJA" name="reference"/>
+    <ownedOperation xmi:id="_ie1G0MydEeeMyo7NjZMvJA" name="dateAcquisition"/>
+    <ownedOperation xmi:id="_ozm3kMydEeeMyo7NjZMvJA" name="valeurBrute"/>
+    <ownedOperation xmi:id="_s4bX4MydEeeMyo7NjZMvJA" name="valeurNonDepreciable"/>
+    <ownedOperation xmi:id="_vr_rsMydEeeMyo7NjZMvJA" name="valeurResiduelle"/>
+    <ownedOperation xmi:id="_wPDRQMykEeeMyo7NjZMvJA" name="dateMiseEnService"/>
+    <ownedOperation xmi:id="_glLOwM1nEeeMyo7NjZMvJA" name="planAmortissement"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_NsxXsMyeEeeMyo7NjZMvJA" name="Est du type" memberEnd="_NsxXscyeEeeMyo7NjZMvJA _NsxXtMyeEeeMyo7NjZMvJA" navigableOwnedEnd="_NsxXtMyeEeeMyo7NjZMvJA">
+    <ownedEnd xmi:id="_NsxXscyeEeeMyo7NjZMvJA" name="immobilisations" type="_KGg4IMydEeeMyo7NjZMvJA" association="_NsxXsMyeEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NsxXssyeEeeMyo7NjZMvJA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NsxXs8yeEeeMyo7NjZMvJA" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_NsxXtMyeEeeMyo7NjZMvJA" name="immoTypes" type="__RXTgMycEeeMyo7NjZMvJA" association="_NsxXsMyeEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_NsxXtcyeEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_NsxXtsyeEeeMyo7NjZMvJA" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_SrO1wMyeEeeMyo7NjZMvJA" name="Possède paramètres comptables" memberEnd="_SrO1wcyeEeeMyo7NjZMvJA _SrO1xMyeEeeMyo7NjZMvJA" navigableOwnedEnd="_SrO1xMyeEeeMyo7NjZMvJA">
+    <ownedEnd xmi:id="_SrO1wcyeEeeMyo7NjZMvJA" name="immoTypes" type="__RXTgMycEeeMyo7NjZMvJA" association="_SrO1wMyeEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SrO1wsyeEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SrO1w8yeEeeMyo7NjZMvJA" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_SrO1xMyeEeeMyo7NjZMvJA" name="immoTypeComptaParameters" type="_5EaCAMycEeeMyo7NjZMvJA" association="_SrO1wMyeEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SrO1xcyeEeeMyo7NjZMvJA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SrO1xsyeEeeMyo7NjZMvJA" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_HsOVEMyfEeeMyo7NjZMvJA" name="PlanAmortissement">
+    <ownedOperation xmi:id="_S4BCoMygEeeMyo7NjZMvJA" name="calculer"/>
+    <ownedOperation xmi:id="_jD_akM1nEeeMyo7NjZMvJA" name="immobilisation"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_PGbc0MyfEeeMyo7NjZMvJA" name="Amortissement">
+    <ownedOperation xmi:id="_mwQN0MyfEeeMyo7NjZMvJA" name="dateDepreciation"/>
+    <ownedOperation xmi:id="_oUvfYMyfEeeMyo7NjZMvJA" name="montantDejaAmorti"/>
+    <ownedOperation xmi:id="_rtQ6YMyfEeeMyo7NjZMvJA" name="montantAamortir"/>
+    <ownedOperation xmi:id="_wgA3sMyfEeeMyo7NjZMvJA" name="montantPeriodeSuivante"/>
+    <ownedOperation xmi:id="_zZ3ZsMyfEeeMyo7NjZMvJA" name="comptabilise"/>
+    <ownedOperation xmi:id="_CAFcMMygEeeMyo7NjZMvJA" name="pieceComptable"/>
+    <ownedOperation xmi:id="_VdIqwMygEeeMyo7NjZMvJA" name="executer"/>
+    <ownedOperation xmi:id="_m6bgoM1nEeeMyo7NjZMvJA" name="planAmortissement"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_WgxHcMyfEeeMyo7NjZMvJA" name="Possède un plan d'amortissement" memberEnd="_WgxHccyfEeeMyo7NjZMvJA _WgxHdMyfEeeMyo7NjZMvJA" navigableOwnedEnd="_WgxHdMyfEeeMyo7NjZMvJA">
+    <ownedEnd xmi:id="_WgxHccyfEeeMyo7NjZMvJA" name="immobilisations" type="_KGg4IMydEeeMyo7NjZMvJA" association="_WgxHcMyfEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_WgxHcsyfEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WgxHc8yfEeeMyo7NjZMvJA" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_WgxHdMyfEeeMyo7NjZMvJA" name="planAmortissements" type="_HsOVEMyfEeeMyo7NjZMvJA" association="_WgxHcMyfEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_WgxHdcyfEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WgxHdsyfEeeMyo7NjZMvJA" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_cA3S8MyfEeeMyo7NjZMvJA" name="Possède amortissements" memberEnd="_cA3S8cyfEeeMyo7NjZMvJA _cBAc4syfEeeMyo7NjZMvJA" navigableOwnedEnd="_cBAc4syfEeeMyo7NjZMvJA">
+    <ownedEnd xmi:id="_cA3S8cyfEeeMyo7NjZMvJA" name="planAmortissements" type="_HsOVEMyfEeeMyo7NjZMvJA" association="_cA3S8MyfEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cBAc4MyfEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cBAc4cyfEeeMyo7NjZMvJA" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_cBAc4syfEeeMyo7NjZMvJA" name="amortissements" type="_PGbc0MyfEeeMyo7NjZMvJA" aggregation="composite" association="_cA3S8MyfEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cBAc48yfEeeMyo7NjZMvJA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cBAc5MyfEeeMyo7NjZMvJA" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interaction" xmi:id="_Gn4RMM1lEeeMyo7NjZMvJA" name="NewModel">
+    <ownedAttribute xmi:id="_PJJHoM1lEeeMyo7NjZMvJA" name="Comptable" type="_PI_WoM1lEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_u9iGUM1lEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_u-K_gM1lEeeMyo7NjZMvJA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_TYp_ks1mEeeMyo7NjZMvJA" name="Système" type="_TYp_kM1mEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_b3hpUM1mEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_b3hpUc1mEeeMyo7NjZMvJA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_iMdyIM1mEeeMyo7NjZMvJA" name="Immobilisation" type="_KGg4IMydEeeMyo7NjZMvJA"/>
+    <ownedAttribute xmi:id="_KxeR4s1nEeeMyo7NjZMvJA" name="Système" type="_KxeR4M1nEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_L3oBoM1nEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_L3oBoc1nEeeMyo7NjZMvJA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_v-9xUM1pEeeMyo7NjZMvJA" name="Immobilisation" type="_KGg4IMydEeeMyo7NjZMvJA"/>
+    <ownedAttribute xmi:id="_JUGNkM1qEeeMyo7NjZMvJA" name="PlanAmortissement" type="_HsOVEMyfEeeMyo7NjZMvJA"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_0r0iAM1pEeeMyo7NjZMvJA" name="planAmortissement()"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_NOowgs1qEeeMyo7NjZMvJA" name="calculer()"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_57Uv8s1tEeeMyo7NjZMvJA" name="obtenir_parametres_de_calcul"/>
+    <lifeline xmi:id="_PI_Woc1lEeeMyo7NjZMvJA" name="Comptable : Comptable [1]" represents="_PJJHoM1lEeeMyo7NjZMvJA" coveredBy="_pyUJMM1mEeeMyo7NjZMvJA _OGlzk81nEeeMyo7NjZMvJA _0r1JEM1pEeeMyo7NjZMvJA _0r1wIM1pEeeMyo7NjZMvJA _NOowhM1qEeeMyo7NjZMvJA _NOowiM1qEeeMyo7NjZMvJA"/>
+    <lifeline xmi:id="_v--YYM1pEeeMyo7NjZMvJA" name="Immobilisation" represents="_v-9xUM1pEeeMyo7NjZMvJA" coveredBy="_0r1JEc1pEeeMyo7NjZMvJA _0r1JE81pEeeMyo7NjZMvJA _0r1JEs1pEeeMyo7NjZMvJA _57Uv9c1tEeeMyo7NjZMvJA _57Uv981tEeeMyo7NjZMvJA _57Uv9s1tEeeMyo7NjZMvJA"/>
+    <lifeline xmi:id="_JUGNkc1qEeeMyo7NjZMvJA" name="PlanAmortissement" represents="_JUGNkM1qEeeMyo7NjZMvJA" coveredBy="_NOowhc1qEeeMyo7NjZMvJA _NOowh81qEeeMyo7NjZMvJA _NOowhs1qEeeMyo7NjZMvJA _57Uv9M1tEeeMyo7NjZMvJA _57Uv-M1tEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_0r1JEM1pEeeMyo7NjZMvJA" name="planAmortissement()_sender" covered="_PI_Woc1lEeeMyo7NjZMvJA" message="_0rz68M1pEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_0r1JEc1pEeeMyo7NjZMvJA" name="planAmortissement()_receiver" covered="_v--YYM1pEeeMyo7NjZMvJA" message="_0rz68M1pEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_0r1JE81pEeeMyo7NjZMvJA" name="planAmortissement()" covered="_v--YYM1pEeeMyo7NjZMvJA" finish="_0r1JEs1pEeeMyo7NjZMvJA" start="_0r1JEc1pEeeMyo7NjZMvJA" behavior="_0r0iAM1pEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_0r1JEs1pEeeMyo7NjZMvJA" name="planAmortissement()_finish" covered="_v--YYM1pEeeMyo7NjZMvJA" message="_0r0iAc1pEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_0r1wIM1pEeeMyo7NjZMvJA" name="planAmortissement_reply_receiver" covered="_PI_Woc1lEeeMyo7NjZMvJA" message="_0r0iAc1pEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_NOowhM1qEeeMyo7NjZMvJA" name="calculer()_sender" covered="_PI_Woc1lEeeMyo7NjZMvJA" message="_NOowgc1qEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_NOowhc1qEeeMyo7NjZMvJA" name="calculer()_receiver" covered="_JUGNkc1qEeeMyo7NjZMvJA" message="_NOowgc1qEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_NOowh81qEeeMyo7NjZMvJA" name="calculer()" covered="_JUGNkc1qEeeMyo7NjZMvJA" finish="_NOowhs1qEeeMyo7NjZMvJA" start="_NOowhc1qEeeMyo7NjZMvJA" behavior="_NOowgs1qEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_57Uv9M1tEeeMyo7NjZMvJA" name="obtenir_parametres_de_calcul_sender" covered="_JUGNkc1qEeeMyo7NjZMvJA" message="_57Uv8c1tEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_57Uv9c1tEeeMyo7NjZMvJA" name="obtenir_parametres_de_calcul_receiver" covered="_v--YYM1pEeeMyo7NjZMvJA" message="_57Uv8c1tEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_57Uv981tEeeMyo7NjZMvJA" name="obtenir_parametres_de_calcul" covered="_v--YYM1pEeeMyo7NjZMvJA" finish="_57Uv9s1tEeeMyo7NjZMvJA" start="_57Uv9c1tEeeMyo7NjZMvJA" behavior="_57Uv8s1tEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_57Uv9s1tEeeMyo7NjZMvJA" name="parametres_de_calcul_sender" covered="_v--YYM1pEeeMyo7NjZMvJA" message="_57Uv881tEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_57Uv-M1tEeeMyo7NjZMvJA" name="parametres_de_calcul_receiver" covered="_JUGNkc1qEeeMyo7NjZMvJA" message="_57Uv881tEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_NOowhs1qEeeMyo7NjZMvJA" name="liste_amortissements_sender" covered="_JUGNkc1qEeeMyo7NjZMvJA" message="_NOowg81qEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_NOowiM1qEeeMyo7NjZMvJA" name="liste_amortissements_receiver" covered="_PI_Woc1lEeeMyo7NjZMvJA" message="_NOowg81qEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_OGlzk81nEeeMyo7NjZMvJA" name="calculer_amortissement_sender" covered="_PI_Woc1lEeeMyo7NjZMvJA" message="_OGlzkM1nEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_OGlzlM1nEeeMyo7NjZMvJA" name="calculer_amortissement_receiver" message="_OGlzkM1nEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_pyUJMM1mEeeMyo7NjZMvJA" name="calculer_amortissement_sender" covered="_PI_Woc1lEeeMyo7NjZMvJA" message="_pyS7EM1mEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_pyUJMc1mEeeMyo7NjZMvJA" name="calculer_amortissement_receiver" message="_pyS7EM1mEeeMyo7NjZMvJA"/>
+    <message xmi:id="_pyS7EM1mEeeMyo7NjZMvJA" name="calculer_amortissement" receiveEvent="_pyUJMc1mEeeMyo7NjZMvJA" sendEvent="_pyUJMM1mEeeMyo7NjZMvJA"/>
+    <message xmi:id="_OGlzkM1nEeeMyo7NjZMvJA" name="calculer_amortissement" receiveEvent="_OGlzlM1nEeeMyo7NjZMvJA" sendEvent="_OGlzk81nEeeMyo7NjZMvJA"/>
+    <message xmi:id="_0rz68M1pEeeMyo7NjZMvJA" name="planAmortissement()" receiveEvent="_0r1JEc1pEeeMyo7NjZMvJA" sendEvent="_0r1JEM1pEeeMyo7NjZMvJA"/>
+    <message xmi:id="_0r0iAc1pEeeMyo7NjZMvJA" name="planAmortissement_reply" messageSort="reply" receiveEvent="_0r1wIM1pEeeMyo7NjZMvJA" sendEvent="_0r1JEs1pEeeMyo7NjZMvJA"/>
+    <message xmi:id="_NOowgc1qEeeMyo7NjZMvJA" name="calculer()" receiveEvent="_NOowhc1qEeeMyo7NjZMvJA" sendEvent="_NOowhM1qEeeMyo7NjZMvJA"/>
+    <message xmi:id="_NOowg81qEeeMyo7NjZMvJA" name="liste_amortissements" messageSort="reply" receiveEvent="_NOowiM1qEeeMyo7NjZMvJA" sendEvent="_NOowhs1qEeeMyo7NjZMvJA"/>
+    <message xmi:id="_57Uv8c1tEeeMyo7NjZMvJA" name="obtenir_parametres_de_calcul" receiveEvent="_57Uv9c1tEeeMyo7NjZMvJA" sendEvent="_57Uv9M1tEeeMyo7NjZMvJA"/>
+    <message xmi:id="_57Uv881tEeeMyo7NjZMvJA" name="parametres_de_calcul" messageSort="reply" receiveEvent="_57Uv-M1tEeeMyo7NjZMvJA" sendEvent="_57Uv9s1tEeeMyo7NjZMvJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_PI_WoM1lEeeMyo7NjZMvJA" name="Actor1"/>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_TYp_kM1mEeeMyo7NjZMvJA" name="Actor2"/>
+  <packagedElement xmi:type="uml:Actor" xmi:id="_KxeR4M1nEeeMyo7NjZMvJA" name="Actor3"/>
+  <packagedElement xmi:type="uml:Interaction" xmi:id="_5sFkoM1uEeeMyo7NjZMvJA" name="NewModel">
+    <ownedAttribute xmi:id="_-ralYM1uEeeMyo7NjZMvJA" name="Comptable" type="_PI_WoM1lEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__3xq0M1uEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__3xq0c1uEeeMyo7NjZMvJA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_Fe65gM1vEeeMyo7NjZMvJA" name="Amortissement" type="_PGbc0MyfEeeMyo7NjZMvJA"/>
+    <ownedAttribute xmi:id="_SpKGMM1vEeeMyo7NjZMvJA" name="ImmoType" type="__RXTgMycEeeMyo7NjZMvJA"/>
+    <ownedAttribute xmi:id="_u6P9Qs1vEeeMyo7NjZMvJA" name="ComptaParameter" type="_u6P9QM1vEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_52xVMM1vEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_52xVMc1vEeeMyo7NjZMvJA" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_D-l5wM1wEeeMyo7NjZMvJA" name="ImmoTypeComptaParameter" type="_5EaCAMycEeeMyo7NjZMvJA"/>
+    <ownedAttribute xmi:id="_gyNPEs1wEeeMyo7NjZMvJA" name="ModeleSaisie" type="_gyNPEM1wEeeMyo7NjZMvJA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ipFRIM1wEeeMyo7NjZMvJA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ipF4MM1wEeeMyo7NjZMvJA" value="1"/>
+    </ownedAttribute>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_LYXZIc1vEeeMyo7NjZMvJA" name="executer"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_m3Xr8c1vEeeMyo7NjZMvJA" name="comptaParameter"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_KpCYgc1wEeeMyo7NjZMvJA" name="journal"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_Pi64kc1wEeeMyo7NjZMvJA" name="modeleSaisie"/>
+    <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_lIhIAs1wEeeMyo7NjZMvJA" name="genererEcritureComptable(journal)"/>
+    <lifeline xmi:id="_-ralYc1uEeeMyo7NjZMvJA" name="Comptable : Actor1 [1]" represents="_-ralYM1uEeeMyo7NjZMvJA" coveredBy="_LYXZI81vEeeMyo7NjZMvJA _LYXZJ81vEeeMyo7NjZMvJA"/>
+    <lifeline xmi:id="_Fe65gc1vEeeMyo7NjZMvJA" name="Amortissement" represents="_Fe65gM1vEeeMyo7NjZMvJA" coveredBy="_LYXZJM1vEeeMyo7NjZMvJA _LYXZJs1vEeeMyo7NjZMvJA _LYXZJc1vEeeMyo7NjZMvJA _m3Xr881vEeeMyo7NjZMvJA _m3Xr981vEeeMyo7NjZMvJA _KpCYg81wEeeMyo7NjZMvJA _KpCYh81wEeeMyo7NjZMvJA _Pi64k81wEeeMyo7NjZMvJA _Pi64l81wEeeMyo7NjZMvJA _lIhIBM1wEeeMyo7NjZMvJA _lIhICM1wEeeMyo7NjZMvJA"/>
+    <lifeline xmi:id="_SpKGMc1vEeeMyo7NjZMvJA" name="ImmoType" represents="_SpKGMM1vEeeMyo7NjZMvJA" coveredBy="_m3Xr9M1vEeeMyo7NjZMvJA _m3Xr9s1vEeeMyo7NjZMvJA _m3Xr9c1vEeeMyo7NjZMvJA"/>
+    <lifeline xmi:id="_D-l5wc1wEeeMyo7NjZMvJA" name="ImmoTypeComptaParameter" represents="_D-l5wM1wEeeMyo7NjZMvJA" coveredBy="_KpCYhM1wEeeMyo7NjZMvJA _KpCYhs1wEeeMyo7NjZMvJA _KpCYhc1wEeeMyo7NjZMvJA _Pi64lM1wEeeMyo7NjZMvJA _Pi64ls1wEeeMyo7NjZMvJA _Pi64lc1wEeeMyo7NjZMvJA"/>
+    <lifeline xmi:id="_gyNPEc1wEeeMyo7NjZMvJA" name="ModeleSaisie : Class7 [1]" represents="_gyNPEs1wEeeMyo7NjZMvJA" coveredBy="_lIhIBc1wEeeMyo7NjZMvJA _lIhIB81wEeeMyo7NjZMvJA _lIhIBs1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_LYXZI81vEeeMyo7NjZMvJA" name="executer_sender" covered="_-ralYc1uEeeMyo7NjZMvJA" message="_LYXZIM1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_LYXZJM1vEeeMyo7NjZMvJA" name="executer_receiver" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_LYXZIM1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_LYXZJs1vEeeMyo7NjZMvJA" name="executer" covered="_Fe65gc1vEeeMyo7NjZMvJA" finish="_LYXZJc1vEeeMyo7NjZMvJA" start="_LYXZJM1vEeeMyo7NjZMvJA" behavior="_LYXZIc1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_m3Xr881vEeeMyo7NjZMvJA" name="comptaParameter_sender" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_m3Xr8M1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_m3Xr9M1vEeeMyo7NjZMvJA" name="comptaParameter_receiver" covered="_SpKGMc1vEeeMyo7NjZMvJA" message="_m3Xr8M1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_m3Xr9s1vEeeMyo7NjZMvJA" name="comptaParameter" covered="_SpKGMc1vEeeMyo7NjZMvJA" finish="_m3Xr9c1vEeeMyo7NjZMvJA" start="_m3Xr9M1vEeeMyo7NjZMvJA" behavior="_m3Xr8c1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_m3Xr9c1vEeeMyo7NjZMvJA" name="comptaParameter_reply_sender" covered="_SpKGMc1vEeeMyo7NjZMvJA" message="_m3Xr8s1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_m3Xr981vEeeMyo7NjZMvJA" name="comptaParameter_reply_receiver" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_m3Xr8s1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_KpCYg81wEeeMyo7NjZMvJA" name="journal_sender" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_KpCYgM1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_KpCYhM1wEeeMyo7NjZMvJA" name="journal_receiver" covered="_D-l5wc1wEeeMyo7NjZMvJA" message="_KpCYgM1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_KpCYhs1wEeeMyo7NjZMvJA" name="journal" covered="_D-l5wc1wEeeMyo7NjZMvJA" finish="_KpCYhc1wEeeMyo7NjZMvJA" start="_KpCYhM1wEeeMyo7NjZMvJA" behavior="_KpCYgc1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_KpCYhc1wEeeMyo7NjZMvJA" name="journal_reply_sender" covered="_D-l5wc1wEeeMyo7NjZMvJA" message="_KpCYgs1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_KpCYh81wEeeMyo7NjZMvJA" name="journal_reply_receiver" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_KpCYgs1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_Pi64k81wEeeMyo7NjZMvJA" name="modeleSaisie_sender" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_Pi64kM1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_Pi64lM1wEeeMyo7NjZMvJA" name="modeleSaisie_receiver" covered="_D-l5wc1wEeeMyo7NjZMvJA" message="_Pi64kM1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_Pi64ls1wEeeMyo7NjZMvJA" name="modeleSaisie" covered="_D-l5wc1wEeeMyo7NjZMvJA" finish="_Pi64lc1wEeeMyo7NjZMvJA" start="_Pi64lM1wEeeMyo7NjZMvJA" behavior="_Pi64kc1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_Pi64lc1wEeeMyo7NjZMvJA" name="modeleSaisie_reply_sender" covered="_D-l5wc1wEeeMyo7NjZMvJA" message="_Pi64ks1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_Pi64l81wEeeMyo7NjZMvJA" name="modeleSaisie_reply_receiver" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_Pi64ks1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_lIhIBM1wEeeMyo7NjZMvJA" name="genererEcritureComptable(journal)_sender" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_lIhIAc1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_lIhIBc1wEeeMyo7NjZMvJA" name="genererEcritureComptable(journal)_receiver" covered="_gyNPEc1wEeeMyo7NjZMvJA" message="_lIhIAc1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:BehaviorExecutionSpecification" xmi:id="_lIhIB81wEeeMyo7NjZMvJA" name="genererEcritureComptable(journal)" covered="_gyNPEc1wEeeMyo7NjZMvJA" finish="_lIhIBs1wEeeMyo7NjZMvJA" start="_lIhIBc1wEeeMyo7NjZMvJA" behavior="_lIhIAs1wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_lIhIBs1wEeeMyo7NjZMvJA" name="genererEcritureComptable(journal)_finish" covered="_gyNPEc1wEeeMyo7NjZMvJA" message="_lIhIA81wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_lIhICM1wEeeMyo7NjZMvJA" name="ecriture_comptable_receiver" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_lIhIA81wEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_LYXZJc1vEeeMyo7NjZMvJA" name="executer_reply_sender" covered="_Fe65gc1vEeeMyo7NjZMvJA" message="_LYXZIs1vEeeMyo7NjZMvJA"/>
+    <fragment xmi:type="uml:MessageOccurrenceSpecification" xmi:id="_LYXZJ81vEeeMyo7NjZMvJA" name="executer_reply_receiver" covered="_-ralYc1uEeeMyo7NjZMvJA" message="_LYXZIs1vEeeMyo7NjZMvJA"/>
+    <message xmi:id="_LYXZIM1vEeeMyo7NjZMvJA" name="executer" receiveEvent="_LYXZJM1vEeeMyo7NjZMvJA" sendEvent="_LYXZI81vEeeMyo7NjZMvJA" signature="_VdIqwMygEeeMyo7NjZMvJA"/>
+    <message xmi:id="_LYXZIs1vEeeMyo7NjZMvJA" name="executer_reply" messageSort="reply" receiveEvent="_LYXZJ81vEeeMyo7NjZMvJA" sendEvent="_LYXZJc1vEeeMyo7NjZMvJA"/>
+    <message xmi:id="_m3Xr8M1vEeeMyo7NjZMvJA" name="comptaParameter" receiveEvent="_m3Xr9M1vEeeMyo7NjZMvJA" sendEvent="_m3Xr881vEeeMyo7NjZMvJA" signature="_cZYqIM1vEeeMyo7NjZMvJA"/>
+    <message xmi:id="_m3Xr8s1vEeeMyo7NjZMvJA" name="comptaParameter_reply" messageSort="reply" receiveEvent="_m3Xr981vEeeMyo7NjZMvJA" sendEvent="_m3Xr9c1vEeeMyo7NjZMvJA"/>
+    <message xmi:id="_KpCYgM1wEeeMyo7NjZMvJA" name="journal" receiveEvent="_KpCYhM1wEeeMyo7NjZMvJA" sendEvent="_KpCYg81wEeeMyo7NjZMvJA" signature="_7yD7EMycEeeMyo7NjZMvJA"/>
+    <message xmi:id="_KpCYgs1wEeeMyo7NjZMvJA" name="journal_reply" messageSort="reply" receiveEvent="_KpCYh81wEeeMyo7NjZMvJA" sendEvent="_KpCYhc1wEeeMyo7NjZMvJA"/>
+    <message xmi:id="_Pi64kM1wEeeMyo7NjZMvJA" name="modeleSaisie" receiveEvent="_Pi64lM1wEeeMyo7NjZMvJA" sendEvent="_Pi64k81wEeeMyo7NjZMvJA" signature="_8e-rcMycEeeMyo7NjZMvJA"/>
+    <message xmi:id="_Pi64ks1wEeeMyo7NjZMvJA" name="modeleSaisie_reply" messageSort="reply" receiveEvent="_Pi64l81wEeeMyo7NjZMvJA" sendEvent="_Pi64lc1wEeeMyo7NjZMvJA"/>
+    <message xmi:id="_lIhIAc1wEeeMyo7NjZMvJA" name="genererEcritureComptable(journal)" receiveEvent="_lIhIBc1wEeeMyo7NjZMvJA" sendEvent="_lIhIBM1wEeeMyo7NjZMvJA" signature="_lIhIAM1wEeeMyo7NjZMvJA"/>
+    <message xmi:id="_lIhIA81wEeeMyo7NjZMvJA" name="ecriture_comptable" messageSort="reply" receiveEvent="_lIhICM1wEeeMyo7NjZMvJA" sendEvent="_lIhIBs1wEeeMyo7NjZMvJA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_u6P9QM1vEeeMyo7NjZMvJA" name="Class6"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_gyNPEM1wEeeMyo7NjZMvJA" name="Class7">
+    <ownedOperation xmi:id="_lIhIAM1wEeeMyo7NjZMvJA" name="Operation_1"/>
+  </packagedElement>
 </uml:Model>

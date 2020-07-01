@@ -73,7 +73,7 @@ public class EncryptionImpl implements Encryption {
 	public Claims claims(String token) throws IOException {
 		return Jwts.parser()
 				   .setSigningKey(stringToSecretKey(keyStr))
-				   .parseClaimsJws(token)
+				   .parseClaimsJws(token)			   
 				   .getBody();
 	}
 
@@ -81,13 +81,12 @@ public class EncryptionImpl implements Encryption {
 	public String generateToken(String fullUsername, UUID userId, String hashedPassword, UUID companyId) throws IOException {
 		
 		Map<String, Object> claims = new HashMap<String, Object>();
-		claims.put("fullUsername", fullUsername);
+		claims.put("username", fullUsername);
 		claims.put("password", hashedPassword);
 		claims.put("companyId", companyId);
+		claims.put("userId", userId);
 		
 		return Jwts.builder()
-				  .setSubject(fullUsername)
-				  .setId(userId.toString())
 				  .setClaims(claims)
 				  .signWith(SignatureAlgorithm.HS512, stringToSecretKey(keyStr))
 				  .compact();

@@ -28,7 +28,7 @@
     						notificationService.displaySuccess("La catégorie " + item.name + " a été supprimée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

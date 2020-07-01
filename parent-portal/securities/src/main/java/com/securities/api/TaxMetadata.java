@@ -35,11 +35,23 @@ public class TaxMetadata implements DomainMetadata {
 		return "shortname";
 	}
 	
-	public String rateKey() {
-		return "rate";
+	public String valueKey() {
+		return "value";
+	}
+	
+	public String valueTypeKey() {
+		return "valuetype";
 	}	
 	
 	public String companyIdKey() {
 		return "companyid";
+	}
+	
+	public String typeIdKey() {
+		return "typeid";
+	}
+	
+	public static TaxMetadata create(){
+		return new TaxMetadata();
 	}
 }

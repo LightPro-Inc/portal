@@ -18,15 +18,26 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.infrastructure.core.PaginationSet;
+import com.lightpro.admin.cmd.FeatureProfiling;
 import com.lightpro.admin.cmd.ProfileEdited;
 import com.lightpro.admin.cmd.SequenceEdited;
+import com.lightpro.admin.vm.FeatureVm;
 import com.lightpro.admin.vm.ProfileVm;
+import com.securities.api.Feature;
+import com.securities.api.FeatureType;
+import com.securities.api.Features;
+import com.securities.api.Module;
+import com.securities.api.ModuleType;
 import com.securities.api.Profile;
 import com.securities.api.Profiles;
 import com.securities.api.Secured;
 
 @Path("/profile")
 public class ProfileRs extends AdminBaseRs {
+	
+	private Profiles profiles() throws IOException{
+		return admin().profiles();
+	}
 	
 	@GET
 	@Secured
@@ -38,7 +49,7 @@ public class ProfileRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<ProfileVm> items = currentCompany().profiles().all()
+						List<ProfileVm> items = profiles().all()
 														 .stream()
 												 		 .map(m -> new ProfileVm(m))
 												 		 .collect(Collectors.toList());
@@ -61,13 +72,13 @@ public class ProfileRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Profiles container = currentCompany().profiles();
+						Profiles container = profiles();
 						
 						List<ProfileVm> itemsVm = container.find(page, pageSize, filter).stream()
 															 .map(m -> new ProfileVm(m))
 															 .collect(Collectors.toList());
 													
-						int count = container.totalCount(filter);
+						long count = container.count(filter);
 						PaginationSet<ProfileVm> pagedSet = new PaginationSet<ProfileVm>(itemsVm, page, count);
 						
 						return Response.ok(pagedSet).build();
@@ -87,11 +98,92 @@ public class ProfileRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						ProfileVm item = new ProfileVm(currentCompany().profiles().get(id));
+						ProfileVm item = new ProfileVm(profiles().get(id));
 
 						return Response.ok(item).build();
 					}
 				});		
+	}
+	
+	@GET
+	@Secured
+	@Path("/{id}/module/{moduleTypeId}/feature/category")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getFeatureCategoriesOfModule(@PathParam("id") final UUID id, @PathParam("moduleTypeId") final Integer moduleTypeId) throws IOException {	
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						Profile profile = profiles().get(id);
+						Module module = currentCompany.modulesSubscribed().get(moduleTypeId);
+						
+						List<FeatureVm> itemsVm = profile.featuresSubscribed().of(module).of(FeatureType.FEATURE_CATEGORY).all()
+														 .stream()
+														 .map(m -> new FeatureVm(m))
+														 .collect(Collectors.toList());
+													
+						return Response.ok(itemsVm).build();
+					}
+				});		
+	}
+	
+	@GET
+	@Secured
+	@Path("/{id}/module/{moduleTypeId}/feature/category/{categoryid}/child")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getFeatureChildrenOfModule(@PathParam("id") final UUID id, @PathParam("moduleTypeId") final Integer moduleTypeId, @PathParam("categoryid") final String categoryId) throws IOException {	
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						Profile profile = profiles().get(id);
+						Feature feature = profile.featuresSubscribed().of(ModuleType.get(moduleTypeId)).get(categoryId);
+						
+						List<FeatureVm> itemsVm = feature.children()
+														 .stream()
+														 .map(m -> new FeatureVm(m))
+														 .collect(Collectors.toList());
+													
+						return Response.ok(itemsVm).build();
+					}
+				});		
+	}
+	
+	@POST
+	@Secured
+	@Path("/{id}/module/{moduleTypeId}/feature")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response profileModuleFeatures(@PathParam("id") final UUID id, @PathParam("moduleTypeId") final Integer moduleTypeId, final FeatureProfiling profiling) throws IOException {
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						Profile profile = profiles().get(id);
+						Module module = currentCompany.modulesSubscribed().get(moduleTypeId);
+						Features featuresSubscribed = module.featuresSubscribed();
+						Features profileFeatures = profile.featuresSubscribed().of(module);
+						
+						for (String id : profiling.featuresToAdd()) {
+							Feature item = featuresSubscribed.get(id);
+							
+							if(!profileFeatures.contains(item))
+								profile.addFeature(item);							
+						}
+						
+						for (String id : profiling.featuresToDelete()) {
+							Feature item = featuresSubscribed.build(id);							
+							profile.removeFeature(item);							
+						}
+						
+						return Response.status(Response.Status.OK).build();	
+					}
+				});					
 	}
 	
 	@POST
@@ -104,8 +196,9 @@ public class ProfileRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						currentCompany().profiles().add(cmd.name());
+						Profile profile = profiles().add(cmd.name());
 						
+						log.info(String.format("Création du profil %s.", profile.name()));
 						return Response.status(Response.Status.OK).build();
 					}
 				});		
@@ -122,9 +215,10 @@ public class ProfileRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Profile item = currentCompany().profiles().get(id);
+						Profile item = profiles().get(id);
 						item.update(cmd.name());
 						
+						log.info(String.format("Mise à jour du profil %s.", item.name()));
 						return Response.status(Response.Status.OK).build();
 					}
 				});		
@@ -141,9 +235,11 @@ public class ProfileRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Profile item = currentCompany().profiles().get(id);
-						currentCompany().profiles().delete(item);
+						Profile item = profiles().get(id);
+						String name = item.name();
+						profiles().delete(item);
 						
+						log.info(String.format("Suppression du profil %s.", name));
 						return Response.status(Response.Status.OK).build();
 					}
 				});	

@@ -1,0 +1,234 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Ventes</h4>
+		</div>
+		<div class="panel-body">
+			<uib-tabset active="vm.active">
+            	   <uib-tab index="0">
+                       <uib-tab-heading>
+                           Facture
+                       </uib-tab-heading>
+                       	<div class="panel" ng-controller="salesFacturationCtrl as vm">
+                       		<div class="panel panel-body">
+	                           <div class="row">
+	                               <div class="col-md-12">
+	                               	   <div class="row">	      
+					                        <div class="form-group form-group-sm col-sm-12">
+				                    			<label class="control-label col-sm-5" for="journalVente">Journal des ventes par défaut</label>
+								                <div class="col-sm-7">						                	
+									                <select class="form-control" id="journalVente" name="journalVente" ng-model="vm.facturation.journalVenteId" ng-options="v.id as v.name for v in vm.salesJournals" ng-change="vm.saleJournalChanged(vm.facturation.journalVenteId)">
+									                	<option value="">-- Choisir un journal --</option>
+										            </select>   
+								                </div>
+				                    		</div>
+					                    	<div class="form-group form-group-sm col-sm-12">
+				                    			<label class="control-label col-sm-5" for="factureClient">Facture client par défaut</label>
+								                <div class="col-sm-7">						                	
+									                <select class="form-control" id="factureClient" name="factureClient" ng-model="vm.facturation.factureClientId" ng-options="v.id as v.name for v in vm.pieceTypes" ng-change="vm.factureClientChanged(vm.facturation.factureClientId)">
+									                	<option value="">-- Choisir un type de pièce --</option>
+										            </select>   
+								                </div>
+				                    		</div>
+				                    		<div class="form-group form-group-sm col-sm-12">
+				                    			<label class="control-label col-sm-5" for="factureDoitTrame">Modèle de saisie Facture Doit par défaut</label>
+								                <div class="col-sm-7">						                	
+									                <select class="form-control" id="factureDoitTrame" name="factureDoitTrame" ng-model="vm.facturation.factureDoitTrameId" ng-options="v.id as v.name for v in vm.trames">
+									                	<option value="">-- Choisir un modèle --</option>
+										            </select>   
+								                </div>
+				                    		</div>
+				                    	</div>   
+					                    <div class="row">
+					                    	<div class="col-md-12">
+					                			<div class="table-responsive">
+							                		<table class="table table-responsive table-bordered table-condensed shortMargin">
+							                			<thead>
+							                				<tr>
+							                					<th>Catégorie de produit</th>
+							                					<th>Journal de ventes</th>
+							                					<th>Type de facture client</th>
+							                					<th>Modèle de saisie</th>
+							                				</tr>		                				
+							                			</thead>
+							                			<tbody>
+							                				<tr ng-repeat="item in vm.productCategories">
+							                					<td class="shortMargin">{{item.name}}</td>
+							                					<td class="shortMargin">
+							                						<select class="form-control input-sm" id="journalVentePc" name="journalVentePc" ng-model="item.journalVenteId" ng-options="v.id as v.name for v in vm.salesJournals" ng-change="vm.saleJournalPcChanged(item, item.journalVenteId)">
+													                	<option value="">-- Choisir un journal --</option>
+														            </select>
+							                					</td>
+							                					<td class="shortMargin">
+							                						<select class="form-control input-sm" id="factureClientPc" name="factureClientPc" ng-model="item.factureClientId" ng-options="v.id as v.name for v in item.pieceTypes" ng-change="vm.factureClientPcChanged(item, item.factureClientId)">
+													                	<option value="">-- Choisir un type de pièce --</option>
+														            </select>
+							                					</td>
+							                					<td class="shortMargin">
+							                						<select class="form-control input-sm" id="factureDoitTramePc" name="factureDoitTramePc" ng-model="item.factureDoitTrameId" ng-options="v.id as v.name for v in item.trames" ng-change="vm.factureDoitTramePcChanged(item, item.factureDoitTrameId)">
+													                	<option value="">-- Choisir un modèle --</option>
+														            </select>
+							                					</td>						                					
+							                				</tr>
+							                				<tr ng-if="vm.productCategories.length == 0">
+								                                <td colspan="4" class="text-center" style="color: orangered"><i>Aucune catégorie de produit disponible.</i></td>
+								                            </tr>
+							                			</tbody>
+							                		</table>
+							                	</div>	
+					                		</div>	
+					                    </div>                            	                                      
+	                               </div>                               
+	                           </div>
+	                       </div>  
+	                       <div class="panel-footer clearfix">
+								<div class="pull-right">																									
+									<button type="button" class="btn btn-primary btn-sm" ng-click="vm.saveFacturation()">Enregistrer</button>
+								</div>
+				            </div>
+                       	</div>                     	                                                        
+                   </uib-tab>
+                   <uib-tab index="1">
+                       <uib-tab-heading>
+                           Paiement
+                       </uib-tab-heading>
+                       <div class="panel" ng-controller="salesPaymentCtrl as vm">
+                       		<div class="panel panel-body">
+	                           <div class="row">
+	                               <div class="col-md-12">
+	                               	   	<div class="table-responsive">
+					                		<table class="table table-responsive table-bordered table-condensed shortMargin">
+					                			<thead>
+					                				<tr>
+					                					<th>Mode de paiement</th>
+					                					<th>Type</th>
+					                					<th>Journal d'encaissement</th>
+					                					<th>Pièce comptable</th>
+					                					<th>Acompte ou avance</th>
+					                					<th>Règlement</th>
+					                					<th>Provision</th>
+					                				</tr>		                				
+					                			</thead>
+					                			<tbody>
+					                				<tr ng-repeat="item in vm.payment.paymentModes">
+					                					<td class="shortMargin">{{item.name}}</td>
+					                					<td class="shortMargin">{{item.type}}</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="journalEncaissement" name="journalEncaissement" ng-model="item.journalEncaissementId" ng-options="v.id as v.name for v in vm.bankAndCashJournals" ng-change="vm.bankAndCashJournalChanged(item, item.journalEncaissementId)">
+											                	<option value="">-- Choisir un journal --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="reglement" name="reglement" ng-model="item.reglementId" ng-options="v.id as v.name for v in item.pieceTypes" ng-change="vm.reglementChanged(item, item.reglementId)">
+											                	<option value="">-- Choisir un type de pièce --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="acompteOrAvance" name="acompteOrAvance" ng-model="item.acompteOrAvanceId" ng-options="v.id as v.name for v in item.trames">
+											                	<option value="">-- Choisir un modèle --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="reglementDefinitif" name="reglementDefinitif" ng-model="item.reglementDefinitifId" ng-options="v.id as v.name for v in item.trames">
+											                	<option value="">-- Choisir un modèle --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="provision" name="provision" ng-model="item.provisionId" ng-options="v.id as v.name for v in item.trames">
+											                	<option value="">-- Choisir un modèle --</option>
+												            </select>
+					                					</td>							                					
+					                				</tr>
+					                				<tr ng-if="vm.payment.paymentModes.length == 0">
+						                                <td colspan="8" class="text-center" style="color: orangered"><i>Aucun mode de paiement disponible.</i></td>
+						                            </tr>
+					                			</tbody>
+					                		</table>
+					                	</div>							    								   
+	                               </div>
+	                           </div>
+	                       </div>
+	                       <div class="panel-footer clearfix">
+								<div class="pull-right">																									
+									<button type="button" class="btn btn-primary btn-sm" ng-click="vm.savePayment()">Enregistrer</button>
+								</div>
+				            </div>
+                       </div>                                     
+                   </uib-tab>
+                   <uib-tab index="2">
+                       <uib-tab-heading>
+                           Points de vente
+                       </uib-tab-heading>
+                       <div class="panel" ng-controller="salesPdvCtrl as vm">
+                       		<div class="panel panel-body">
+	                           <div class="row">
+	                               <div class="col-md-12">
+	                               	   	<div class="table-responsive" ng-repeat="pdv in vm.pdvs">
+					                		<table class="table table-responsive table-bordered table-condensed shortMargin">
+					                			<thead>
+					                				<tr>
+					                					<th colspan="7" style="background-color: yellow;">
+					                						<span>{{pdv.name}}</span>	
+					                						<div class="pull-right">
+					                							<button type="button" class="btn btn-primary btn-sm" ng-click="vm.savePdv(pdv)">Enregistrer</button>					                							
+					                						</div>		                						
+					                					</th>
+					                				</tr>
+					                				<tr>
+					                					<th>Mode de paiement</th>
+					                					<th>Type</th>
+					                					<th>Journal d'encaissement</th>
+					                					<th>Pièce comptable</th>
+					                					<th>Acompte ou avance</th>
+					                					<th>Règlement</th>
+					                					<th>Provision</th>
+					                				</tr>		                				
+					                			</thead>
+					                			<tbody>
+					                				<tr ng-repeat="item in pdv.paymentModes">
+					                					<td class="shortMargin">{{item.name}}</td>
+					                					<td class="shortMargin">{{item.type}}</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="journalEncaissement" name="journalEncaissement" ng-model="item.journalEncaissementId" ng-options="v.id as v.name for v in vm.bankAndCashJournals" ng-change="vm.bankAndCashJournalChanged(item, item.journalEncaissementId)">
+											                	<option value="">-- Choisir un journal --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="reglement" name="reglement" ng-model="item.reglementId" ng-options="v.id as v.name for v in item.pieceTypes" ng-change="vm.reglementChanged(item, item.reglementId)">
+											                	<option value="">-- Choisir un type de pièce --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="acompteOrAvance" name="acompteOrAvance" ng-model="item.acompteOrAvanceId" ng-options="v.id as v.name for v in item.trames">
+											                	<option value="">-- Choisir un modèle --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="reglementDefinitif" name="reglementDefinitif" ng-model="item.reglementDefinitifId" ng-options="v.id as v.name for v in item.trames">
+											                	<option value="">-- Choisir un modèle --</option>
+												            </select>
+					                					</td>
+					                					<td class="shortMargin">
+					                						<select class="form-control input-sm" id="provision" name="provision" ng-model="item.provisionId" ng-options="v.id as v.name for v in item.trames">
+											                	<option value="">-- Choisir un modèle --</option>
+												            </select>
+					                					</td>								                					
+					                				</tr>
+					                				<tr ng-if="pdv.paymentModes.length == 0">
+						                                <td colspan="7" class="text-center" style="color: orangered"><i>Aucun mode de paiement disponible.</i></td>
+						                            </tr>
+					                			</tbody>
+					                		</table>
+					                	</div>							    								   
+	                               </div>
+	                           </div>
+	                       </div>
+                       </div>                                     
+                   </uib-tab>
+               </uib-tabset>  
+		</div>
+		<div class="panel-footer">
+			
+		</div>
+	</div>
+</div>

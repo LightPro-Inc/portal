@@ -1,0 +1,24 @@
+<div class="col-md-8">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">Disponibilité des chambres</h4>
+				</div>
+				<div class="panel-body">
+					<div ng-show="loadingRoomAvailability">
+		                <div class="col-xs-4"></div>
+		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+		                <div class="col-xs-4"></div>
+		            </div>
+					<div class="row" ng-show="!loadingRoomAvailability">
+						<div class="col-md-6">
+							<h5 class="text-center">Libre</h5>
+							<h1 class="text-center">{{numberOfFreeRooms}}</h1>
+						</div>
+						<div class="col-md-6">
+							<h5 class="text-center">Occupée</h5>
+							<h1 class="text-center">{{numberOfRoomOccupied}}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>

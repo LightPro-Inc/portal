@@ -22,7 +22,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put('/web/api/article-family/' + vm.item.id, vm.item,
@@ -31,7 +31,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}
 			
@@ -46,16 +46,17 @@
 			if(vm.isNewItem){
 				vm.title = "Créer une famille d'article";
 				vm.btnSaveLabel = "Créer";	
-				
-				apiService.get('/web/api/article-category/' + vm.item.categoryId, null, 
-						function(response){
-							vm.item.category = response.data.name;
-						}
-				);
+					
 			}else{
 				vm.title = "Modifier une famille d'article";
 				vm.btnSaveLabel = "Modifier";
-			}	
+			}
+			
+			apiService.get('/web/api/article-category', {}, 
+					function(response){
+						vm.categories = response.data;
+					}
+			);
 		}
 		
 	}

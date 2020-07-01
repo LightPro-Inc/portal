@@ -24,41 +24,33 @@
 					<div class="col-sm-6" ng-repeat="item in vm.items">
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading clearfix">
-	                            <strong>{{item.fullName}}</strong>
+	                            <strong>{{item.name}}</strong>
 								<div class="pull-right">
-									<buton class="btn btn-primary btn-xs" ng-click="vm.activate(item);">{{item.active ? 'Désactiver' : 'Activer'}} <i class="fa fa-pencil pull-right"></i></buton>
+									<button class="btn btn-primary btn-xs" ng-click="vm.activate(item);">{{item.active ? 'Désactiver' : 'Activer'}} <i class="fa fa-pencil"></i></button>
 								</div>
 	                        </div>
 	                        <div class="panel-body">
 	                            <div class="table-responsive">
 	                                <table class="table table-condensed shortMargin">
 	                                	<tr>
-	                                        <td class="shortPadding">Genre :</td>
-	                                        <td class="shortPadding"><i>{{item.sex == 'M' ? 'Homme' : 'Femme'}}</i></td>
-	                                    </tr>
-	                                	<tr>
-	                                        <td class="shortPadding">Addresse :</td>
-	                                        <td class="shortPadding"><i>{{item.address}}</i></td>
+	                                        <td class="shortPadding">Adresse :</td>
+	                                        <td class="shortPadding"><i>{{item.locationAddress}}</i></td>
 	                                    </tr>
 	                                    <tr>
-	                                        <td class="shortPadding">Tel 1 :</td>
-	                                        <td class="shortPadding"><i>{{item.tel1}}</i></td>
+	                                        <td class="shortPadding">Mobile :</td>
+	                                        <td class="shortPadding"><i>{{item.mobile}}</i></td>
 	                                    </tr>
 	                                    <tr>
-	                                        <td class="shortPadding">Tel 2 :</td>
-	                                        <td class="shortPadding"><i>{{item.tel2}}</i></td>
-	                                    </tr>
-	                                    <tr>
-	                                        <td class="shortPadding">Actif :</td>
-	                                        <td class="shortPadding"><i>{{item.active ? 'Oui' : 'Non'}}</i></td>
-	                                    </tr>		                                    				                                  
+	                                        <td class="shortPadding">Téléphone :</td>
+	                                        <td class="shortPadding"><i>{{item.phone}}</i></td>
+	                                    </tr>		                                   				                                  
 	                                </table>
 	                            </div>
 	                        </div>
 	                        <div class="panel-footer clearfix">
 	                            <div class="pull-right">
-	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
-	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
+	                                <button class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil"></i></button>
+	                                <button class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>

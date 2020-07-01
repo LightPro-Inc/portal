@@ -11,6 +11,11 @@
   <packaging>war</packaging>
   <dependencies>
   	<dependency>
+	    <groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+	    <artifactId>Tidy</artifactId>
+	    <version>1</version>
+	</dependency>  	
+  	<dependency>
 	    <groupId>com.fasterxml.jackson.datatype</groupId>
 	    <artifactId>jackson-datatype-jsr310</artifactId>
 	    <version>2.6.5</version>
@@ -96,11 +101,6 @@
 	</dependency>
 	<dependency>
 		<groupId>com.lightpro.app</groupId>
-		<artifactId>hotel-api</artifactId>
-		<version>1.0</version>
-	</dependency>
-	<dependency>
-		<groupId>com.lightpro.app</groupId>
 		<artifactId>stocks-api</artifactId>
 		<version>1.0</version>
 	</dependency>
@@ -116,7 +116,22 @@
 	</dependency>
 	<dependency>
 		<groupId>com.lightpro.app</groupId>
+		<artifactId>saas-api</artifactId>
+		<version>1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.lightpro.app</groupId>
+		<artifactId>hotel-api</artifactId>
+		<version>1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.lightpro.app</groupId>
 		<artifactId>compta-api</artifactId>
+		<version>1.0</version> 
+	</dependency>
+	<dependency>
+		<groupId>com.lightpro.app</groupId>
+		<artifactId>purchases-api</artifactId>
 		<version>1.0</version>
 	</dependency>
   </dependencies>

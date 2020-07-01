@@ -4,8 +4,8 @@
 
     app.controller('cashdeskCtrl', cashdeskCtrl);
 
-    cashdeskCtrl.$inject = ['$state', '$previousState' ,'$scope', '$q', '$rootScope', '$stateParams', '$timeout', '$uibModal', '$confirm', 'utilityService', 'apiService', 'notificationService', 'Guid', '$document'];
-    function cashdeskCtrl($state, $previousState, $scope, $q, $rootScope, $stateParams, $timeout, $uibModal, $confirm, utilityService, apiService, notificationService, Guid, $document) {
+    cashdeskCtrl.$inject = ['$state', '$previousState' ,'$scope', '$q', '$rootScope', '$stateParams', '$timeout', '$uibModal', '$confirm', 'utilityService', 'apiService', 'notificationService', 'Guid', '$document', 'contactService'];
+    function cashdeskCtrl($state, $previousState, $scope, $q, $rootScope, $stateParams, $timeout, $uibModal, $confirm, utilityService, apiService, notificationService, Guid, $document, contactService) {
         var vm = this;
 
         vm.sessionId = $stateParams.sessionId;
@@ -21,17 +21,74 @@
         vm.openSearchCustomer = openSearchCustomer;
         vm.cancelOrder = cancelOrder;
         vm.changerOrderDate = changerOrderDate;
-        vm.changePaymentDate = changePaymentDate
         vm.selectPanelArticle = selectPanelArticle;
         vm.addNumber = addNumber;
         vm.retirerNumber = retirerNumber;
         vm.retirerArticle = retirerArticle;
-        vm.btnRemClick = btnRemClick;
         vm.pay = pay;
-        vm.cancelPayment = cancelPayment;
-        vm.validPayment = validPayment;
-        vm.totalAmountPaid = totalAmountPaid;
         vm.terminateSession = terminateSession;
+        vm.reset = reset;
+        vm.clearSearch = clearSearch;
+		vm.search = search;
+		vm.invoice = invoice;
+		
+		function invoice(){
+			if(vm.currentOrder == null)
+                return;
+            
+			$confirm({ text: "Souhaitez-vous émettre une facture pour ce client ?", title: 'Emettre une facture', ok: 'Oui', cancel: 'Non' })
+        	.then(function () {
+        		
+        		vm.invoicing = true;
+    			apiService.post(String.format('/web/api/pdv/session/{0}/order/{1}/invoice', vm.sessionId, vm.currentOrder.id), {},
+  					  function(response){
+    				      vm.invoicing = false; 
+    				      notificationService.displaySuccess("Emission de facture réalisée avec succès !");
+    				      loadInitialData();					  
+  					  },function(error){
+  						  vm.invoicing = false;
+  						  
+  					  }
+  			  	);
+        	});
+		}
+		
+        vm.pageChanged = function(){
+			search(vm.currentPage);
+		}
+		
+		function clearSearch(){
+			vm.filter = "";
+			search();
+		}
+		
+		function search(page){
+			page = page ? page : 1;
+
+			var config = {
+				params : {
+		                page: page,
+		                pageSize: vm.pageSize,
+		                filter: vm.filter,
+		                categoryId: vm.categoryId
+		            }	
+			};
+			            
+			vm.loadingDataPdToSale = true;
+			apiService.get(String.format('/web/api/pdv/pdv/{0}/product-to-sale/search', vm.currentSession.pdvId), config, 
+					function(result){					
+						vm.loadingDataPdToSale = false;
+			            vm.totalCount = result.data.totalCount;
+			            vm.currentPage = result.data.page;
+			            
+			            vm.products = result.data.items;
+					});
+		}
+        
+        function reset(){
+        	beginSelectPanelArticle = true;
+        	addNumber('1');
+        }
         
         function terminateSession(){
         	$confirm({ text: "Souhaitez-vous clôturer votre session ?", title: 'Clôturer session', ok: 'Oui', cancel: 'Non' })
@@ -45,68 +102,30 @@
     				      closeDirectly();						  
   					  },function(error){
   						  vm.terminatingSession = false;
-  						  notificationService.displayError(error);
+  						  
   					  }
   			  	);
         	});
         }
         
-        function totalAmountPaid(){
-        	if(!vm.ordersDone)
-        		return;
-        	
-        	var total = 0;
-        	angular.forEach(vm.ordersDone, function(order){
-        		total += order.totalAmountTtc;
-        	});
-        	
-        	return total;
-        }
-        
-        function validPayment(order){
-        	vm.payingOrder = true;
-			apiService.post(String.format('/web/api/pdv/session/{0}/order/{1}', vm.sessionId, order.id), {paymentDate: order.paymentDate, orderId : order.id, paymentModeId : order.paymentModeId, montantVerse: order.montantVerse},
-					  function(response){
-					  	vm.payingOrder = false;	
-					  	loadInitialData();
-					  	notificationService.displaySuccess("Paiement de la commande réalisée avec succès!");
-					  },function(error){
-						  vm.payingOrder = false;
-						  notificationService.displayError(error);
-					  }
-			  );
-        }
-        
-        function cancelPayment() {
-            if (vm.currentOrder == null)
+        function pay(order){
+            if(!order)
                 return;
-
-            vm.currentOrder.doPayment = false;
-            vm.currentOrder.montantVerse = 0;
-            vm.currentOrder.montantRembourse = 0;
-        }
-        
-        function pay(){
-            if(vm.currentOrder == null)
-                return;
-
-            vm.currentOrder.doPayment = true;
-            vm.currentOrder.montantVerse = 0;
-            vm.currentOrder.montantRembourse = 0;
-            vm.currentOrder.paymentModeId = 2;
-            vm.currentOrder.paymentDate = new Date();
-        }
-        
-        function btnRemClick() {
-        	
-            if (vm.currentOrder == null)
-                return;
-
-            if (vm.currentOrder.currentIndex == null)
-                return;
-
-            vm.btnRemEnabled = true;
-            vm.btnQteEnabled = false;
+            
+            $uibModal.open({
+                templateUrl: 'modules/pdv/features/cashdesk/payOrderView.html',
+                controller: 'payOrderCtrl as vm',
+                size: 'md',
+                resolve: {
+                    data: {
+                    	sessionId: vm.sessionId,
+                        orderId: order.id
+                    }
+                }
+            }).result.then(function (payment) {
+            	loadInitialData();
+            }, function () {
+            });
         }
         
         function retirerArticle() {
@@ -124,6 +143,8 @@
     			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
     			vm.currentOrder.products = orderSaved.products;
     			notificationService.displaySuccess("L'article a été supprimé avec succès !");
+    			
+    			vm.refresh();
     		});
         }
         
@@ -132,70 +153,64 @@
             if (vm.currentOrder == null)
                 return;            
 
-            if (vm.currentOrder.doPayment) {
-                if (vm.currentOrder.montantVerse > 0) {
-                    var length = vm.currentOrder.montantVerse.toString().length;
-                    if (length == 1)
-                        vm.currentOrder.montantVerse = 0;
+            if (vm.currentOrder.currentIndex == null)
+                return;
+
+            var arst = angular.copy(vm.currentOrder.products[vm.currentOrder.currentIndex]);
+
+            if (vm.btnQteEnabled) {
+                if (arst.quantity > 0) {
+                    var length = arst.quantity.toString().length;
+                    if (length == 1){
+                    	if(arst.quantity > 1)
+                    		arst.quantity = 1;
+                    	else if(arst.quantity == 1)
+                    		arst.quantity = 0;
+                    }                            
                     else {
-                        var number = vm.currentOrder.montantVerse.toString().slice(0, length - 1);
-                        vm.currentOrder.montantVerse = parseInt(number);
-                    }
-
-                    var monnaie = vm.currentOrder.montantVerse - vm.currentOrder.totalAmountTtc;
-                    if (monnaie < 0)
-                        vm.currentOrder.montantRembourse = 0;
-                    else
-                        vm.currentOrder.montantRembourse = monnaie;
-                }                
-            } else {
-                if (vm.currentOrder.currentIndex == null)
-                    return;
-
-                var arst = angular.copy(vm.currentOrder.products[vm.currentOrder.currentIndex]);
-
-                if (vm.btnQteEnabled) {
-                    if (arst.quantity > 0) {
-                        var length = arst.quantity.toString().length;
-                        if (length == 1){
-                        	if(arst.quantity > 1)
-                        		arst.quantity = 1;
-                        	else if(arst.quantity == 1)
-                        		arst.quantity = 0;
-                        }                            
-                        else {
-                            var number = arst.quantity.toString().slice(0, length - 1);
-                            arst.quantity = parseInt(number);
-                        }
-                    }
-                } else if (vm.btnRemEnabled) {                    
-                    if (arst.reductionAmount > 0) {
-                        var length = arst.reductionAmount.toString().length;
-                        if (length == 1){
-                        	if(arst.reductionAmount > 0)
-                        		arst.reductionAmount = 0;
-                        } else {
-                        	var number = arst.reductionAmount.toString().slice(0, length - 1);
-                            arst.reductionAmount = parseInt(number);
-                        }                       	
+                        var number = arst.quantity.toString().slice(0, length - 1);
+                        arst.quantity = parseInt(number);
                     }
                 }
+            }
 
-                calculateProductPrice(arst.productId, arst.quantity, arst.reductionAmount, vm.currentOrder.orderDate, function(itemCalulated){
-                	arst.unitPrice = itemCalulated.unitPrice;
-                	arst.totalAmountHt = itemCalulated.totalAmountHt;
-                	arst.totalTaxAmount = itemCalulated.totalTaxAmount;
-                	arst.totalAmountTtc = itemCalulated.totalAmountTtc;  
-                	
-                	vm.currentOrder.products[vm.currentOrder.currentIndex] = arst;
-                	
-                	saveOrder(vm.currentOrder, function(orderSaved){
-                		vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
-            			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
-            			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
-                	});
+            calculateProductPrice(arst.productId, arst.quantity, arst.reductionAmount, vm.currentOrder.orderDate, arst.taxes, function(itemCalulated){
+            	arst.unitPrice = itemCalulated.unitPrice;
+            	arst.totalAmountHt = itemCalulated.totalAmountHt;
+            	arst.totalTaxAmount = itemCalulated.totalTaxAmount;
+            	arst.totalAmountTtc = itemCalulated.totalAmountTtc;  
+            	arst.reduceAmount = itemCalulated.reduceAmount;
+            	arst.taxesDescription = itemCalulated.taxesDescription;
+            	
+            	vm.currentOrder.products[vm.currentOrder.currentIndex] = arst;
+            	
+            	saveOrder(vm.currentOrder, function(orderSaved){
+            		vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
+        			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
+        			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
             	});
-            }            
+        	});        
+        }
+        
+        function incrementArticleQte(arst, number){
+            arst.quantity += number;
+
+            calculateProductPrice(arst.productId, arst.quantity, arst.reductionAmount, vm.currentOrder.orderDate, arst.taxes, function(itemCalulated){
+            	
+            	arst.unitPrice = itemCalulated.unitPrice;
+            	arst.totalAmountHt = itemCalulated.totalAmountHt;
+            	arst.totalTaxAmount = itemCalulated.totalTaxAmount;
+            	arst.totalAmountTtc = itemCalulated.totalAmountTtc;
+            	arst.reduceAmount = itemCalulated.reduceAmount;
+            	arst.taxesDescription = itemCalulated.taxesDescription;
+            	
+            	vm.currentOrder.products[vm.currentOrder.currentIndex] = arst;
+            	saveOrder(vm.currentOrder, function(orderSaved){
+            		vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
+        			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
+        			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
+            	});
+        	});
         }
         
         function addNumber(caracter) {
@@ -203,54 +218,40 @@
             if (vm.currentOrder == null)
                 return;
                         
-            if (vm.currentOrder.doPayment) {
-                vm.currentOrder.montantVerse = parseInt(vm.currentOrder.montantVerse + "" + caracter);
-                var monnaie = vm.currentOrder.montantVerse - vm.currentOrder.totalAmountTtc;
-                if (monnaie < 0)
-                    vm.currentOrder.montantRembourse = 0;
-                else
-                    vm.currentOrder.montantRembourse = monnaie;
+            if (vm.currentOrder.currentIndex == null)
+                return;
 
-            } else {
-                if (vm.currentOrder.currentIndex == null)
-                    return;
+            var arst = angular.copy(vm.currentOrder.products[vm.currentOrder.currentIndex]);
 
-                var arst = angular.copy(vm.currentOrder.products[vm.currentOrder.currentIndex]);
-
-                if (vm.btnQteEnabled) {
-                    
-                    if (beginSelectPanelArticle) {
-                        beginSelectPanelArticle = false;
-                        arst.quantity = parseInt(caracter);
-                    } else {
-                        arst.quantity = parseInt(arst.quantity + "" + caracter);
-                    }
-                } else if (vm.btnRemEnabled) {
-
-                    if (beginSelectPanelArticle)
-                    {
-                        beginSelectPanelArticle = false;
-                        arst.reductionAmount = parseInt(caracter);
-                    } else {
-                        arst.reductionAmount = parseInt(arst.reductionAmount + "" + caracter);
-                    }                   
+            if (vm.btnQteEnabled) {
+                
+                if (beginSelectPanelArticle) {
+                    beginSelectPanelArticle = false;
+                    if(parseInt(caracter) == 0 && arst.quantity > 0)
+                    	arst.quantity = parseInt(arst.quantity + "" + caracter);
+                    else
+                    	arst.quantity = parseInt(caracter);
+                } else {
+                    arst.quantity = parseInt(arst.quantity + "" + caracter);
                 }
+            }
 
-                calculateProductPrice(arst.productId, arst.quantity, arst.reductionAmount, vm.currentOrder.orderDate, function(itemCalulated){
-                	
-                	arst.unitPrice = itemCalulated.unitPrice;
-                	arst.totalAmountHt = itemCalulated.totalAmountHt;
-                	arst.totalTaxAmount = itemCalulated.totalTaxAmount;
-                	arst.totalAmountTtc = itemCalulated.totalAmountTtc;  
-                	
-                	vm.currentOrder.products[vm.currentOrder.currentIndex] = arst;
-                	saveOrder(vm.currentOrder, function(orderSaved){
-                		vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
-            			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
-            			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
-                	});
+            calculateProductPrice(arst.productId, arst.quantity, arst.reductionAmount, vm.currentOrder.orderDate, arst.taxes, function(itemCalulated){
+            	
+            	arst.unitPrice = itemCalulated.unitPrice;
+            	arst.totalAmountHt = itemCalulated.totalAmountHt;
+            	arst.totalTaxAmount = itemCalulated.totalTaxAmount;
+            	arst.totalAmountTtc = itemCalulated.totalAmountTtc;
+            	arst.reduceAmount = itemCalulated.reduceAmount;
+            	arst.taxesDescription = itemCalulated.taxesDescription;
+            	
+            	vm.currentOrder.products[vm.currentOrder.currentIndex] = arst;
+            	saveOrder(vm.currentOrder, function(orderSaved){
+            		vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
+        			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
+        			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
             	});
-            }            
+        	});            
         }
         
         function selectPanelArticle(index) {            
@@ -263,8 +264,7 @@
             vm.currentOrder.currentIndex = index;
             arst.selected = true;
             
-            vm.btnQteEnabled = true;
-            vm.btnRemEnabled = false;          
+            vm.btnQteEnabled = true;          
 
             angular.forEach(vm.currentOrder.products, function (value) {
                 if (arst.id != value.id)
@@ -300,23 +300,7 @@
             	})
             }, function () {
             });
-		}
-        
-        function changePaymentDate(order){			
-			$uibModal.open({
-                templateUrl: 'main/calendar/calendarView.html',
-                controller: 'calendarCtrl as vm',
-                size: 'md',
-                resolve: {
-                    data: {
-                        date: order.paymentDate
-                    }
-                }
-            }).result.then(function (dateSelected) {            	
-            	order.paymentDate = dateSelected;
-            }, function () {
-            });
-		}
+		}        
         
         function removeOrderFromList(order){
         	utilityService.remove(vm.orders, "orderPosition", order.orderPosition);
@@ -342,7 +326,7 @@
     						  notificationService.displaySuccess("Annulation de la commande réalisée avec succès!");
       					  },function(error){
       						  vm.cancelingOrder = false;
-      						  notificationService.displayError(error);
+      						  
       					  }
       			  );
         		}
@@ -350,21 +334,12 @@
         }
         
         function openSearchCustomer(){
-        	$uibModal.open({
-                templateUrl: 'modules/sales/features/customer/customerSearchView.html',
-                controller: 'customerSearchCtrl as vm',
-                size : 'lg',
-                resolve: {
-                    data: {}
-                }
-            }).result.then(function (itemChoosed) {
-            	vm.currentOrder.customer = itemChoosed.fullName;
+        	contactService.search('all', function(itemChoosed){
+        		vm.currentOrder.customer = itemChoosed.name;
             	vm.currentOrder.customerId = itemChoosed.id;
             	
             	saveOrder(vm.currentOrder);
-            }, function () {
-
-            });
+        	});
         }
         
         function calculateTotalAmounTtc(order){
@@ -379,15 +354,15 @@
         	return total;
         }
         
-        function calculateProductPrice(productId, quantity, reductionAmount, orderDate, callback){
+        function calculateProductPrice(productId, quantity, reductionAmount, orderDate, taxes, callback){
         	
-        	apiService.post(String.format('/web/api/product/{0}/calculate-amount', productId), {quantity: quantity, reductionAmount: reductionAmount, orderDate : orderDate },
+        	apiService.post(String.format('/web/api/product/{0}/calculate-amount', productId), {quantity: quantity, reductionAmount: reductionAmount, orderDate : orderDate, taxes: taxes },
 					  function(response){		        		
 	        			if(callback)
 	        				callback(response.data);
 	        			
 					  },function(error){
-						  notificationService.displayError(error);
+						  
 					  }
 			  );
         }
@@ -403,7 +378,7 @@
 						  		callback(response.data);
 						},
 						function(error){							
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				return apiService.put(String.format('/web/api/pdv/session/{0}/order/{1}', vm.sessionId, order.id), order,
@@ -412,7 +387,7 @@
 								callback(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}	
         }
@@ -423,6 +398,11 @@
         	        	
         	var panelItem = utilityService.findSingle(vm.currentOrder.products, "productId", item.id);
         	
+        	if(panelItem){
+        		incrementArticleQte(panelItem, 1);
+        		return;
+        	}
+        	
         	var newItem = {};
         	newItem.taxesDescription = item.taxesDescription;
         	newItem.product = item.name;
@@ -431,20 +411,26 @@
         	newItem.productId = item.id;
         	newItem.paymentConditionId = 0; // immédiat
         	
-        	calculateProductPrice(item.id, newItem.quantity, newItem.reductionAmount, vm.currentOrder.orderDate, function(itemCalulated){
-        		
-        		var order = angular.copy(vm.currentOrder);
-        		order.products.push(newItem);
-        		
-        		saveOrder(order, function(orderSaved){
-        			vm.currentOrder.id = orderSaved.id; 
-        			vm.currentOrder.reference = orderSaved.reference;
-        			vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
-        			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
-        			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
-        			vm.currentOrder.products = orderSaved.products;
-        		});
-        	});
+        	apiService.get(String.format('/web/api/product/{0}/tax', item.id), {}, 
+					function(response){
+						newItem.taxes = response.data;	
+						
+						calculateProductPrice(item.id, newItem.quantity, newItem.reductionAmount, vm.currentOrder.orderDate, newItem.taxes, function(itemCalulated){
+			        		
+							newItem.unitPrice = itemCalulated.unitPrice;
+			        		var order = angular.copy(vm.currentOrder);
+			        		order.products.push(newItem);
+			        		
+			        		saveOrder(order, function(orderSaved){
+			        			vm.currentOrder.id = orderSaved.id; 
+			        			vm.currentOrder.reference = orderSaved.reference;
+			        			vm.currentOrder.totalAmountHt = orderSaved.totalAmountHt;
+			        			vm.currentOrder.totalTaxAmount = orderSaved.totalTaxAmount;
+			        			vm.currentOrder.totalAmountTtc = orderSaved.totalAmountTtc;
+			        			vm.currentOrder.products = orderSaved.products;
+			        		});
+			        	});
+					});        	        	
         }
         
         function close(){
@@ -459,7 +445,7 @@
         }
 
         function loadInitialData() {        	
-        	
+        	vm.modeSelected = {typeId: undefined};
         	apiService.get(String.format('/web/api/pdv/session/{0}/order/done', vm.sessionId), {},
                     function (response) {
                         vm.ordersDone = response.data;
@@ -487,6 +473,12 @@
                                     }
                                 });
                     });
+        	
+        	apiService.get(String.format('/web/api/pdv/session/{0}/turnover', vm.sessionId), {},
+        			function(response){
+        				vm.totalAmountPaid = response.data.turnover;
+	        		}
+	        	);
         }
 
         vm.refresh = function () {
@@ -507,30 +499,21 @@
 
         vm.$onInit = function () {            
         	vm.orders = [];
-        	        	
+        	vm.pageSize = 12;  
+        	
             var sessionPromise = apiService.get(String.format('/web/api/pdv/session/{0}', vm.sessionId), {},
                 function (response) {
                     vm.currentSession = response.data; 
                     
-                    apiService.get(String.format("/web/api/pdv/pdv/{0}/product-to-sale", vm.currentSession.pdvId), {},
-                            function (response) {
-                                vm.products = response.data;
-                                
-                                loadInitialData();
-                            }
-                        );                              
+                    loadInitialData();
+                    
+                    apiService.get(String.format('/web/api/pdv/pdv/{0}/product-category-to-sale', vm.currentSession.pdvId), {}, 
+        					function(result){					
+        			            vm.categories = result.data;
+        					});
+                    
+                    search();
                 }); 
-            
-            apiService.get('/web/api/company', {}, 
-    				function(response){
-    					$rootScope.companyCurrency = response.data.currencyShortName;
-    				});
-            
-            apiService.get(String.format('/web/api/sales/payment/mode'), {}, 
-					function(response){
-						vm.paymentModes = response.data;												
-					}
-			);	
         }
     }
 })(angular.module('lightpro'));

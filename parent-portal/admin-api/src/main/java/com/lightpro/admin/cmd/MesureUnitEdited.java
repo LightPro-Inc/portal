@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.securities.api.MesureUnitType;
 
 public class MesureUnitEdited {
 	
@@ -11,7 +12,7 @@ public class MesureUnitEdited {
 	private final String shortName;
 	private final String fullName;
 	private final int quantity;
-	private final String typeId;
+	private final int typeId;
 	
 	public MesureUnitEdited(){
 		throw new UnsupportedOperationException("#MesureUnitEdited()");
@@ -22,7 +23,7 @@ public class MesureUnitEdited {
 						    @JsonProperty("shortName") final String shortName, 
 						    @JsonProperty("fullName") final String fullName,
 						    @JsonProperty("quantity") final int quantity,
-						    @JsonProperty("typeId") final String typeId){
+						    @JsonProperty("typeId") final int typeId){
 		
 		this.id = id;
 		this.shortName = shortName;
@@ -47,7 +48,7 @@ public class MesureUnitEdited {
 		return quantity;
 	}
 	
-	public String typeId(){
-		return typeId;
+	public MesureUnitType type(){
+		return MesureUnitType.get(typeId);
 	}
 }

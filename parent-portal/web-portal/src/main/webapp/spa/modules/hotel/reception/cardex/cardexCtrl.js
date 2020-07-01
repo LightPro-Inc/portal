@@ -3,15 +3,22 @@
 	
 	app.controller('cardexCtrl', cardexCtrl);
 	
-	cardexCtrl.$inject = ['apiService', 'notificationService', '$state'];
-	function cardexCtrl(apiService, notificationService, $state){
+	cardexCtrl.$inject = ['apiService', 'notificationService', '$state', 'contactService'];
+	function cardexCtrl(apiService, notificationService, $state, contactService){
 		var vm = this;
 		
-		vm.openEditDialog = openEditDialog;
+		vm.showBookings = showBookings;
 		vm.clearSearch = clearSearch;
 		vm.search = search;
+		vm.editItem = editItem;
 		
-		function openEditDialog(item){
+		function editItem(item){
+			contactService.edit(item, function(personEdited){
+				search(vm.currentPage);
+			});
+		}
+		
+		function showBookings(item){
 			$state.go('main.hotel.cardex-guest', { guestId: item.id }, { location: false });   
 		}
 		
@@ -45,7 +52,7 @@
 						vm.items = result.data.items;
 					}, 
 					function(error){
-						notificationService.displayError(error);
+						
 					});
 		}
 		

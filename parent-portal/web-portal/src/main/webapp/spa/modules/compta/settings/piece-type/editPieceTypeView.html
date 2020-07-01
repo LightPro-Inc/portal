@@ -1,0 +1,48 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body clearfix">
+		<div class="form-group">
+			<label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+            <input type="text" class="form-control" ng-model="vm.item.name" name="Name" id="Name" placeholder="Renseigner le libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+		</div>	
+		<div class="form-group">
+			<label class="control-label" for="nature"><small style="color: red">*</small>&nbsp;&nbsp;Nature </label>
+               <select ng-disabled="!vm.isNewItem" class="form-control" id="nature" name="nature" ng-options="v.id as v.name for v in vm.natures" validate-on="blur" required required-message="'Nature est un champ obligatoire'"
+                       ng-model="vm.item.natureId">
+                   <option value="">-- Choisir une nature --</option>
+               </select>
+		</div>
+		<div class="form-group">
+           	<label class="control-label" for="sequence-reference">Séquence de référence</label>
+            <div class="input-group">
+            	 <input type="text" class="form-control" id="sequence-reference" name="sequence-reference" ng-model="vm.item.sequence" placeholder="Rechercher une séquence" disabled />
+                 <div class="input-group-btn">
+                 	 <button ng-if="vm.item.sequenceId" type="button" class="btn btn-primary" ng-click="vm.modifySequence(vm.item.sequenceId)"><i class="fa fa-edit"></i></button>
+                     <button type="button" class="btn btn-primary" ng-click="vm.searchSequence()"><i class="glyphicon glyphicon-search"></i></button>
+                 </div>
+             </div>
+         </div>
+		<div class="form-group" ng-show="vm.item.natureId == 2 || vm.item.natureId == 4">
+			<label class="control-label" for="typeTiers">Type de tiers géré </label>
+               <select class="form-control" id="typeTiers" name="typeTiers" ng-options="v.id as v.name for v in vm.tiersTypes"
+                       ng-model="vm.item.tiersTypeManagedId">
+                   <option value="">-- Aucun type géré --</option>
+               </select>
+		</div>
+		<div class="form-group" ng-show="!vm.isNewItem">
+			<label class="control-label" for="trame">Modèle de saisie par défaut </label>
+               <select class="form-control" id="trame" name="trame" ng-options="v.id as v.name for v in vm.trames"
+                       ng-model="vm.item.preferredTrameId">
+                   <option value="">-- Aucun modèle --</option>
+               </select>
+		</div>			
+	</div>
+	<div class="modal-footer">
+		<div class="pull-right">
+			<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+			<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+		</div>
+	</div>
+</form>

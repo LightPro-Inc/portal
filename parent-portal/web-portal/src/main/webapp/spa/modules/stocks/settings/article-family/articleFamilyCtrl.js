@@ -18,7 +18,7 @@
 		vm.showArticles = showArticles;
 		
 		function showArticles(item){
-			$state.go('main.stocks.article', {familyId: item.id});
+			$state.go('main.stocks.article', {familyId: item.id}, {location:true});
 		}
 		
 		function deleteItem(item){
@@ -31,7 +31,7 @@
     						notificationService.displaySuccess(String.format("La famille d'article {0} a été supprimée avec succès !", item.name));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -83,34 +83,23 @@
 				params : {
 		                page: page,
 		                pageSize: vm.pageSize,
-		                filter: vm.filter
+		                filter: vm.filter,
+		                categoryId: vm.categoryId
 		            }	
 			};
 			            
-			vm.loadingData = true;
-			
-			if(vm.categoryId){
-				apiService.get('/web/api/article-category/' + vm.categoryId + '/family', config, 
-						function(result){					
-							vm.loadingData = false;
-							vm.items = result.data;
-						},
-						function(error){
-							vm.loadingData = true;						
-						});
-			}else{
-				apiService.get('/web/api/article-family/search', config, 
-						function(result){					
-							vm.loadingData = false;
-				            vm.totalCount = result.data.totalCount;
-				            vm.currentPage = result.data.page;
-				            
-							vm.items = result.data.items;
-						},
-						function(error){
-							vm.loadingData = true;						
-						});
-			}			
+			vm.loadingData = true;			
+			apiService.get('/web/api/article-family/search', config, 
+					function(result){					
+						vm.loadingData = false;
+			            vm.totalCount = result.data.totalCount;
+			            vm.currentPage = result.data.page;
+			            
+						vm.items = result.data.items;
+					},
+					function(error){
+						vm.loadingData = true;						
+					});			
 		}
 		
 		function goPreviousPage(){
@@ -122,13 +111,11 @@
 			
 			search();	
 			
-			if(vm.categoryId){				
-				apiService.get('/web/api/article-category/' + vm.categoryId, null, 
-						function(response){
-							vm.category = response.data;
-						}
-				);
-			}			
+			apiService.get('/web/api/article-category', {}, 
+					function(response){
+						vm.categories = response.data;
+					}
+			);					
 		}
 	}
 	

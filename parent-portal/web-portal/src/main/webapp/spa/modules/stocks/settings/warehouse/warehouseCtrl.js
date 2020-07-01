@@ -33,7 +33,7 @@
     						notificationService.displaySuccess("L'entrepôt " + item.name + " a été supprimé avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

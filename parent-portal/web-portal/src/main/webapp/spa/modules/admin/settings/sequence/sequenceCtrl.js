@@ -23,7 +23,7 @@
     						notificationService.displaySuccess("La séquence " + item.name + " a été supprimée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

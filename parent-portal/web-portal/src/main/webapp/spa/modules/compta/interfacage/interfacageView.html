@@ -1,0 +1,16 @@
+<h3>Interfaçage</h3>
+<div class="row-offcanvas">
+    <div id="sidebar" class="sidebar-offcanvas" role="navigation">
+	    <div class="col-md-12">
+	        <ul class="nav nav-pills nav-stacked">
+	        	<li class="nav-divider"></li>
+		         <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".sales">Ventes<i class="fa fa-home fa-fw pull-right"></i></a></li> 
+	        </ul>
+	    </div>
+	</div>
+    <div id="main">
+        <div class="col-md-12">
+            <div ui-view></div>
+        </div>
+    </div>
+</div>

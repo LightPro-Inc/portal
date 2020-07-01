@@ -1,7 +1,9 @@
 package com.securities.api;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.UUID;
+
+import com.infrastructure.core.AdvancedQueryable;
 
 /**
  * Modules manager of a company
@@ -9,14 +11,12 @@ import java.util.List;
  *
  */
 
-public interface Modules {
-	List<Module> subscribed() throws IOException;
-	List<Module> availables() throws IOException;
-	List<Module> installed() throws IOException;
-	List<Module> used() throws IOException;
-	
-	void install(Module module) throws IOException;
-	void uninstall(Module module) throws IOException;
-	void activate(Module module, boolean active) throws IOException;
+public interface Modules extends AdvancedQueryable<Module, Integer> {
+	Module get(UUID id) throws IOException;
 	Module get(ModuleType type) throws IOException;
+	boolean contains(ModuleType type) throws IOException;
+	Modules of(Company company) throws IOException;
+	Modules of(ModuleType type) throws IOException;
+	Modules of(ModuleState state) throws IOException;
+	Modules of(ModuleStatus status) throws IOException;
 }

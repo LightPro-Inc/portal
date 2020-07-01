@@ -1,0 +1,166 @@
+
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            {{ vm.title }}
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-8">
+                	<uib-tabset active="vm.active">
+	            	   <uib-tab index="0">
+	                       <uib-tab-heading>
+	                           Identification
+	                       </uib-tab-heading>
+	                       <div class="row">
+                               <div class="col-md-12">
+                               	   	<div class="col-md-12">
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="person"><small style="color: red">*</small>&nbsp;&nbsp;Nom</label>
+				                                    <input type="text" class="form-control" id="person" name="person" ng-model="vm.item.lastName" placeholder="Renseigner le nom" required required-message="'Nom est un champ obligatoire'" />   
+				                                </div>
+				
+				                                <div class="col-sm-6 selectContainer">
+				                                    <label class="control-label" for="FirstName"><small style="color: red">*</small>&nbsp;&nbsp;Prénom(s)</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.firstName" name="FirstName" id="FirstName" placeholder="Renseigner le prénom" validate-on="blur" required required-message="'Prénom est un champ obligatoire'">
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="dateOfBirth">Date de naissance</label>
+				                                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" ng-model="vm.item.birthDate" placeholder="Saisir une date" />
+				                                </div>
+				
+												<div class="col-sm-6 selectContainer">
+				                                    <label class="control-label" for="birthPlace">Lieu de naissance</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.birthPlace" name="birthPlace" id="birthPlace" placeholder="Renseigner un lieu géographique">
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="naming"><small style="color: red">*</small>&nbsp;&nbsp;Mode d'affichage nom complet</label>
+				                                    <select class="form-control" id="naming" name="naming" ng-model="vm.item.namingId" required required-message="'Mode affichage nom complet est un champ obligatoire'" ng-options="naming.id as naming.name for naming in vm.namings">
+				                                    </select>   
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>				                                                     
+                               </div>                               
+                           </div>                                                        
+	                   </uib-tab>
+	                   <uib-tab index="1">
+	                       <uib-tab-heading>
+	                           Adresse
+	                       </uib-tab-heading>
+	                       <div class="row">
+                               <div class="col-md-12">
+                               	   	<div class="col-md-12">
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="locationAddress">Domicile</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.locationAddress" name="locationAddress" id="locationAddress" placeholder="Renseigner un lieu géographique">
+				                                </div>
+				
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="poBox">Adresse postale</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.poBox" name="poBox" id="poBox" placeholder="Renseigner une adresse postale">
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="mobile">Mobile</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.mobile" name="mobile" id="mobile" placeholder="Renseigner un numéro mobile">
+				                                </div>
+				
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="phone">Fixe</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.phone" name="phone" id="phone" placeholder="Renseigner numéro fixe">
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="fax">Fax</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.fax" name="fax" id="fax" placeholder="Renseigner un numéro de téléphone">
+				                                </div>
+				
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="mail">Adresse mail</label>
+				                                    <input type="email" class="form-control" ng-model="vm.item.mail" name="mail" id="mail" placeholder="Renseigner une adresse mail">
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="webSite">Site web</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.webSite" name="webSite" id="webSite" placeholder="Renseigner un nom de domaine">
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>                                  
+                               </div>                               
+                           </div>                                                        
+	                   </uib-tab>
+	                   <uib-tab index="2">
+	                       <uib-tab-heading>
+	                           Autres
+	                       </uib-tab-heading>
+	                       <div class="row">
+                               <div class="col-md-12">
+                               	   	<div class="col-md-12">
+                               	   		<div class="form-group">
+				                            <div class="row">
+				                                <div class="col-sm-6">
+				                                    <label class="control-label" for="posteOccupe">Profession</label>
+				                                    <input type="text" class="form-control" ng-model="vm.item.posteOccupe" name="posteOccupe" id="posteOccupe" placeholder="Renseigner un poste">
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>                                  
+                               </div>                               
+                           </div>                                                        
+	                   </uib-tab>
+	               </uib-tabset>                    
+                </div>
+                <div class="col-md-3">
+                  	<div class="row">
+                  		<div class="form-group">
+                           <label class="control-label" for="Photo">Photo <span>(jpeg, png)</span></label>
+                           <div class="col-md-12">
+                               <img ng-src="{{vm.item.photo}}" style="width:150px;height:auto" />                               
+                               <input id="Photo" name="Photo" type="file" image="vm.photo" accept="image/*" class="input-sm" style="width:135px" resize-max-height="800" resize-max-width="800" resize-quality="0.7" resize-type="image/jpeg" ng-image-compress />
+                               <button type="button" class="btn btn-primary btn-sm" ng-click="vm.captureAnImage()">Capturer une image</button>
+                           </div>
+                       </div>
+                  	   <div class="form-group">
+							<div class="col-md-offset-2 col-md-10">
+								<div class="checkbox">
+									<label><input name="Sex" type="radio" value="1" ng-model="vm.item.sexId"> Masculin</label>
+									<label><input name="Sex" type="radio" value="2" ng-model="vm.item.sexId"> Féminin</label>
+								</div>
+							</div>
+						</div>
+                  	</div>                        
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer clearfix">
+            <span>(*) champ obligatoire</span>
+            <div class="pull-right">                
+                <button type="submit" class="btn btn-primary" click-once>{{vm.saveLabel}}</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>

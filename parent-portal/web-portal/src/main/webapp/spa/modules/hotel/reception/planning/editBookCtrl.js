@@ -3,81 +3,76 @@
 	
 	app.controller('editBookCtrl', editBookCtrl);
 	
-	editBookCtrl.$inject = ['$state', '$rootScope', '$stateParams', 'apiService', '$timeout', 'notificationService', '$uibModal', '$confirm', '$previousState'];
-	function editBookCtrl($state, $rootScope, $stateParams, apiService, $timeout, notificationService, $uibModal, $confirm, $previousState){
+	editBookCtrl.$inject = ['$state', '$rootScope', '$stateParams', 'apiService', '$timeout', 'notificationService', '$uibModal', '$confirm', '$previousState', 'contactService'];
+	function editBookCtrl($state, $rootScope, $stateParams, apiService, $timeout, notificationService, $uibModal, $confirm, $previousState, contactService){
 		var vm = this;
 		
-		vm.bookingId = $stateParams.bookingId;
-		
+		vm.bookingId = $stateParams.bookingId;		
 		
 		vm.dateOptions = {
 	            formatYear: 'yy',
 	            startingDay: 1
 	        };
 
-        vm.datepicker = { format: 'yyyy-MM-dd' };
-        vm.datepickerDeliveredBy = { format: 'yyyy-MM-dd' };
+        vm.datepicker = { format: 'dd/MM/yyyy' };
+        vm.datepickerDeliveredBy = { format: 'dd/MM/yyyy' };
         
         // Function
         vm.openDatePicker = openDatePicker;
         vm.openDatePickerDeliveredBy = openDatePickerDeliveredBy;
         vm.goPreviousPage = goPreviousPage;
-		vm.identifyGuest = identifyGuest;
-		vm.searchPerson = searchPerson;
-		vm.razGuest = razGuest;
-		vm.canSaveGuest = canSaveGuest;
-		vm.canClearGuest = canClearGuest;
+		
 		vm.save = save;
+		vm.searchCustomer = searchCustomer;
+		vm.modifyCustomer = modifyCustomer;
+		vm.searchGuest = searchGuest;
+		vm.modifyGuest = modifyGuest;
+		vm.invoice = invoice;
 		
-		function canSaveGuest(){
-			return vm.guest && (vm.guest.firstName && vm.guest.lastName)
+		function invoice(){
+			$state.go('main.sales.edit-purchase-order', {purchaseOrderId: vm.item.orderId}, {location: false});         
 		}
 		
-		function canClearGuest(){
-			return canSaveGuest();
-		}
-        
-        function razGuest(){
-        	vm.guest = {sex: 'M', fullName : 'Non identifié' };
-        }
-        
-		function searchPerson(){
-			$uibModal.open({
-                templateUrl: 'main/person/personSearchView.html',
-                controller: 'personSearchCtrl as vm',
-                resolve: {
-                    data: { }
-                }
-            }).result.then(function (personSelected) {
-
-            	$timeout(function(){
-            		vm.guest = personSelected;
-            		vm.guest.birthDate = new Date(personSelected.birthDate);            		            		
-            	});            	
-            }, function () {
-
-            });    
+		function modifyGuest(){
+			apiService.get(String.format('/web/api/contact/{0}', vm.item.guestId), {},
+					function(response){
+						contactService.edit(response.data, function(person){
+							vm.item.guest = person.name;
+						});
+					}
+			);			
 		}
 		
-		function identifyGuest(){
-			vm.loadingGuestData = true;
-			apiService.post(String.format('/web/api/booking/{0}/guest', vm.bookingId), vm.guest,
-											function(response){
-												$timeout(function(){
-													vm.loadingGuestData = false;
-													
-													vm.guest = response.data;	
-													vm.guest.birthDate = new Date(vm.guest.birthDate);
-													notificationService.displaySuccess('Hôte enregistré avec succès !');
-												});												
-											}
-			);
+		function searchGuest(){
+			contactService.search("all", function(person){
+				vm.item.guest = person.name;
+				vm.item.guestId = person.id;
+			});
+		}
+		function modifyCustomer(){
+			apiService.get(String.format('/web/api/contact/{0}', vm.item.customerId), {},
+					function(response){
+						contactService.edit(response.data, function(person){
+							vm.item.customer = person.name;
+						});
+					}
+			);			
+		}
+		
+		function searchCustomer(){
+			contactService.search("all", function(person){
+				
+				if(vm.item.customerId == vm.item.guestId){
+					vm.item.guestId = person.id;
+					vm.item.guest = person.name;
+				}
+				
+				vm.item.customer = person.name;
+				vm.item.customerId = person.id;
+			});
 		}
 		
 		function save(){
-			vm.item.guest = vm.guest;
-			vm.item.guestId = vm.guest.id;
-			
 			vm.loadingBooking = true;
 			apiService.put(String.format('/web/api/booking/{0}', vm.bookingId), vm.item,
 											function(response){
@@ -86,12 +81,16 @@
 												$timeout(function(){
 																							
 													notificationService.displaySuccess('Réservation modifiée avec succès !');
-													vm.goPreviousPage();
+													
+													if(vm.canClose)
+														goPreviousPage();
+													else {
+														loadBooking();
+													}
 												});												
 											},
 											function(error){
-												vm.loadingBooking = false;	
-												notificationService.displayError(error);
+												vm.loadingBooking = false;													
 											}
 			);
 		}
@@ -106,23 +105,6 @@
 			else
 				$previousState.go();
 		}
-
-		function loadGuest(){
-			// obtenir l'hôte        	
-			vm.loadingGuestData = true;
-			apiService.get(String.format('/web/api/booking/{0}/guest', vm.bookingId), null,
-							function(response){
-								vm.guest = response.data;
-								if (!(vm.guest.birthDate == null))
-				                    vm.guest.birthDate = new Date(vm.guest.birthDate);
-								vm.loadingGuestData = false;
-							},
-							function(error){
-								notificationService.displayError(error);
-								vm.loadingGuestData = false;
-							}
-			);
-		}
 		
 		function confirm(){
 			$confirm({ text: String.format("Souhaitez-vous confirmer cette réservation ?"), title: 'Confirmer une réservation', ok: 'Oui', cancel: 'Non' })
@@ -133,8 +115,7 @@
         					goPreviousPage();
         					notificationService.displaySuccess("La réservation a été confirmée avec succès !");
     					},
-    					function(error){
-    						notificationService.displayError(error);
+    					function(error){    						
     					}
     			);
         	});  					
@@ -150,7 +131,7 @@
         					notificationService.displaySuccess("La réservation a été annulée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  					
@@ -166,7 +147,7 @@
         					notificationService.displaySuccess("L'hôte a été logé avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  					
@@ -182,7 +163,7 @@
         					notificationService.displaySuccess("La réservation a été clôturée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  					
@@ -194,9 +175,6 @@
 					function(response){
 						vm.loadingBooking = false;
 						vm.item = response.data; 
-						
-						if(vm.item.deliveredDatePiece)
-							vm.item.deliveredDatePiece = new Date(vm.item.deliveredDatePiece);
 						
 						vm.bookingStatus = [                
 						                    {
@@ -223,17 +201,10 @@
 						                    	active: vm.item.canCheckOut,
 						                		action: checkOut
 						                    }
-						            	];
-						
-						if(vm.item.guestId){
-							loadGuest();
-						}else{
-							razGuest();
-						}						
+						            	];					
 					},
 					function(error){
-							vm.loadingBooking = false;
-							notificationService.displayError(error);
+							vm.loadingBooking = false;							
 						}
 			);
 		}		

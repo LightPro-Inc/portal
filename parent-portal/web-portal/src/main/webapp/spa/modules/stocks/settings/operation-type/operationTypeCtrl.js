@@ -17,17 +17,22 @@
 		vm.deleteItem = deleteItem;		
 		vm.showUnfinishedOperations = showUnfinishedOperations;
 		vm.warehouseChanged = warehouseChanged;
+		vm.showTodoOperations = showTodoOperations;
 		
 		function warehouseChanged(warehouseId){
 			search();
 		}
 		
 		function addNewOperation(type){
-			$state.go('main.stocks.edit-operation', {operationTypeId: type.id});
+			$state.go('main.stocks.edit-operation', {operationTypeId: type.id}, {location:false});
 		}
 		
 		function showUnfinishedOperations(item){
-			$state.go('main.stocks.unfinished-operation', {operationTypeId: item.id});
+			$state.go('main.stocks.unfinished-operation', {operationTypeId: item.id, statutId:1}, {location:false});
+		}
+		
+		function showTodoOperations(item){
+			$state.go('main.stocks.unfinished-operation', {operationTypeId: item.id, statutId:2}, {location:false});
 		}
 		
 		function deleteItem(item){
@@ -40,7 +45,7 @@
     						notificationService.displaySuccess(String.format("L'article {0} a été supprimé avec succès !", item.name));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -63,6 +68,7 @@
 			$uibModal.open({
                 templateUrl: 'modules/stocks/settings/operation-type/editOperationTypeView.html',
                 controller: 'editOperationTypeCtrl as vm',
+                size: 'lg',
                 resolve: {
                     data: {
                     	warehouseId : item ? item.warehouseId : vm.warehouseId,
@@ -119,9 +125,12 @@
 						vm.warehouses = response.data;
 						
 						if(!vm.warehouseId && vm.warehouses.length > 0)
-							vm.warehouseId = vm.warehouses[0].id;
-						
-						warehouseChanged(vm.warehouseId);
+							{
+								vm.warehouseId = vm.warehouses[0].id;
+								warehouseChanged(vm.warehouseId);
+							}else{
+								warehouseChanged(vm.warehouseId);
+							}
 					}
 			);				
 		}

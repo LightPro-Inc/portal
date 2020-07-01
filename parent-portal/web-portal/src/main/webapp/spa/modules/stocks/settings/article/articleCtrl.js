@@ -18,7 +18,7 @@
 		vm.showPlannings = showPlannings;
 		
 		function showPlannings(item){
-			$state.go('main.stocks.article-planning', {articleId: item.id});
+			$state.go('main.stocks.article-planning', {articleId: item.id}, {location:false});
 		}
 		
 		function deleteItem(item){
@@ -31,7 +31,7 @@
     						notificationService.displaySuccess(String.format("L'article {0} a été supprimé avec succès !", item.name));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -122,13 +122,11 @@
 			
 			search();	
 			
-			if(vm.familyId){
-				apiService.get('/web/api/article-family/' + vm.familyId, null, 
-						function(response){
-							vm.family = response.data;
-						}
-				);
-			}			
+			apiService.get('/web/api/article-family', {}, 
+					function(response){
+						vm.families = response.data;
+					}
+			);	
 		}
 	}
 	

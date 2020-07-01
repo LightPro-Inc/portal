@@ -1,0 +1,28 @@
+<div class="col-md-12">
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h4 class="panel-title">Occupations du jour</h4>
+		</div>
+		<div class="panel-body">
+			<div ng-show="loadingDayOccupation">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+                <div class="col-xs-4"></div>
+            </div>
+			<div class="row" ng-show="!loadingDayOccupation">
+				<div class="col-md-4">
+					<h5 class="text-center">Client en recouche</h5>
+					<h1 class="text-center">{{numberOfClientEnRechouche}}</h1>
+				</div>
+				<div class="col-md-4">
+					<h5 class="text-center">Client attendu</h5>
+					<h1 class="text-center">{{numberOfClientAttendu}}</h1>
+				</div>
+				<div class="col-md-4">
+					<h5 class="text-center">Client arrivé</h5>
+					<h1 class="text-center">{{numberOfClientArrive}}</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

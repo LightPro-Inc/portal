@@ -13,8 +13,25 @@
 	                <div class="col-xs-4"></div>
 	            </div>
 	            <div ng-if="!vm.loadingMetadatas" class="row">
-	                <div class="col-sm-12">	                
-	                    <div class="form-group form-group-sm">
+	                <div class="col-sm-12">	         
+	                	<div class="form-group form-group-sm" ng-if="vm.type.categoryId != 2">
+	                		<div class="row">
+	                    		<div class="col-sm-6">
+	                   				<label class="control-label col-sm-4" for="partner">Partenaire</label>
+					                <div class="col-sm-8">						                	
+						                <div class="input-group">
+							                <input type="text" class="form-control" id="partner" name="partner" ng-model="vm.item.partner" placeholder="Rechercher un partenaire" disabled />
+	                                        <div class="input-group-btn">	                                        	
+	                                        	<button ng-if="vm.item.partnerId" type="button" class="btn btn-primary" ng-click="vm.removePartner()"><i class="glyphicon glyphicon-remove"></i></button>
+	                                        	<button ng-if="vm.item.partnerId" type="button" class="btn btn-primary" ng-click="vm.modifyPartner(vm.item.partnerId)"><i class="fa fa-edit"></i></button>
+	                                            <button type="button" class="btn btn-primary" ng-click="vm.searchPerson()"><i class="glyphicon glyphicon-search"></i></button>
+	                                        </div>
+	                                    </div>   
+					                </div>
+	                   			</div>
+	                    	</div>
+	                	</div>       
+	                    <div class="form-group form-group-sm">	                    	
 	                    	<div class="row">
 		                    	<div class="col-sm-6">
 		                    		<label class="control-label col-sm-4" for="documentSource">Document source</label>
@@ -23,7 +40,7 @@
 		                    		</div>		            				
 		                    	</div>
 		                    	<div class="col-sm-6">
-		                            <label class="control-label col-sm-4" for="movementDate"><small ng-if="vm.item.delayed" style="color: red">*</small>&nbsp;&nbsp;Date</label>                                
+		                            <label class="control-label col-sm-4" for="movementDate"><small ng-if="vm.item.delayed" style="color: red">*</small>&nbsp;&nbsp;Date prévue</label>                                
 	                                <div class="col-sm-5">
 	                                    <div class="input-group">
 	                                        <input type="text" class="form-control" id="movementDate" name="movementDate" ng-model="vm.item.movementDate" placeholder="Renseigner date" validate-on="blur" ng-required="vm.item.delayed" ng-disabled="!vm.item.delayed" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" />
@@ -102,9 +119,11 @@
 	        </div>
 	        <div class="panel-footer clearfix">
 	            <div class="pull-right">
-	                <button type="submit" class="btn btn-primary">Enregistrer brouillon</button>
-	                <button type="button" class="btn btn-primary" ng-click="vm.validate()">Valider</button>
-                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Annuler</button>
+	                <button ng-if="vm.isNewItem" type="submit" class="btn btn-primary">Créer</button>
+	                <button ng-if="vm.item.statutId == 1" type="submit" class="btn btn-primary">Enregistrer</button>
+	                <button ng-if="vm.item.statutId == 1" type="button" class="btn btn-primary" ng-click="vm.validate()">Valider</button>
+	                <button ng-if="vm.item.statutId == 2" type="button" class="btn btn-primary" ng-click="vm.execute()">Exécuter</button>
+                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Fermer</button>
 	            </div>
 	        </div>
 	    </div>

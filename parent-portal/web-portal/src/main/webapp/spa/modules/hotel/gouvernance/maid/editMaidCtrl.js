@@ -63,7 +63,7 @@
         }
 
         function saveItemLoadFailed(error) {
-            notificationService.displayError(error);
+            
         }
 
         function cancelEdit() {

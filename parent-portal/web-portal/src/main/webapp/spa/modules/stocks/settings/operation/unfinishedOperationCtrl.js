@@ -9,6 +9,8 @@
         var vm = this;
 
         vm.operationTypeId = $stateParams.operationTypeId;
+        vm.statutId = $stateParams.statutId;
+        
         vm.close = close;
         vm.modifyItem = modifyItem;
         vm.deleteItem = deleteItem;
@@ -19,18 +21,18 @@
 
         		apiService.remove("/web/api/operation/" + item.id, {},
     					function(response){
-        				loadItems();    						
-    						notificationService.displaySuccess(String.format("L'opération {0} a été supprimé avec succès !", item.reference));
+        					loadItems();    						
+    						notificationService.displaySuccess(String.format("L'opération {0} a été supprimée avec succès !", item.reference));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  
         }
 
         function modifyItem(item){
-        	$state.go('main.stocks.edit-operation', {operationTypeId: item.typeId, operationId: item.id});
+        	$state.go('main.stocks.edit-operation', {operationTypeId: item.typeId, operationId: item.id}, {location:false});
         }
         
         function close() {
@@ -38,15 +40,25 @@
         }
 
         function loadItems(){
-        	apiService.get(String.format('/web/api/operation-type/{0}/operation/unfinished', vm.operationTypeId), {},
-    			    function (response) {
-    			        vm.loadingData = false;
-    			        vm.items = response.data;
-    			    }
-    			);
+        	if(vm.statutId == 1){
+        		apiService.get(String.format('/web/api/operation-type/{0}/operation/unfinished', vm.operationTypeId), {},
+        			    function (response) {
+        			        vm.loadingData = false;
+        			        vm.items = response.data;
+        			    }
+        			);
+        	} else if(vm.statutId == 2){
+        		apiService.get(String.format('/web/api/operation-type/{0}/operation/todo', vm.operationTypeId), {},
+        			    function (response) {
+        			        vm.loadingData = false;
+        			        vm.items = response.data;
+        			    }
+        			);
+        	}
         }
         
         vm.$onInit = function () {
+        	vm.title = vm.statutId == 1 ? "Opérations en attente de confirmation" : "Opérations à faire";        	
             vm.loadingData = true;
 
             loadItems();

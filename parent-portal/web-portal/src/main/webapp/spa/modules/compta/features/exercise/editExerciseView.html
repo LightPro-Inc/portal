@@ -1,0 +1,21 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body clearfix">
+		<div class="form-group">
+			<label class="control-label" for="start"><small style="color: red">*</small>&nbsp;&nbsp;Début</label>
+            <input type="date" class="form-control" ng-model="vm.item.start" name="start" id="start" placeholder="dd/MM/yyyy" validate-on="blur" required required-message="'Début est un champ obligatoire'">
+		</div>
+		<div class="form-group">
+			<label class="control-label" for="end"><small style="color: red">*</small>&nbsp;&nbsp;Fin</label>
+            <input type="date" class="form-control" ng-model="vm.item.end" name="end" id="end" placeholder="dd/MM/yyyy" validate-on="blur" required required-message="'Fin est un champ obligatoire'">
+		</div>		
+	</div>
+	<div class="modal-footer">
+		<div class="pull-right">
+			<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+			<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+		</div>
+	</div>
+</form>

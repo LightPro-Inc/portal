@@ -1,0 +1,46 @@
+<div class="row">
+	<div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+        	<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Membres de l'équipe commerciale {{vm.team.name}}</h4>            
+        </div>
+        <div class="panel-body">
+            <div class="col-md-8 col-md-offset-2">
+            	<div class="row" style="margin-bottom: 10px">
+            		<div class="col-md-12">
+            			<button ng-click="vm.addNew()" class="btn btn-primary" type="button">Créer un vendeur</button>
+            			<button ng-click="vm.searchPerson()" class="btn btn-primary" type="button">Ajouter une personne existante</button>       		
+            		</div>
+            	</div>
+            	<div class="table-responsive">
+	                <table class="table table-bordered table-hover shortMargin">
+		                <thead>
+		                	<tr>
+		                        <th></th>
+		                        <th>Nom complet</th>
+		                        <th></th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                	<tr ng-repeat="item in vm.items">
+		                        <td class="shortPadding">{{$index + 1}}</td>
+		                        <td class="shortPadding"><i>{{item.name}}</i></td>                                    
+		                        <td>
+		                        	<button type="button" class="btn btn-primary btn-xs" ng-click="vm.editItem(item)"><i class="fa fa-edit"></i></button>
+		                            <button type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item)"><i class="fa fa-trash-o"></i></button>
+		                            <button type="button" class="btn btn-info btn-xs" ng-click="vm.changeTeam(item)"><i class="fa fa-home fa-fw"></i></button>
+		                        </td>
+		                    </tr>
+		                    <tr ng-if="vm.items.length == 0">
+                                <td colspan="3" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+                            </tr>
+		                </tbody>                                        
+	                </table>
+	            </div>
+            </div>
+        </div>
+        <div class="panel-footer clearfix">
+            <label class="label label-danger">{{ vm.items.length }} vendeur(s)</label>
+            <button class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>
+        </div>
+    </div>
+</div>

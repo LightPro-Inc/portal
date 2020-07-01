@@ -1,0 +1,63 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Modèles de saisie ({{vm.pieceType.name}})</h4>
+			<div class="input-group col-md-6 pull-right">
+                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les modèles...">                
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
+                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+                    <button class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+                </div>
+            </div>	
+		</div>
+		<div class="panel-body">
+			<div ng-show="vm.loadingData">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+			<div class="col-md-12" ng-show="!vm.loadingData">
+				<div class="row">
+					<div class="col-sm-6" ng-repeat="item in vm.items">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading clearfix">
+	                            <strong>{{item.name}}</strong>
+	                            <div class="pull-right">                
+					                <button class="btn btn-primary btn-xs" ng-click="vm.duplicate(item)">Dupliquer <i class="glyphicon glyphicon-plus"></i></button>
+					            </div>
+	                        </div>
+	                        <div class="panel-body">
+	                            <div class="table-responsive">
+	                                <table class="table table-condensed shortMargin">	
+	                                	<tr>
+	                                        <td class="shortPadding">Nombre de modèles d'écriture :</td>
+	                                        <td class="shortPadding"><i>{{item.fluxes.length}}</i></td>
+	                                    </tr>                                                    	                                                				                                 
+	                                </table>
+	                            </div>
+	                        </div>
+	                        <div class="panel-footer clearfix">
+	                            <div class="pull-right">
+	                                <button class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></button>
+	                                <button class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></button>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
+			<div class="text-center">
+				<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" ng-change="vm.pageChanged()"></ul>
+			</div>
+			<div class="pull-right">
+                <button class="btn btn-primary" ng-click="vm.goPrevious();">Retour</button>
+            </div>			
+		</div>
+	</div>
+</div>

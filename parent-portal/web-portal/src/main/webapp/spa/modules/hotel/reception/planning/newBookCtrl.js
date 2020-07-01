@@ -47,7 +47,7 @@
             			$uibModalInstance.close(response.data);
             		},
             		function(error){
-            			notificationService.displayError(error);
+            			
             		}
             );         
         }

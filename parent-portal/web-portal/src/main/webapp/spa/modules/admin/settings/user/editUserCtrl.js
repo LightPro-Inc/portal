@@ -10,17 +10,10 @@
 
         vm.itemId = $stateParams.itemId;
         
+        vm.identify = identify;
         vm.openSearchPerson = openSearchPerson;
 
-        vm.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
-        vm.datepicker = { format: 'dd/MM/yyyy' };
-
         // Function
-        vm.openDatePicker = openDatePicker;
         vm.selectProfile = selectProfile;
         vm.Save = Save;
         vm.cancelEdit = cancelEdit;
@@ -45,19 +38,44 @@
 
             vm.datepicker.opened = true;
         };
+        
+        function identify(){
 
+        	if(!vm.item.id)
+        		return;
+			
+			$uibModal.open({
+                templateUrl: 'modules/contacts/features/contact/editContactPersonView.html',
+                controller: 'editContactPersonCtrl as vm',
+                size: "lg",
+                resolve: {
+                    data: {
+                    	id : vm.item.id
+                    }
+                }
+            }).result.then(function (itemEdited) {
+            	vm.item.name = itemEdited.name;
+            	setTitle(vm.item.name);
+            }, function () {
+
+            });           
+		}
+        
         function openSearchPerson() {
             $uibModal.open({
-                templateUrl: 'main/person/personSearchView.html',
-                controller: 'personSearchCtrl as vm',
+                templateUrl: 'modules/contacts/features/contact/contactSearchView.html',
+                controller: 'contactSearchCtrl as vm',
+                size: 'lg',
                 resolve: {
                     data: {
                         filter: 'personNotUser'
                     }
                 }
             }).result.then(function (person) {
-                vm.item = person;
+            	vm.item.id = person.id;
+                vm.item.name = person.name;
             }, function () {
+            	
             });
         }
 
@@ -79,36 +97,42 @@
             if (vm.isNewItem) {
                 apiService.post('/web/api/membership/register/', itemToSave,
                     function (response) {
-                        notificationService.displaySuccess(response.data.fullName + ' a été créé avec succès !');
+                        notificationService.displaySuccess(response.data.name + ' a été créé avec succès !');
                         $previousState.go();
                     }, function (response) {
-                        notificationService.displayError(response.data);
+                        
                     });
             } else {
                 apiService.put('/web/api/membership/user/' + itemToSave.id, itemToSave,
                     function (response) {
-                        notificationService.displaySuccess(itemToSave.fullName + ' a été modifié avec succès');
+                        notificationService.displaySuccess(itemToSave.name + ' a été modifié avec succès');
                         $previousState.go();
                     }, function (response) {
-                        notificationService.displayError(response.data);
+                        
                     });
             }
         }
 
+        function setTitle(name){
+        	if(vm.isNewItem)
+        		vm.title = "Créer un utilisateur";
+        	else
+        		vm.title = "Modifier l'utilisateur " + name;
+        }
+        
         vm.$onInit = function () {
             vm.isNewItem = vm.itemId ? false : true
 
+            setTitle();
+            
             if (vm.isNewItem) {
             	vm.item = {sex : 'M'};
-                vm.saveLabel = "Créer";
-                vm.title = "Créer un utilisateur";
+                vm.saveLabel = "Créer";                
             } else {
-                vm.saveLabel = "Modifier";
-                vm.title = "Modifier un utilisateur";
+                vm.saveLabel = "Modifier";                
             }
-
-            vm.loadingData = true;
-
+            
+            vm.loadingData = true;                      
             var profilePromise = apiService.get('/web/api/profile/', {},
                 function (response) {
                     vm.profiles = response.data;
@@ -131,7 +155,7 @@
                     apiService.get('/web/api/membership/user/' + vm.itemId, {},
                         function (response) {
                             vm.item = response.data;
-                            vm.title = "Modifier l'utilisateur " + vm.item.fullName;
+                            setTitle(vm.item.name);                            
 
                             angular.forEach(vm.profiles, function (profile) {
                                 if (profile.id == vm.item.profileId)

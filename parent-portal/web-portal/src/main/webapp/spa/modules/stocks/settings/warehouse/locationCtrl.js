@@ -32,7 +32,7 @@
     						notificationService.displaySuccess("L'action s'est effectuée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -52,7 +52,7 @@
     						notificationService.displaySuccess("L'emplacement " + item.name + " a été supprimé avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

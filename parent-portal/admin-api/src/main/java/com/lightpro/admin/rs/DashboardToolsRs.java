@@ -8,7 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -17,10 +19,12 @@ import javax.ws.rs.core.Response;
 
 import com.lightpro.admin.vm.DayVm;
 import com.lightpro.admin.vm.MonthVm;
+import com.securities.api.Indicator;
+import com.securities.api.Indicators;
 import com.securities.api.Secured;
 
 @Path("/dashboard-tool")
-public class DashboardToolsRs extends AdminBaseRs {
+public class DashboardToolsRs extends AdminBaseRs {	
 	
 	@GET
 	@Secured
@@ -126,5 +130,47 @@ public class DashboardToolsRs extends AdminBaseRs {
 						return Response.ok(new DayVm(name, now.getDayOfMonth(), now.getMonthValue(), now.getYear())).build();
 					}
 				});			
+	}
+	
+	@POST
+	@Path("/indicator/{id}")
+	@Secured
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response addIndicator(@PathParam("id") final int id) throws IOException {
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						Indicators indicators = currentCompany.indicators();
+						Indicator item = indicators.get(id);
+						currentUser.indicators().add(item);
+						
+						log.info(String.format("Ajout de l'indicateur %s au tableau de bord général de l'utilisateur %s", item.name(), currentUser.name()));
+						return Response.status(Response.Status.OK).build();
+					}
+				});		
+	}
+	
+	@DELETE
+	@Secured
+	@Path("/indicator/{id}")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response deleteIndicator(@PathParam("id") final int id) throws IOException {
+		
+		return createHttpResponse(
+				new Callable<Response>(){
+					@Override
+					public Response call() throws IOException {
+						
+						Indicators indicators = currentCompany.indicators();
+						Indicator item = indicators.get(id);
+						currentUser.indicators().delete(item);
+						
+						log.info(String.format("Retrait de l'indicateur %s au tableau de bord général de l'utilisateur %s", item.name(), currentUser.name()));
+						return Response.status(Response.Status.OK).build();
+					}
+				});	
 	}
 }

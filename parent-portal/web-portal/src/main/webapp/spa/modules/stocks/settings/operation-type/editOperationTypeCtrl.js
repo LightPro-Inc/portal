@@ -22,7 +22,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put(String.format('/web/api/operation-type/{0}', vm.item.id), vm.item,
@@ -31,7 +31,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}			
 		}
@@ -71,6 +71,12 @@
 			apiService.get(String.format('/web/api/sequence'), {}, 
 					function(response){
 						vm.sequences = response.data;												
+					}
+			);
+			
+			apiService.get(String.format('/web/api/warehouse/{0}/operation-type', vm.warehouseId), {}, 
+					function(response){
+						vm.operationTypes = response.data;												
 					}
 			);
 		}

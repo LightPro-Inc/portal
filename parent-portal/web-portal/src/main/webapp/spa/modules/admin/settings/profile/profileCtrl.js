@@ -12,6 +12,11 @@
 		vm.clearSearch = clearSearch;
 		vm.search = search;
 		vm.deleteItem = deleteItem;		
+		vm.configureFeatures = configureFeatures;
+		
+		function configureFeatures(item){
+			$state.go('main.settings.profile-feature', {profileId: item.id}, {location:false});
+		}
 		
 		function deleteItem(item){
 			$confirm({ text: String.format("Souhaitez-vous supprimer le profil {0} ?", item.name), title: "Supprimer un profil", ok: 'Oui', cancel: 'Non' })
@@ -23,7 +28,7 @@
     						notificationService.displaySuccess("Le profil " + item.name + " a été supprimé avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

@@ -1,14 +1,14 @@
-<div class="panel panel-default full-screen">
-    <div class="panel-body">
-        <div ng-show="vm.loadingData">
+
+<div ng-show="vm.loadingData">
             <div class="col-xs-4"></div>
             <div class="col-xs-4">
                 <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
             </div>
             <div class="col-xs-4"></div>
         </div>
-        <div ng-show="!vm.loadingData">
-            <table class="table table-bordered table-responsive" style="min-height:100%;height:625px;">
+        <div class="container-fluid" style="margin-top:-60px" ng-show="!vm.loadingData">
+        	<div class="table-responsive">
+            <table class="table table-bordered table-responsive" style="min-height:100%;min-width:100%">
                 <tbody>
                     <tr >
                         <td class="col-md-5">
@@ -19,7 +19,7 @@
                         <td class="col-md-7">
                               <div class="row">
                               		<div class="col-md-9">
-                              			<span>Montant total encaissé : <strong>{{vm.totalAmountPaid() | number }} {{companyCurrency}}</strong></span>
+                              			<span>Montant total encaissé : <strong>{{vm.totalAmountPaid | companyCurrency}}</strong></span>
                               		</div>
                               		<div class="col-md-3">
                               			<button class="btn btn-primary btn-sm pull-right" ng-click="vm.terminateSession()">Clôturer session</button>
@@ -35,86 +35,88 @@
                                     <h1>Votre panier est vide</h1>
                                 </div>
                             </div>
-                            <table class="table bg-primary dker" ng-show="vm.currentOrder.products.length > 0 && !vm.currentOrder.doPayment">
+                            <table class="table bg-primary dker" ng-show="vm.currentOrder.products.length > 0">
                                 <tbody>
                                 	<tr>
                                 		<td colspan="2">Date d'édition : {{vm.currentOrder.orderDate | date:'dd/MM/yyyy'}} - Réf Bon de commande : {{vm.currentOrder.reference}}</td>
                                 	</tr>
                                     <tr class="bg-primary" ng-class="{ lter : arst.selected, dker: !arst.selected }" ng-repeat="arst in vm.currentOrder.products" ng-click="vm.selectPanelArticle($index)">
                                         <td>
-                                            <span><i>{{arst.product}} (x{{arst.quantity}})</i></span><br />
-                                            <span><i>1 {{arst.mesureUnitShortName}} à {{arst.unitPrice | number}} {{companyCurrency}} HT</i></span><br />
-                                            <span><i>Taxes appliquées : {{arst.taxesDescription}}</i></span><br />
-                                            <span><i>Remise : {{arst.reductionAmount}} {{companyCurrency}}</i></span><br />
+                                            <span><i>{{arst.product}}</i></span><br />
+                                            <span><i>{{arst.pricingModeId == 1 ? 'Prix unitaire' : 'Prix tranche'}} : {{arst.unitPrice | companyCurrency}} HT</i></span><br />
+                                            <span><i>Taxes : {{arst.taxesDescription == '' ? 'Aucune' : arst.taxesDescription}}</i></span><br />
+                                            <span><i>Quantité : {{arst.quantity}} {{arst.emballage}}</i></span><br />                                            
+                                            <span><i>Remise : {{arst.reduceAmount | companyCurrency}}</i></span><br />
                                         </td>
                                         <td>
-                                            <strong class="pull-right">{{ arst.totalAmountTtc | number }} {{companyCurrency}} TTC</strong>                                      
+                                            <strong class="pull-right">{{ arst.totalAmountTtc | companyCurrency}} TTC</strong>                                      
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th colspan="2">
-                                            <strong class="pull-right">Total à payer : {{vm.calculateTotalAmounTtc(vm.currentOrder) | number }} {{companyCurrency}} TTC</strong>
+                                            <strong class="pull-right">Total à payer : {{vm.calculateTotalAmounTtc(vm.currentOrder) | companyCurrency}} TTC</strong>
                                         </th>
                                     </tr>
                                 </tfoot>
                             </table>
-                            <div class="panel panel-default" ng-show="vm.currentOrder.doPayment">
-                                <div class="panel-heading clearfix">
-                                    <h4 class="pull-left">Paiement de la facture - {{vm.currentOrder.paymentDate | date:'dd/MM/yyyy'}}</h4>
-                                    <buton class="btn btn-primary btn-xs pull-right" ng-click="vm.changePaymentDate(vm.currentOrder)">Modifier date <i class="fa fa-cog"></i></buton>
-                                </div>
-                                <div class="panel-body form-horizontal">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-5" for="MontantTtc" style="color: black">Total à payer</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" id="MontantTtc" name="MontantTtc" ng-model="vm.currentOrder.totalAmountTtc" style="color: black" disabled />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-5" for="MontantVerse" style="color: black">Montant versé</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" id="MontantVerse" name="MontantVerse" ng-model="vm.currentOrder.montantVerse" style="background-color: burlywood;color: black" placeholder="Montant versé" disabled />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-5" for="MontantRembourse" style="color: black">Monnaie</label>
-                                                <div class="col-md-7">
-                                                    <input style="color: black" type="text" class="form-control" id="MontantRembourse" name="MontantRembourse" ng-model="vm.currentOrder.montantRembourse" placeholder="Monnaie" disabled />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                        	<div class="form-group">
-												 <label class="control-label col-md-5" for="mode" style="color: black">Mode de paiement</label>												 
-												 <div class="col-md-7">
-                                                    <select style="color: black" class="form-control" name="mode" id="mode" ng-model="vm.currentOrder.paymentModeId">
-													 	<option ng-selected="vm.currentOrder.paymentModeId == option.id" ng-repeat="option in vm.paymentModes" value="{{option.id}}">{{option.name}}</option>
-													 </select>
-                                                </div>         
-											</div>	
-                                        </div>   
-                                    </div>                                                                                                                                                                              
-                                </div>
-                                <div class="panel-footer clearfix">
-                                    <span>(*) champ obligatoire</span>
-                                    <div class="pull-right">                                                                                
-                                        <button type="button" class="btn btn-primary" ng-click="vm.validPayment(vm.currentOrder)" ng-disabled="vm.payingOrder || (vm.currentOrder.montantVerse - vm.currentOrder.totalAmountTtc < 0)">Valider</button>
-                                        <button type="button" class="btn btn-danger" ng-click="vm.cancelPayment()">Fermer</button>
-                                    </div>
-                                </div>
-                            </div>
                         </td>
-                        <td class="col-md-7">
+                        <td class="col-md-7" rowspan="2">
                         	<uib-tabset active="0">
-                                <uib-tab index="0">
+                        		<uib-tab index="0">
+                                    <uib-tab-heading>
+                                        Produits ({{vm.totalCount}})
+                                    </uib-tab-heading>
+                                    <div class="panel panel-body bg-primary dker">
+                                        <div class="row">
+                                        	<div class="col-md-12 clearfix">
+                                        		<div class="col-md-5 pull-left">					
+									               	<select class="form-control input-sm" id="category" name="category" ng-options="v.id as v.name for v in vm.categories" ng-model="vm.categoryId" ng-change="vm.search(0)">
+									               		<option value="">-- choisir une catégorie --</option>
+									               	</select>
+												</div>
+                                        		<div class="col-md-5 pull-right">
+                                            		<div class="input-group">
+										                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher par code barre, libellé ...">
+										                <div class="input-group-btn">
+										                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
+										                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+										                </div>
+										            </div>
+                                            	</div>
+                                        	</div>
+                                        	<div ng-show="vm.loadingDataPdToSale">
+								                <div class="col-xs-4"></div>
+								                <div class="col-xs-4">
+								                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Chargement des produits...</label>
+								                </div>
+								                <div class="col-xs-4"></div>
+								            </div>
+								            <div class="col-md-12 clearfix m-t-md" ng-if="vm.products.length == 0 && !vm.loadingDataPdToSale">
+								            	<div class="text-center">
+								                    <span><i>Aucun produit trouvé.</i></span>
+								                </div>
+								            </div>
+                                            <div class="col-md-12" ng-show="!vm.loadingDataPdToSale">                                            	                                            
+                                                <div class="col-md-4" ng-repeat="item in vm.products">
+                                                    <div class="hbox text-center m-t b-t b-b b-light bg-success dker" ng-click="vm.addArticle(item)">
+                                                        <a class="col padder-v text-muted b-l b-r b-light">
+                                                            <div class="h4">{{item.pricingModeId == 1 ? item.pricingSummary : item.pricingMode}}</div>
+                                                            <span>{{item.name}}</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 clearfix">
+						                       	<div class="text-center">
+													<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" ng-change="vm.pageChanged()"></ul>
+												</div>
+					                       </div>
+                                        </div>
+                                    </div>                                    
+                                </uib-tab>
+                                <uib-tab index="1">
                                     <uib-tab-heading>
                                         <span>Commandes en cours ({{vm.orders.length}})</span> <button class="btn btn-primary btn-sm" ng-click="vm.addNewOrder()"><i class="glyphicon glyphicon-plus"></i></button>
                                     </uib-tab-heading>
@@ -130,8 +132,8 @@
 				                            </div>
                                         </div>
                                     </div>                                    
-                                </uib-tab>
-                                <uib-tab index="1">
+                                </uib-tab>                                 
+                                <uib-tab index="2">
                                     <uib-tab-heading>
                                         Commandes réalisées ({{vm.ordersDone.length}})
                                     </uib-tab-heading>
@@ -143,9 +145,8 @@
 					                					<th>Date édition</th>
 					                					<th>Réf</th>
 					                					<th>Client</th>
-					                					<th>Montant total HT</th>
-					                					<th>Montant TVA</th>
-					                					<th>Montant total TTC</th>
+					                					<th>Total TTC</th>
+					                					<th></th>
 					                				</tr>		                				
 					                			</thead>
 					                			<tbody>
@@ -153,12 +154,13 @@
 					                					<td class="shortMargin">{{item.orderDate}}</td>
 					                					<td class="shortMargin">{{item.reference}}</td>
 					                					<td class="shortMargin">{{item.customer}}</td>
-					                					<td class="shortMargin">{{item.totalAmountHt | number}}</td>
-					                					<td class="shortMargin">{{item.totalTaxAmount | number}}</td>
-					                					<td class="shortMargin">{{item.totalAmountTtc | number}}</td>					                					
+					                					<td class="shortMargin">{{item.totalAmountTtc | number}}</td>	
+					                					<td>
+								                        	<button class="btn btn-primary btn-xs" ng-if="item.statusId == 4" ng-click="vm.pay(item)"><i class="fa fa-money"></i> Régler</button>
+								                        </td>				                					
 					                				</tr>
 					                				<tr ng-if="vm.ordersDone.length == 0">
-						                                <td colspan="6" class="text-center"><i>Aucune commande réalisée.</i></td>
+						                                <td colspan="5" class="text-center"><i>Aucune commande réalisée.</i></td>
 						                            </tr>					                				
 					                			</tbody>
 					                		</table>
@@ -173,98 +175,80 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr>
-                                        <td class="col-md-4" style="padding:0"  rowspan="2">
-                                            <button ng-click="vm.openSearchCustomer()" ng-disabled="vm.currentOrder.doPayment" type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0"><i class="fa fa-male"></i> {{ vm.currentOrder.customerId ? vm.currentOrder.customer : 'Client' }}</button>
+                                        <td class="col-md-4" style="padding:0">
+                                            <button ng-click="vm.openSearchCustomer()" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0"><i class="fa fa-male"></i> {{ vm.currentOrder.customerId ? vm.currentOrder.customer : 'Client' }}</button>
                                         </td> 
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(1)">1</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(1)">1</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(2)">2</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(2)">2</button>
                                         </td>   
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(3)">3</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(3)">3</button>
                                         </td>  
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0" ng-click="vm.btnQteClick()" ng-disabled="vm.currentOrder.currentIndex == null || vm.currentOrder.doPayment" ng-class="{ 'btn-default': !vm.btnQteEnabled, 'btn-primary': vm.btnQteEnabled }">Qté</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0" ng-click="vm.btnQteClick()" ng-disabled="vm.currentOrder.currentIndex == null" ng-class="{ 'btn-default': !vm.btnQteEnabled, 'btn-primary': vm.btnQteEnabled }">Qté</button>
                                         </td>                                 
                                     </tr>
-                                    <tr>                                                                              
+                                    <tr>    
+                                    	<td class="col-md-4" style="padding:0">
+                                            <button ng-click="vm.invoice()" ng-disabled="vm.currentOrder.products.length == 0 || vm.invoicing" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;"><i class="fa fa-money"></i> Facturer</button>
+                                        </td>                                                                          
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(4)">4</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(4)">4</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(5)">5</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(5)">5</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(6)">6</button>
-                                        </td>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(6)">6</button>
+                                        </td>       
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0" ng-disabled="vm.currentOrder.currentIndex == null || vm.currentOrder.doPayment" ng-class="{ 'btn-default': !vm.btnRemEnabled, 'btn-primary': vm.btnRemEnabled }" ng-click="vm.btnRemClick()">Rem.</button>
-                                        </td>                                 
+                                            <button ng-click="vm.reset()" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0">Reset</button>
+                                        </td>                         
                                     </tr>
                                     <tr>
                                         <td class="col-md-4" style="padding:0">
-                                            <button ng-click="vm.pay()" ng-disabled="vm.currentOrder.doPayment || vm.currentOrder.products.length == 0" type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;"><i class="fa fa-money"></i> Payer</button>
+                                            <button ng-click="vm.pay(vm.currentOrder)" ng-disabled="vm.currentOrder.products.length == 0" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;"><i class="fa fa-money"></i> Régler</button>
                                         </td>                                        
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(7)">7</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(7)">7</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(8)">8</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(8)">8</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(9)">9</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(9)">9</button>
+                                        </td>
+                                        <td class="col-md-2" style="padding:0">
+                                            <button ng-click="vm.retirerNumber()" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0"><i class="fa fa-arrow-left"></i> Arr.</button>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="col-md-2" style="padding:0">
-                                            <button ng-disabled="vm.currentOrder.doPayment" ng-click="vm.retirerArticle()" type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;"><i class="fa fa-trash-o"></i> Supprimer article</button>
+                                            <button ng-click="vm.retirerArticle()" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;"><i class="fa fa-trash-o"></i> Supprimer article</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0;" ng-click="vm.addNumber(0)">0</button>
+                                            <button type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0;" ng-click="vm.addNumber(0)">0</button>
                                         </td>
                                         <td class="col-md-2" style="padding:0">
-                                            <button ng-disabled="vm.currentOrder.doPayment" ng-click="vm.reset()" type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0">Reset</button>
-                                        </td>
+                                            <button ng-click="vm.addNumber('00')" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0">00</button>
+                                        </td>                                        
                                         <td class="col-md-2" style="padding:0">
-                                            <button ng-click="vm.retirerNumber()" type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0"><i class="fa fa-arrow-left"></i> Arr.</button>
-                                        </td>
+                                            <button ng-click="vm.addNumber('000')" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0">000</button>
+                                        </td>                                        
                                     </tr>
                                     <tr>
                                         <td colspan="5" class="col-md-2" style="padding:0">
-                                            <button ng-disabled="!vm.currentOrder || vm.cancelingOrder" ng-click="vm.cancelOrder(vm.currentOrder)" type="button" class="btn btn-default btn-block" style="border-radius:0;margin:0">Annuler commande</button>
+                                            <button ng-disabled="!vm.currentOrder || vm.cancelingOrder" ng-click="vm.cancelOrder(vm.currentOrder)" type="button" class="btn btn-default btn-block btn-lg" style="border-radius:0;margin:0">Annuler commande</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <td class="col-md-7">
-                            <uib-tabset active="0">
-                                <uib-tab index="0">
-                                    <uib-tab-heading>
-                                        Produits ({{vm.products.length}})
-                                    </uib-tab-heading>
-                                    <div class="panel panel-body">
-                                        <div class="row" style="max-height:150px; overflow-y: scroll;">
-                                            <div class="col-md-12">
-                                                <div class="col-md-4" ng-repeat="item in vm.products">
-                                                    <div class="hbox text-center m-t b-t b-b b-light bg-success dker" ng-click="vm.addArticle(item)">
-                                                        <a class="col padder-v text-muted b-l b-r b-light">
-                                                            <div class="h4">{{item.priceSummary}}</div>
-                                                            <span>{{item.name}}</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                </uib-tab>
-                            </uib-tabset>                            
-                        </td>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
-    </div>
-</div>

@@ -1,0 +1,114 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title " style="padding-top: 7.5px;">Modules (Entreprise {{vm.company.denomination}})</h4>
+		</div>
+		<div class="panel-body">			
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-sm-6">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading clearfix">
+	                            <strong class="pull-left">Proposé</strong>
+								<div class="input-group col-md-8 pull-right">
+					                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.searchFreeModule(0)" ng-model="vm.filterFreeModule" class="form-control input-sm" placeholder="Rechercher modules proposés...">
+					                <div class="input-group-btn">
+					                    <button class="btn btn-primary" ng-click="vm.searchFreeModule();"><i class="glyphicon glyphicon-search"></i></button>
+					                    <button class="btn btn-primary" ng-click="vm.clearSearchFreeModule();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+					                </div>
+					            </div>
+	                        </div>
+	                        <div class="panel-body">
+	                        	<div ng-show="vm.loadingDataFreeModule">
+					                <div class="col-xs-4"></div>
+					                <div class="col-xs-4">
+					                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+					                </div>
+					                <div class="col-xs-4"></div>
+					            </div>
+					            <div class="text-center" ng-if="vm.freeProducts.length == 0 && !vm.loadingDataFreeModule">
+				                    <span style="color: orangered"><i>Aucun résultat.</i></td>
+				                </div>
+	                            <div class="table-responsive" ng-show="!vm.loadingDataFreeModule">
+	                                <table class="table table-condensed shortMargin">
+	                                	<tr ng-repeat="item in vm.freeProducts">
+	                                        <td class="shortPadding">{{item.name}}</td>
+	                                        <td class="shortPadding">
+	                                        	<div class="pull-right">
+	                                                <buton class="btn btn-primary btn-xs" ng-disabled="vm.loadingDataAddProduct" ng-click="vm.addProduct(item)">Ajouter <i class="glyphicon glyphicon-plus"></i></buton>
+	                                            </div>
+	                                        </td>
+	                                    </tr> 	                                                   	                                               				                                  
+	                                </table>
+	                            </div>
+	                        </div>
+	                        <div class="panel-footer clearfix">
+	                            <label class="label label-danger">Total : {{vm.totalCountFreeModule}} éléments - {{vm.pagesCountFreeModule}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCountFreeModule" ng-model="vm.currentPageFreeModule" items-per-page="vm.pageSizeFreeModule" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCountFreeModule" ng-change="vm.pageChangedFreeModule()"></ul>
+								</div>			
+	                        </div>
+	                    </div>
+	                </div>	
+	                <div class="col-sm-6">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading clearfix">
+	                            <strong class="pull-left">Souscrit</strong>
+								<div class="input-group col-md-8 pull-right">
+					                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.searchPdToSale(0)" ng-model="vm.filterPdToSale" class="form-control input-sm" placeholder="Rechercher modules souscrits...">
+					                <div class="input-group-btn">
+					                    <button class="btn btn-primary" ng-click="vm.searchPdToSale();"><i class="glyphicon glyphicon-search"></i></button>
+					                    <button class="btn btn-primary" ng-click="vm.clearSearchPdToSale();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+					                </div>
+					            </div>
+	                        </div>
+	                        <div class="panel-body">
+	                        	<div ng-show="vm.loadingDataPdToSale">
+					                <div class="col-xs-4"></div>
+					                <div class="col-xs-4">
+					                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+					                </div>
+					                <div class="col-xs-4"></div>
+					            </div>
+					            <div class="text-center" ng-if="vm.productsToSale.length == 0 && !vm.loadingDataPdToSale">
+				                    <span style="color: orangered"><i>Aucun résultat.</i></td>
+				                </div>
+	                            <div class="table-responsive" ng-show="!vm.loadingDataPdToSale">
+	                                <table class="table table-condensed shortMargin">
+	                                	<tr ng-repeat="item in vm.productsToSale">
+	                                        <td class="shortPadding">
+	                                        	{{item.name}}
+	                                        	<span class="badge badge-sm up" style="background-color:green;" ng-if="item.isActive">Activé</span> 
+								                <span class="badge badge-sm up" style="background-color:red;" ng-if="!item.isActive">Désactivé</span>
+								                <span class="badge badge-sm up" style="background-color:blue;" ng-if="item.isInstalled">Installé</span>
+	                                        </td>
+	                                        <td class="shortPadding">
+	                                        	<div class="pull-right">
+	                                        		<button class="btn btn-primary btn-xs" ng-click="vm.configureFeatures(item)">Fonctionnalités <i class="fa fa-cog"></i></button>
+	                                                <button ng-if="!vm.company.isCurrent && item.isActive && !item.isInstalled || vm.company.isCurrent && item.isActive && !item.isAdminModule && !item.isInstalled" class="btn btn-danger btn-xs" ng-click="vm.removeProduct(item)">Retirer <i class="fa fa-trash-o"></i></button>
+	                                                <button ng-if="vm.company.isCurrent && !item.isAdminModule && !item.isActive || !vm.company.isCurrent && !item.isActive" class="btn btn-primary btn-xs" ng-click="vm.activateProduct(item)">Activer <i class="fa fa-edit"></i></button>
+	                                                <button ng-if="vm.company.isCurrent && !item.isAdminModule && item.isActive || !vm.company.isCurrent && item.isActive" class="btn btn-danger btn-xs" ng-click="vm.unactivateProduct(item)">Désactiver <i class="fa fa-edit"></i></button>
+	                                                <button ng-if="!vm.company.isCurrent && item.isInstalled" class="btn btn-danger btn-xs" ng-click="vm.uninstallModule(item)">Désinstaller <i class="fa fa-edit"></i></button>
+	                                                <button ng-if="!vm.company.isCurrent && item.isAdminModule && !item.isInstalled" class="btn btn-primary btn-xs" ng-click="vm.installModule(item)">Installer <i class="fa fa-edit"></i></button>
+	                                            </div>
+	                                        </td>
+	                                    </tr> 	                                                   	                                               				                                  
+	                                </table>
+	                            </div>
+	                        </div>
+	                        <div class="panel-footer clearfix">
+	                            <label class="label label-danger">Total : {{vm.totalCountPdToSale}} éléments - {{vm.pagesCountPdToSale}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCountPdToSale" ng-model="vm.currentPagePdToSale" items-per-page="vm.pageSizePdToSale" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCountPdToSale" ng-change="vm.pageChangedPdToSale()"></ul>
+								</div>			
+	                        </div>
+	                    </div>
+	                </div>                
+				</div>
+			</div>
+		</div>
+		<div class="panel-footer clearfix">
+			<button class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>	
+		</div>
+	</div>
+</div>

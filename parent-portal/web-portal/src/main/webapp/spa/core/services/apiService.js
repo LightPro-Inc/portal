@@ -18,14 +18,22 @@
         function buildReport(url, data, success, failure) {
         	url = url.replace("/web", rootUrl);
             return $http.post(url, data, { responseType: "arraybuffer" }).
-                          success(function (data) {
+                          then(function (response) {
                               if(success)
-                                success(data);
-                          }).
-                          error(function (error, status) {
+                                success(response.data);
+                          }, function (error, status) {
                               if (error.status == -1) {
                                   notificationService.displayError('Connexion au serveur momentanément interrompue.');
-                              }else if(failure)
+                              } else if (error.status == '401') {
+                                  notificationService.displayError(error);
+                                  $rootScope.simpleLogout();
+                              } else if(error.status == '400') {
+                              	notificationService.displayInfo(error);
+                              } else if (error.status == '500') {
+                                  notificationService.displayError("Une erreur inattendue s'est produite ! Veuillez contacter votre administrateur si elle persiste.");
+                              } 
+                              
+                              if(failure)
                                   failure(error);
                           });
         }
@@ -39,11 +47,17 @@
                     }, function (error) {
                         if (error.status == '401') {
                             notificationService.displayError(error);
-                            $state.go('login');
-                        } else if (error.status == -1) {
+                            $rootScope.simpleLogout();
+                        } else if (error.status == '500') {
+                            notificationService.displayError("Une erreur inattendue s'est produite ! Veuillez contacter votre administrateur si elle persiste.");
+                        } else if(error.status == '400') {
+                        	notificationService.displayInfo(error);
+                        }
+                        else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
                         }
-                        else if (failure) {
+                        
+                        if (failure) {
                             failure(error);
                         }
                     });
@@ -58,13 +72,16 @@
                     }, function (error) {
                         if (error.status == '401') {
                             notificationService.displayError(error);
-                            $state.go('login');
+                            $rootScope.simpleLogout();
                         } else if(error.status == '400') {
                         	notificationService.displayInfo(error);
+                        } else if (error.status == '500') {
+                            notificationService.displayError("Une erreur inattendue s'est produite ! Veuillez contacter votre administrateur si elle persiste.");
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
                         }
-                        else if (failure) {
+                        
+                        if (failure) {
                             failure(error);
                         }
                     });
@@ -79,12 +96,16 @@
                     }, function (error) {
                         if (error.status == '401') {
                             notificationService.displayError(error);
-                            $state.go('login');
+                            $rootScope.simpleLogout();
                         } else if(error.status == '400') {
                         	notificationService.displayInfo(error);
+                        } else if (error.status == '500') {
+                            notificationService.displayError("Une erreur inattendue s'est produite ! Veuillez contacter votre administrateur si elle persiste.");
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
-                        } else if (failure) {
+                        } 
+                        
+                        if (failure) {
                             failure(error);
                         }
                     });
@@ -99,13 +120,16 @@
                     }, function (error) {
                         if (error.status == '401') {
                             notificationService.displayError(error);
-                            $state.go('login');
+                            $rootScope.simpleLogout();
                         } else if(error.status == '400') {
                         	notificationService.displayInfo(error);
+                        } else if (error.status == '500') {
+                            notificationService.displayError("Une erreur inattendue s'est produite ! Veuillez contacter votre administrateur si elle persiste.");
                         } else if (error.status == -1) {
                             notificationService.displayError('Connexion au serveur momentanément interrompue.');
                         }
-                        else if (failure) {
+                        
+                        if (failure) {
                             failure(error);
                         }
                     });

@@ -9,16 +9,14 @@
 			                <option ng-selected="vm.warehouseId == option.id" ng-repeat="option in vm.warehouses" value="{{option.id}}">{{option.name}}</option>
 			            </select>
 					</div>
-					<div class="col-md-6">
-						<div class="input-group">
-			                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les types d'opération...">                
-			                <div class="input-group-btn">
-			                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
-			                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
-			                    <button ng-if="vm.warehouseId" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
-			                </div>
-			            </div>
-					</div>		   
+					<div class="input-group col-md-6 pull-right">
+		                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les types d'opération...">                
+		                <div class="input-group-btn">
+		                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
+		                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+		                    <button ng-if="vm.warehouseId && isGranted('STOCKS-OP-TYPE-ADD')" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+		                </div>
+		            </div>		   
 				</div>				        
 			</div>
 			
@@ -41,7 +39,7 @@
 	                        <div class="panel-heading clearfix">
 	                            <strong class="pull-left">{{item.name}}</strong>
 	                            <div class="pull-right">
-									<buton class="btn btn-primary btn-xs" ng-click="vm.addNewOperation(item)">Nouvelle opération <i class="fa fa-pencil"></i></buton>
+									<button ng-if="isGranted('STOCKS-OP-DO')" class="btn btn-primary btn-xs" ng-click="vm.addNewOperation(item)">Nouvelle opération <i class="fa fa-pencil"></i></button>
 								</div>	
 	                        </div>
 	                        <div class="panel-body">	                        	
@@ -58,17 +56,22 @@
 	                                    <tr>
 	                                        <td class="shortPadding">Destination par défaut :</td>
 	                                        <td class="shortPadding"><i>{{item.defaultDestinationLocation}}</i></td>
-	                                    </tr>
-	                                    <tr>
-	                                        <td class="shortPadding">Séquence :</td>
-	                                        <td class="shortPadding"><i>{{item.sequence}}</i></td>
 	                                    </tr>	
 	                                    <tr>
-	                                        <td class="shortPadding">Opérations inachevées :</td>
+	                                        <td class="shortPadding">Opérations à confirmer :</td>
 	                                        <td class="shortPadding">
-	                                        	<i>{{item.numberOfUnfinishedOperations | number}}</i>
+	                                        	<span class="badge badge-sm up" style="background-color:orange;"><i>{{item.numberOfUnfinishedOperations | number}}</i></span>
 	                                        	<div class="pull-right">
-	                                                <buton class="btn btn-primary btn-xs" ng-click="vm.showUnfinishedOperations(item)">Achever opérations <i class="fa fa-eye"></i></buton>
+	                                                <button ng-if="isGranted('STOCKS-OP-DO')" class="btn btn-primary btn-xs" ng-click="vm.showUnfinishedOperations(item)">Voir <i class="fa fa-eye"></i></button>
+	                                            </div>
+	                                        </td>
+	                                    </tr>
+	                                    <tr>
+	                                        <td class="shortPadding">Opérations à faire :</td>
+	                                        <td class="shortPadding">
+	                                        	<span class="badge badge-sm up" style="background-color:green;"><i>{{item.numberOfTodoOperations | number}}</i></span>	                                        	
+	                                        	<div class="pull-right">
+	                                                <button ng-if="isGranted('STOCKS-OP-DO')" class="btn btn-primary btn-xs" ng-click="vm.showTodoOperations(item)">Voir <i class="fa fa-eye"></i></button>
 	                                            </div>
 	                                        </td>
 	                                    </tr>	                                                                       	                                                                        	                                    				                             
@@ -77,8 +80,8 @@
 	                        </div>
 	                        <div class="panel-footer clearfix">
 	                            <div class="pull-right">
-	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
-	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
+	                                <button ng-if="isGranted('STOCKS-OP-TYPE-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil"></i></button>
+	                                <button ng-if="isGranted('STOCKS-OP-TYPE-DEL')" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>

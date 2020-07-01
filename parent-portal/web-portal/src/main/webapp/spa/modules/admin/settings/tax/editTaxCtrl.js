@@ -21,7 +21,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put(String.format('/web/api/tax/{0}', vm.item.id), vm.item,
@@ -30,7 +30,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}			
 		}
@@ -49,6 +49,18 @@
 				vm.title = "Modifier une taxe";
 				vm.btnSaveLabel = "Modifier";
 			}	
+			
+			apiService.get('/web/api/tax/value-type', {},
+					function(response){
+						vm.taxes = response.data;
+					}
+			);
+			
+			apiService.get('/web/api/tax/type', {},
+					function(response){
+						vm.types = response.data;
+					}
+			);
 		}
 	}
 	

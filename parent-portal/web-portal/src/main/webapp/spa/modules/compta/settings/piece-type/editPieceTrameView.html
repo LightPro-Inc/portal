@@ -1,0 +1,103 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="row">
+		<div class="panel panel-primary">
+	        <div class="panel-heading clearfix">
+	        	<h4 class="panel-title pull-left">{{vm.title}}</h4>
+	        	<div class="pull-right">	        				
+	            	<button type="button" class="btn btn-primary" ng-click="vm.addNew()">Ajouter un modèle d'écriture <i class="glyphicon glyphicon-plus"></i></button>
+	            </div>	        	           
+	        </div>
+	        <div class="panel-body">
+	        	<div class="form-group">
+	        		<div class="row">
+   						<label class="control-label col-md-3">Libellé du modèle de saisie : </label>
+	    				<div class="col-md-9">
+	    					<input class="form-control" id="name" placeholder="Libellé du modèle" name="name" ng-model="vm.item.name">
+	    				</div>
+   					</div> 					
+				</div>	        		        
+	        	<div class="panel panel-success" ng-repeat="flux in vm.item.fluxes">
+	        		<div class="panel-heading clearfix">
+	        			<div class="row col-md-9 pull-left">
+	        				<div class="row">
+	        					<label class="control-label col-md-4"><span ng-if="$index > 0">Modèle d'écriture secondaire {{$index}}</span><span ng-if="$index == 0">Modèle d'écriture de base</span></label>
+		        				<div class="col-md-8">
+		        					<input class="form-control input-sm" id="description" placeholder="Décrivez le flux" name="description" ng-model="flux.description">
+		        				</div>
+	        				</div>
+	        			</div>	        				        			
+	        			<div class="pull-right form-inline">	        				
+	        				<select ng-show="$index > 0" class="form-control input-sm" id="journal-type" name="journal-type" ng-options="v.id as v.name for v in vm.journalTypes" ng-model="flux.journalTypeId" ng-change="vm.journalTypeChanged(flux, flux.journalTypeId)">
+			                   <option value="">-- Choisir un type de journal --</option>
+			                </select>
+			                <select ng-show="$index > 0" class="form-control input-sm" id="default-journal" name="default-journal" ng-options="v.id as v.name for v in flux.journals" ng-model="flux.defaultJournalId">
+			                   <option value="">-- Choisir un journal --</option>
+			                </select>
+			            	<button type="button" class="btn btn-primary" ng-click="vm.addNewLine(flux)"><i class="glyphicon glyphicon-plus"></i></button>
+			            	<button type="button" class="btn btn-danger" ng-click="vm.deleteItemFlux(flux)" ng-if="$index > 0"><i class="glyphicon glyphicon-remove-sign"></i></button>
+			            </div>
+	        		</div>
+	        		<div class="panel-body">
+	 					  <div class="row">
+		                 	<div class="col-md-12" ng-repeat="item in flux.details" style="margin-bottom: 10px;">                				                 
+		                 		<div class="form-group form-group-sm form-inline">		            
+				                   	<label class="control-label"> Ligne {{$index + 1}} => </label>
+				                   	<label class="control-label"> Compte général: </label>
+				                   	<div class="input-group col-sm-4">
+							           <input type="text" class="form-control" id="account" name="account" ng-model="item.generalAccount" placeholder="Rechercher un compte" disabled />
+						               <div class="input-group-btn">		               	
+							                <button type="button" class="btn btn-primary" ng-click="vm.searchAccount(item)"><i class="glyphicon glyphicon-search"></i></button>
+							           </div>
+				     				</div>
+				     				<label class="control-label"><input name="aggreateAccount{{flux.id}}" type="checkbox" class="form-control" ng-checked="item.isAggregateAccount" ng-click="vm.setChoiceAggregateAccount(flux, item)"> A agréger</label>
+				                   	<label class="control-label"> Sens: </label>
+				                   	<select class="form-control" ng-model="item.sensId" ng-options="option.id as option.name for option in vm.orientationSens"></select>
+				                   	<label class="control-label"> Formule: </label>	
+				                   	<input type="text" class="form-control" ng-model="item.formular">	                   	
+				                   	<button type="button" class="btn btn-danger btn-sm" ng-click="vm.deleteItemLine(flux, item)"> <i class="fa fa-remove"></i></button>				                   	
+				                </div>    
+				                <div class="row">
+					                    <div class="col-sm-6 center-block" style="float:none;">
+					                        <div class="table-responsive">
+					                            <table class="table table-bordered shortMargin">
+					                            	<tr>
+					                            		<td colspan="3" class="clearfix">
+					                            			<label>Comptes similaires</label>
+					                            			<button type="button" class="btn btn-primary btn-sm pull-right" ng-click="vm.addSimilaryAccountNewLine(item)">Ajouter un compte similaire <i class="glyphicon glyphicon-plus"></i></button>
+					                            		</td>					                            		
+					                            	</tr>
+					                                <tr ng-repeat="cpt in item.similaryAccounts">					                                
+					                                    <td class="shortPadding">{{$index + 1}}</td>
+					                                    <td class="shortPadding">
+					                                    	<div class="input-group col-sm-12">
+													           <input type="text" class="form-control" id="account" name="account" ng-model="cpt.name" placeholder="Rechercher un compte" disabled />
+												               <div class="input-group-btn">		               	
+													                <button type="button" class="btn btn-primary" ng-click="vm.searchSimilaryAccount(cpt)"><i class="glyphicon glyphicon-search"></i></button>
+													           </div>
+										     				</div>
+					                                    </td>
+					                                    <td>								                        	
+								                            <button type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteSimilaryAccount(item, $index)"><i class="fa fa-trash-o"></i></button>								                            
+								                        </td>                                                                     
+					                                </tr>
+					                                <tr ng-if="item.similaryAccounts.length == 0">
+						                                <td colspan="3" class="text-center" style="color: orangered"><i>Aucun compte.</i></td>
+						                            </tr>
+					                            </table>
+					                        </div>
+					                    </div>
+					                </div>  
+		                 	</div>
+		                 </div>
+	        		</div>
+	        	</div>	        	
+	        </div>
+	        <div class="panel-footer clearfix">
+	        	<div class="pull-right">
+	        		<button type="submit" class="btn btn-primary">Enregistrer</button>
+					<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>
+	        	</div>
+	        </div>
+	    </div>
+	</div>
+</form>

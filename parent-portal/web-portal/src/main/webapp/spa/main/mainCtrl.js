@@ -6,10 +6,16 @@
 	mainCtrl.$inject = ['apiService', '$rootScope', '$q', '$timeout'];
 	function mainCtrl(apiService, $rootScope, $q, $timeout) {
 		
-		$rootScope.company = apiService.get('/web/api/company', null, 
+		apiService.get('/web/api/company', {}, 
 				function(response){
-					$rootScope.companyCurrency = response.data.currencyShortName;
-					return response.data;
+					$rootScope.company = response.data;
+					
+					apiService.get('/web/api/currency/' + $rootScope.company.currencyId, {}, 
+							function(response1){
+								$rootScope.companyCurrency = response1.data;		
+							}, function(error){
+								
+							});
 				});	
 	}
 	

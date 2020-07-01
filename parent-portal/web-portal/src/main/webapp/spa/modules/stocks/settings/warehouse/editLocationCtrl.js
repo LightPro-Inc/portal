@@ -22,7 +22,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put(String.format('/web/api/location/{0}', vm.item.id), vm.item,
@@ -31,7 +31,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}			
 		}

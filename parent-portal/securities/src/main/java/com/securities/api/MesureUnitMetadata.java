@@ -42,4 +42,8 @@ public class MesureUnitMetadata implements DomainMetadata {
 	public String companyIdKey(){
 		return "companyid";
 	}
+	
+	public static MesureUnitMetadata create(){
+		return new MesureUnitMetadata();
+	}
 }

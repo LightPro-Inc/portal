@@ -30,7 +30,10 @@
         }
 
         vm.$onInit = function () {
-            
+            if(data.title)
+            	vm.title = data.title;
+            else
+            	vm.title = "Sélectionner une date";
         }
     }
 })(angular.module('lightpro'));

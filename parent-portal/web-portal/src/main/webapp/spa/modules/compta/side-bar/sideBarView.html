@@ -3,10 +3,20 @@
         <h3>Comptabilité</h3>
         <ul class="nav nav-pills nav-stacked">
         	<li class="nav-divider"></li>
-	         <li ui-sref-active="active"><a ui-sref=".dashboard">Tableau de bord<i class="fa fa-home fa-fw pull-right"></i></a></li> 
-	     	<li class="nav-divider"></li>      
-	     	<li ui-sref-active="active"><a ui-sref=".journal">Journaux<i class="fa fa-home fa-fw pull-right"></i></a></li>                                             
-	        <li ui-sref-active="active"><a ui-sref=".chart">Plan comptable<i class="fa fa-home fa-fw pull-right"></i></a></li>                                                 
+	         <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".dashboard">Tableau de bord<i class="fa fa-home fa-fw pull-right"></i></a></li> 
+	         <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".piece">Pièces comptables <i class="fa fa-home fa-fw pull-right"></i></a></li>
+	         <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".correspondance">Correspondances <i class="fa fa-home fa-fw pull-right"></i></a></li>
+	         <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".exercise">Exercices <i class="fa fa-home fa-fw pull-right"></i></a></li>
+	     	<li class="nav-divider"></li>   
+	     	<li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".tiers-type">Types de tiers	<i class="fa fa-home fa-fw pull-right"></i></a></li>   
+	     	<li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".piece-type">Types de pièce<i class="fa fa-home fa-fw pull-right"></i></a></li>
+	     	<li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".journal">Journaux<i class="fa fa-home fa-fw pull-right"></i></a></li>                                             
+	        <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".chart">Plan comptable<i class="fa fa-home fa-fw pull-right"></i></a></li>                                                 
+	        <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".generalities">Généralités<i class="fa fa-home fa-fw pull-right"></i></a></li>
+	        <li class="nav-divider"></li>   
+	     	<li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".reporting">Rapports<i class="fa fa-home fa-fw pull-right"></i></a></li>
+	     	<li class="nav-divider"></li>   
+	     	<li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".interfacage.sales">Interfaçage<i class="fa fa-home fa-fw pull-right"></i></a></li>  
         </ul>
     </div>
 </div>

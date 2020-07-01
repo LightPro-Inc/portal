@@ -3,16 +3,22 @@
 	
 	app.controller('maidCtrl', maidCtrl);
 	
-	maidCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$state'];	
-	function maidCtrl(apiService, $uibModal, $confirm, notificationService, $state){
+	maidCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$state', 'contactService'];	
+	function maidCtrl(apiService, $uibModal, $confirm, notificationService, $state, contactService){
 		var vm = this;
 		
 		vm.addNew = addNew;
-		vm.openEditDialog = openEditDialog;
 		vm.clearSearch = clearSearch;
 		vm.search = search;
 		vm.deleteItem = deleteItem;
 		vm.activate = activate;
+		vm.openEditDialog = openEditDialog;
+
+		function openEditDialog(item){
+			contactService.edit(item, function(personEdited){
+				search(vm.currentPage);
+			});
+		}
 		
 		function activate(item){
 			var title = item.active ? String.format("Souhaitez-vous désactiver l'employé {0} ?", item.fullName) : String.format("Souhaitez-vous activer l'employé {0} ?", item.fullName);
@@ -26,7 +32,7 @@
     						notificationService.displaySuccess(msg);
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  			
@@ -39,43 +45,27 @@
         		apiService.remove("/web/api/maid/" + item.id, {},
     					function(response){
     						search();    						
-    						notificationService.displaySuccess("L'employé " + item.fullName + " a été supprimé avec succès !");
+    						notificationService.displaySuccess("L'employé " + item.name + " a été supprimé avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
 		}
 		
-		function openEditDialog(item){
-			editItem(item, function(){
-				 search(vm.currentPage);
-			 });
-		}
-		
 		function addNew(){
-			 editItem(null, function(){
-				 search();
-			 });
-		}
-		
-		function editItem(item, callback){
-
-			$uibModal.open({
-                templateUrl: 'modules/hotel/gouvernance/maid/editMaidView.html',
-                controller: 'editMaidCtrl as vm',
-                resolve: {
-                    data: {
-                    	item : item
-                    }
-                }
-            }).result.then(function (itemEdited) {
-            	if(callback)
-            		callback(itemEdited);
-            }, function () {
-
-            });           
+			contactService.search("all", function(personEdited){
+				apiService.post(String.format('/web/api/maid/{0}', personEdited.id), {},
+		                function(response){
+							search();    						
+							notificationService.displaySuccess("L'employé " + item.name + " a été ajouté avec succès !");
+						},
+				        function(error){
+							
+						}
+				);
+			});
 		}
 		
 		vm.pageChanged = function(){

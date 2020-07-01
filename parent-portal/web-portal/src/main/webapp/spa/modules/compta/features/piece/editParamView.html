@@ -1,0 +1,17 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">Paramètres du modèle</h4>
+	</div>
+	<div class="modal-body clearfix">
+		<div class="form-group" ng-repeat="param in vm.params">
+			<label class="control-label" for="Name{{$index}}"><small style="color: red">*</small>&nbsp;&nbsp;{{param.name}}</label>
+            <input type="number" class="form-control" ng-model="param.value" name="Name{{$index}}" id="Name{{$index}}" placeholder="Renseigner une valeur" validate-on="blur" required required-message="'{{param.name}} est un champ obligatoire'">
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="pull-right">
+			<button type="submit" class="btn btn-primary">Continuer</button>
+			<button type="button" class="btn btn-danger" ng-click="vm.cancelEdit()">Annuler</button>                
+		</div>
+	</div>
+</form>

@@ -33,7 +33,7 @@
                        notificationService.displaySuccess("Mot de passe changé avec succès");
                        $uibModalInstance.close();
                    }, function (response) {
-                       notificationService.displayError(response.data);
+                       
                    });
         }
 

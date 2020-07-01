@@ -1,0 +1,42 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header clearfix">
+		<h4 class="modal-title">Règlement de la commande</h4>		
+	</div>
+	<div class="modal-body">	
+		<div class="row">
+			<div class="col-md-12">		
+				<div class="form-group form-group-sm">
+					 <label class="control-label" for="paymentDate">Date de paiement</label>
+			         <input type="date" class="form-control" ng-model="vm.receipt.paymentDate" name="paymentDate" id="paymentDate" placeholder="Date du jour par défaut">
+				</div>									
+				<div class="form-group form-group-sm">
+					 <label class="control-label" for="MontantTtc">Total à payer</label>
+			         <input type="number" class="form-control" ng-model="vm.order.totalAmountTtc" name="MontantTtc" id="MontantTtc" disabled>
+				</div>	
+				<div class="form-group form-group-sm">
+					 <label class="control-label" for="MontantVerse"><small style="color: red">*</small>&nbsp;&nbsp;Montant versé</label>
+			         <input type="number" class="form-control" ng-model="vm.receipt.montantVerse" name="MontantVerse" id="MontantVerse" placeholder="Saisir un montant" ng-change="vm.montantVerseChanged(vm.receipt.montantVerse)" required required-message="'Montant versé est un champ obligatoire'">
+				</div>
+				<div class="form-group form-group-sm">
+					 <label class="control-label" for="Monnaie">Monnaie</label>
+			         <input type="number" class="form-control" ng-model="vm.receipt.montantRembourse" name="Monnaie" id="Monnaie" disabled>
+				</div>
+				<div class="form-group form-group-sm">
+					 <label class="control-label" for="mode">Mode de paiement</label>
+			         <select class="form-control" name="mode" id="mode" ng-model="vm.receipt.paymentModeId" ng-options="v.id as v.name for v in vm.paymentModes" ng-change="vm.modeChanged(vm.receipt.paymentModeId)" required required-message="'Mode de paiement est un champ obligatoire'">
+					 	<option value="">-- Choisir un mode --</option>
+					 </select>
+				</div>
+				<div class="form-group form-group-sm" ng-if="vm.isBankPaymentMode">
+					 <label class="control-label" for="transaction-reference"><small style="color: red">*</small>&nbsp;&nbsp;N° de transaction</label>
+			         <input type="text" class="form-control" ng-model="vm.receipt.transactionReference" name="transaction-reference" id="transaction-reference" placeholder="N° de transaction" required required-message="'N° de transaction est un champ obligatoire'">
+				</div>
+			</div>
+		</div>			
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary" click-once>Régler</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

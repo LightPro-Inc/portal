@@ -63,7 +63,7 @@
     						notificationService.displaySuccess(String.format("L'unité de mesure {0} a été supprimée avec succès !", item.fullName));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

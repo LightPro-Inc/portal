@@ -15,7 +15,7 @@
 		vm.showFamilies = showFamilies;
 		
 		function showFamilies(item){		
-			$state.go('main.stocks.article-family', {categoryId: item.id});
+			$state.go('main.stocks.article-family', {categoryId: item.id}, {location:true});
 		}
 		
 		function deleteItem(item){
@@ -28,7 +28,7 @@
     						notificationService.displaySuccess("La catégorie d'article " + item.name + " a été supprimée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

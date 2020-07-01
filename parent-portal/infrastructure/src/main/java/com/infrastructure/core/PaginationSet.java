@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 public class PaginationSet<T> {
 	private final int page;
 	private final List<T> items;
-	private final int totalCount;
+	private final long totalCount;
 	
-	public PaginationSet(final List<T> items, final int page, final int totalCount){
+	public PaginationSet(final List<T> items, final int page, final long totalCount){
 		this.items = items;
 		this.page = page;
 		this.totalCount = totalCount;
@@ -26,7 +26,7 @@ public class PaginationSet<T> {
 	}
 	
 	@JsonGetter
-	public int getTotalCount(){
+	public long getTotalCount(){
 		return this.totalCount;
 	}
 }

@@ -17,6 +17,16 @@
 		vm.openNewSession = openNewSession;
 		vm.openSession = openSession;
 		vm.getSessionInProgress = getSessionInProgress;
+		vm.showCashiers = showCashiers;
+		vm.showProductCategories = showProductCategories;
+		
+		function showProductCategories(item){
+			$state.go('main.pdv.pdv-product-category', {pdvId: item.id}, {location:false});
+		}
+		
+		function showCashiers(item){		
+			$state.go('main.pdv.pdv-cashier', {pdvId: item.id}, {location:false});
+		}
 		
 		function openSession(item){
 			$state.go('cashdesk', {sessionId: item.sessionInProgress.id});
@@ -46,13 +56,13 @@
 						openSession(item);						
 					},
 					function(error){
-						notificationService.displayError(error);
+						
 					}
 			);			
 		}
 		
 		function showProducts(item){
-			$state.go('main.pdv.pdv-product', {pdvId: item.id});
+			$state.go('main.pdv.pdv-product', {pdvId: item.id}, {location:false});
 		}
 		
 		function activate(item){
@@ -67,7 +77,7 @@
     						notificationService.displaySuccess(msg);
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  			
@@ -83,7 +93,7 @@
     						notificationService.displaySuccess(String.format("Le point de vente {0} a été supprimé avec succès !", item.name));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -150,7 +160,7 @@
 						
 						angular.forEach(vm.items, function(value){
 							getSessionInProgress(value);
-						})
+						});
 					});
 		}
 		
@@ -158,6 +168,14 @@
 			vm.pageSize = 4;
 			
 			search();		
+			
+			apiService.get(String.format('/web/api/sales/seller/{0}/is-seller', $rootScope.repository.loggedUser.id), {},
+					function(response){
+						if(response.data){
+							vm.canSale = true;
+						}
+					}
+			);
 		}
 	}
 	

@@ -1,121 +1,87 @@
 package com.securities.api;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import javax.ws.rs.core.Response.Status;
 
 import com.infrastructure.core.ErrorMessage;
 import com.infrastructure.datasource.Base;
 import com.infrastructure.datasource.Txn;
-import com.infrastructure.pgsql.PgBase;
-import com.securities.impl.CompaniesImpl;
-import com.securities.impl.MembershipImpl;
+import com.securities.impl.AppImpl;
+import com.securities.impl.CompanyDb;
+import com.securities.impl.LightProCompanyDb;
+import com.securities.impl.LogDb;
 
 public abstract class BaseRs {
 	
-	private @Context SecurityContext securityContext;
+	@Context
+	private HttpServletRequest requestHttp;
 	
-	private boolean isUsernamePresent() throws IOException {
-		return securityContext.getUserPrincipal() != null; 
-	}
+	@Context
+	private ContainerRequestContext requestContext;
 	
-	private String companyShortName() throws IOException {
-		return getCompanyShortName(fullUsername());
-	}
+	@Context
+    private ResourceInfo resourceInfo;
 	
-	protected String getUsername(String fullUsername) throws IOException {
-		String username = fullUsername;
-		String[] usernameParts = username.split("@");
-		return usernameParts[0];
-	}
+	protected Base base;
+	protected Log log;
+	protected Company currentCompany;	
+	protected Module currentModule;	
+	protected User currentUser;
+	protected Membership membership;
+	protected final ModuleType moduleType;
+	protected String remoteAddress;
 	
-	private String username() throws IOException {
-		return getUsername(fullUsername());
-	}
-
-	private String fullUsername() throws IOException {
-		if(!isUsernamePresent())
-			throw new IllegalArgumentException("L'utilisateur doit être identifé avant de continuer l'action !");
+	public BaseRs(ModuleType moduleType) {
+		this.moduleType = moduleType;				
+	}	
+	
+	private void buildEnvironnement(){
 		
-		return securityContext.getUserPrincipal().getName();
-	}
-	
-	protected boolean hasValidCompany(String fullUsername) throws IOException {
-		String companyShortName = getCompanyShortName(fullUsername);
-		Companies companies = new CompaniesImpl(base());
-		return companies.isPresent(companyShortName);
-	}
-	
-	protected Membership membership() throws IOException {
-		return currentCompany().membership();	
-	}
-	
-	protected Membership membership(String fullUsername) throws IOException {
-		
-		String companyShortName = getCompanyShortName(fullUsername);
-		Company company = getCompany(companyShortName);
-		
-		return new MembershipImpl(base(), company);		
-	}
-	
-	private Company getCompany(String companyShortName) throws IOException {
-		Companies companies = new CompaniesImpl(base());
-		return companies.get(companyShortName);
-	}
-	
-	private String getCompanyShortName(String fullUsername) throws IOException {
-		String username = fullUsername;
-		String[] usernameParts = username.split("@");
-		return usernameParts[usernameParts.length - 1];
-	}
-	
-	protected Company currentCompany() throws IOException {
-		return getCompany(companyShortName());		
-	}
-	
-	protected User currentUser() throws IOException {
-
-		Membership membership = new MembershipImpl(base(), currentCompany());			
-		return membership.get(username());
-	}
-
-	protected Base base() throws IOException {
-		Base base = new PgBase();
-		
-		if(!isUsernamePresent())
-			return base;
-		else
-			return base.build(username());
-	}
-	
-	protected Response createNonTransactionalHttpResponse(Callable<Response> callable){	
-		
-		Response response = null;
-		
-		try
-		{
-			response = callable.call();		
+		try {
+			remoteAddress = requestHttp.getRemoteAddr();
+			
+			Method method = resourceInfo.getResourceMethod();
+			if(method.isAnnotationPresent(Secured.class)){
+				// Get the HTTP Authorization header from the request
+		        String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION); 
+		        String token = App.getToken(authorizationHeader);
+		        App app = new AppImpl(token);
+				this.base = app.base();		
+				this.currentCompany = new CompanyDb(base, app.company().id(), remoteAddress, app.currentUser().username());	
+				this.membership = currentCompany.moduleAdmin().membership();
+				this.currentUser = app.currentUser();
+			}else{
+				App app = new AppImpl();
+				this.base = app.base();
+				this.currentCompany = new LightProCompanyDb(base);
+				this.membership = currentCompany.moduleAdmin().membership();
+				this.currentUser = this.currentCompany.moduleAdmin().membership().defaultUser();
+			}
+			
+			if(!currentCompany.modulesSubscribed().contains(moduleType))
+				throw new IllegalArgumentException(String.format("Le module '%s' n'est pas souscrit !", moduleType));
+			
+			currentModule = currentCompany.modulesSubscribed().get(moduleType);
+			if(currentCompany.modulesInstalled().contains(moduleType))
+				currentModule = currentCompany.modulesInstalled().get(moduleType);
+						
+			log = LogDb.getInstance(currentCompany.shortName(), moduleType, currentUser.username()).withIpAddress(remoteAddress);
+			
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		catch (IllegalArgumentException ex)
-		{
-			ex.printStackTrace();
-			response = Response.status(Status.BAD_REQUEST)
-						       .entity(new ErrorMessage("Erreur de requête", ex.getMessage()))
-						       .build();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			response = Response.status(Status.INTERNAL_SERVER_ERROR)
-							   .entity(new ErrorMessage("Erreur fatale", ex.getMessage()))
-							   .build();
-		}
-		
-		return response;
 	}
 	
 	protected Response createHttpResponse(Callable<Response> callable){	
@@ -123,8 +89,10 @@ public abstract class BaseRs {
 		Response response;
 		
 		try
-		{							
-			response = new Txn(base()).call(
+		{
+			buildEnvironnement();
+			
+			response = new Txn(base).call(
 					new Callable<Response>(){
 						@Override
 						public Response call() throws Exception {
@@ -132,19 +100,35 @@ public abstract class BaseRs {
 						}
 					}
 				);	
-		}
-		catch (IllegalArgumentException ex)
-		{
-			ex.printStackTrace();
-			response = Response.status(Status.BAD_REQUEST)
-						       .entity(new ErrorMessage("Mauvaise requête", ex.getMessage()))
-						       .build();
-		}
+		} 
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			response = buildException(ex);
+		}
+				
+		return response;
+	}
+	
+	private Response buildException(Exception ex) {
+		Response response;
+		
+		ex.printStackTrace();
+		Throwable exRoot = ExceptionUtils.getRootCause(ex) == null ? ex : ExceptionUtils.getRootCause(ex);
+		if(exRoot instanceof IllegalArgumentException){
+			exRoot.printStackTrace();			
+		
+			log.warning(exRoot.getMessage());
+			
+			response = Response.status(Status.BAD_REQUEST)
+						       .entity(new ErrorMessage("Informations", exRoot.getMessage()))
+						       .build();
+		}else{
+			exRoot.printStackTrace();
+			
+			log.error(exRoot.getMessage(), ExceptionUtils.getStackTrace(exRoot));
+			
 			response = Response.status(Status.INTERNAL_SERVER_ERROR)
-							   .entity(new ErrorMessage("Erreur fatale", ex.getMessage()))
+							   .entity(new ErrorMessage("Erreur fatale", exRoot.getMessage()))
 							   .build();
 		}
 		

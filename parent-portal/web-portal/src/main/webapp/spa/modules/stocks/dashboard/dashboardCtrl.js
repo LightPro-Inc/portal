@@ -3,47 +3,35 @@
 	
 	app.controller('stocksDashboardCtrl', stocksDashboardCtrl);
 	
-	stocksDashboardCtrl.$inject = ['apiService', '$scope', '$rootScope', 'notificationService', '$interval'];
-	function stocksDashboardCtrl(apiService, $scope, $rootScope, notificationService, $interval){
+	stocksDashboardCtrl.$inject = ['$compile', 'apiService', '$scope', '$rootScope', 'notificationService', '$interval'];
+	function stocksDashboardCtrl($compile, apiService, $scope, $rootScope, notificationService, $interval){
 		var vm = this;
-
-		vm.getStockColor = getStockColor;
-		vm.warehouseChanged = warehouseChanged;
 		
-		function warehouseChanged(warehouseId){
-			apiService.get(String.format('/web/api/warehouse/{0}/stock', warehouseId), {}, 
-					function(response){						
-						vm.stocks = response.data;
-					}
-			);
+		var moduleTypeId = 3;
+		
+		vm.loadIndicators = loadIndicators;
+		
+		function addIndicator(indicator){
+			var compiled = $compile(String.format('<{0}></{0}>', String.format('{0}-{1}-indicator', indicator.shortName, indicator.moduleShortName)))($scope);
+			angular.element('#placeholder').append(compiled);
 		}
 		
-		function getStockColor(stockLocation) {
-	        switch (stockLocation.alertId) {
-	            case 3:
-	                return 'red'; // minimum atteint
-	            case 2:
-	                return 'orangered'; // sécurité atteint
-	            case 1:
-	                return 'greenyellow'; // maximum atteint
-	            default:
-	                return 'green'; // aucune alerte
-	        }
-	    }
+		function loadIndicators(){	
+			apiService.get(String.format('/web/api/module/{0}/indicator', moduleTypeId), {}, 
+					function(response){
+						
+						var indicators = response.data;
+						angular.element('#placeholder').empty();
+						
+						angular.forEach(indicators, function(indicator){
+							addIndicator(indicator);
+						});
+					}
+			);			
+		}
 		
 		this.$onInit = function(){
-			
-			apiService.get(String.format('/web/api/warehouse'), {}, 
-					function(response){
-						vm.warehouses = response.data;	
-						
-						if(vm.warehouses.length > 0)
-						{
-							vm.warehouseId = vm.warehouses[0].id;
-							warehouseChanged(vm.warehouseId);
-						}
-					}
-			);				
+			loadIndicators();							
 		}
 	}
 	

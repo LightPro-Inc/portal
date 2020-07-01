@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-public class DayVm {
+public final class DayVm {
 	
 	private final transient String name;
 	private final transient int dayOfMonth;

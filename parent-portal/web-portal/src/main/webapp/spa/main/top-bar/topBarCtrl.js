@@ -21,7 +21,7 @@
 		}
 
 		function loadUsed(){
-			apiService.get("/web/api/company/modulesUsed", {},
+			apiService.get("/web/api/module/used", {},
 					function(response){
 						vm.modulesInstalled = response.data;
 						angular.forEach(vm.modulesInstalled, function(module){

@@ -3,43 +3,29 @@ package com.lightpro.admin.vm;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.securities.api.MesureUnit;
 
-public class MesureUnitVm {
+public final class MesureUnitVm {
 	
-	private final transient MesureUnit origin;
+	public final UUID id;
+	public final String shortName;
+	public final String fullName;
+	public final int typeId;
+	public final String type;
 	
 	public MesureUnitVm(){
 		throw new UnsupportedOperationException("#MesureUnitVm()");
 	}
 	
 	public MesureUnitVm(final MesureUnit origin) {
-        this.origin = origin;
+		try {
+			this.id = origin.id();
+			this.shortName = origin.shortName();
+	        this.fullName = origin.fullName();
+	        this.typeId = origin.type().id();
+	        this.type = origin.type().toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}	
     }
-	
-	@JsonGetter
-	public UUID getId(){
-		return origin.id();
-	}
-	
-	@JsonGetter
-	public String getShortName() throws IOException {
-		return origin.shortName();
-	}
-	
-	@JsonGetter
-	public String getFullName() throws IOException {
-		return origin.fullName();
-	}
-	
-	@JsonGetter
-	public String getTypeId() throws IOException {
-		return origin.type().id();
-	}
-	
-	@JsonGetter
-	public String getType() throws IOException {
-		return origin.type().name();
-	}
 }

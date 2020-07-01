@@ -1,11 +1,11 @@
-<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
+<div class="row">
+	<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem()">
     <div class="panel panel-primary">
         <div class="panel-heading clearfix">
             <h4 class="panel-title">Mon compte - {{vm.item.fullUsername}}</h4>
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-12">
                     <div class="col-md-8">
                         <div class="form-group">
                             <div class="row">
@@ -35,20 +35,20 @@
 
                                 <div class="col-sm-6 selectContainer">
                                     <label class="control-label" for="Addresse">Adresse</label>
-                                    <input type="text" class="form-control" ng-model="vm.item.address" name="Addresse" id="Addresse" placeholder="Renseigner l'adresse">
+                                    <input ng-disabled="vm.item.isSuperAdminUser" type="text" class="form-control" ng-model="vm.item.locationAddress" name="Addresse" id="Addresse" placeholder="Renseigner l'adresse">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="Tel1">Tel 1</label>
-                                    <input type="text" class="form-control" ng-model="vm.item.tel1" name="Tel1" id="Tel1" placeholder="Renseigner le téléphone 1">
+                                    <label class="control-label" for="Tel1">Téléphone</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.phone" name="Tel1" id="Tel1" placeholder="Renseigner le téléphone 1">
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <label class="control-label" for="Tel2">Tel 2</label>
-                                    <input type="text" class="form-control" ng-model="vm.item.tel2" name="Tel2" id="Tel2" placeholder="Renseigner le téléphone 2">
+                                    <label class="control-label" for="Tel2">Mobile</label>
+                                    <input type="text" class="form-control" ng-model="vm.item.mobile" name="Tel2" id="Tel2" placeholder="Renseigner le téléphone 2">
                                 </div>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label class="control-label" for="email">Adresse mail</label>
-                                    <input type="email" class="form-control" ng-model="vm.item.email" id="email" name="email" placeholder="Renseigner l'adresse mail">
+                                    <input type="email" class="form-control" ng-model="vm.item.mail" id="email" name="email" placeholder="Renseigner l'adresse mail">
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
         <div class="panel-footer clearfix">
@@ -84,3 +83,4 @@
         </div>
     </div>
 </form>
+</div>

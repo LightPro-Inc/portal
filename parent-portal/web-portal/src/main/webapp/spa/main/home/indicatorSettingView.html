@@ -1,0 +1,38 @@
+<div class="panel panel-primary">
+	<div class="panel-heading clearfix">
+		<h4 class="panel-title pull-left">Indicateurs</h4>
+		<div class="pull-right col-sm-4">
+			<select class="form-control input-sm" id="module" name="module" ng-model="vm.moduleSelected" ng-options="v as v.name for v in vm.modules" ng-change="vm.moduleChanged(vm.moduleSelected)"></select>
+		</div>
+	</div>
+	<div class="panel-body">
+		<div ng-show="vm.loadingData">
+               <div class="col-xs-4"></div>
+               <div class="col-xs-4">
+                   <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+               </div>
+               <div class="col-xs-4"></div>
+           </div>
+		<div class="col-md-12" ng-show="!vm.loadingData">
+			<div class="row table-responsive">
+				<table class="table table-condensed shortMargin">
+	                <tr>
+	                    <th></th>
+	                    <th>Libellé</th>
+	                    <th>Description</th>                     
+	                </tr>
+	                <tr style="cursor:pointer;" ng-repeat="item in vm.items" ng-click="vm.selectItem(item)">
+	                    <td class="shortPadding"><input style="width:20px;height:25px" class="form-control" type="checkbox" ng-checked="item.choosed" /></td>
+	                    <td class="shortPadding">{{ item.name }}</td>
+	                    <td class="shortPadding"><i>{{ item.description }}</i></td>	                    		                   
+	                </tr>
+	            </table>
+			</div>
+		</div>
+	</div>
+	<div class="panel-footer clearfix">	
+		<div class="pull-right">	            
+            <button type="button" class="btn btn-primary" ng-click="vm.close()">Fermer</button>
+        </div>	
+	</div>
+</div>

@@ -15,12 +15,20 @@ if (!String.format) {
 	
 	angular.module('lightpro',['common.core', 'common.ui'])
 		   .config(config)
-		   .run(run);
+		   .run(run)
+		   .controller('appCtrl', appCtrl);
 	
-	config.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider', '$provide', 'localStorageServiceProvider'];
-	function config($stateProvider, $urlRouterProvider, $httpProvider, $provide, localStorageServiceProvider){
+	appCtrl.$inject = [];
+	
+	function appCtrl(){
+		
+	}
+	
+	config.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider', '$provide', 'localStorageServiceProvider', '$locationProvider'];
+	function config($stateProvider, $urlRouterProvider, $httpProvider, $provide, localStorageServiceProvider, $locationProvider){
 
-		var rootUrl = $("#linkRoot").attr("href");
+		$locationProvider.hashPrefix('');
+		
         $provide.constant('rootUrl', rootUrl);
         
 		localStorageServiceProvider.setPrefix("lightpro");
@@ -111,6 +119,15 @@ if (!String.format) {
                 controller: 'profileCtrl as vm',
                 requireAuthenticated: true
             })
+            .state('main.settings.profile-feature', {
+                url:'/profile-feature',
+                params: {
+                    profileId: null,
+                },
+                templateUrl: 'modules/admin/settings/profile/editProfileFeatureView.html',
+                controller: 'editProfileFeatureCtrl as vm',
+                requireAuthenticated: true
+            })
             .state('main.settings.user', {
                 url:'/user',
                 templateUrl: 'modules/admin/settings/user/userView.html',
@@ -142,6 +159,18 @@ if (!String.format) {
 	            url: '/tax',
 	            templateUrl: 'modules/admin/settings/tax/taxView.html',
 	            controller: 'taxCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.settings.payment-mode', {
+	            url: '/payment-mode',
+	            templateUrl: 'modules/admin/settings/payment-mode/paymentModeView.html',
+	            controller: 'paymentModeCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.settings.log', {
+	            url: '/log',
+	            templateUrl: 'modules/admin/settings/log/logView.html',
+	            controller: 'logCtrl as vm',
 	            requireAuthenticated: true
 	        })
             .state('main.hotel', {
@@ -254,7 +283,10 @@ if (!String.format) {
 	            requireAuthenticated: true
 	        })	        
 	        .state('main.stocks.article-family', {
-	            url: '/article-family/{categoryId}',
+	            url: '/article-family',
+	            params :{
+	            	categoryId: null
+	            },
 	            templateUrl: 'modules/stocks/settings/article-family/articleFamilyView.html',
 	            controller: 'articleFamilyCtrl as vm',
 	            requireAuthenticated: true
@@ -266,7 +298,10 @@ if (!String.format) {
 	            requireAuthenticated: true
 	        })
 	        .state('main.stocks.article', {
-	            url: '/article/{familyId}',
+	            url: '/article',
+	            params :{
+	            	familyId: null
+	            },
 	            templateUrl: 'modules/stocks/settings/article/articleView.html',
 	            controller: 'articleCtrl as vm',
 	            requireAuthenticated: true
@@ -278,31 +313,48 @@ if (!String.format) {
 	            requireAuthenticated: true
 	        })
 	        .state('main.stocks.warehouse-location', {
-	            url: '/location/{warehouseId}',
+	            url: '/location',
+	            params :{
+	            	warehouseId: null
+	            },
 	            templateUrl: 'modules/stocks/settings/warehouse/locationView.html',
 	            controller: 'locationCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.stocks.warehouse-operation-type', {
-	            url: '/operation-type/{warehouseId}',
+	            url: '/operation-type',
+	            params :{
+	            	warehouseId: null
+	            },
 	            templateUrl: 'modules/stocks/settings/operation-type/operationTypeView.html',
 	            controller: 'operationTypeCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.stocks.article-planning', {
-	            url: '/article-planning/{articleId}',
+	            url: '/article-planning',
+	            params :{
+	            	articleId: null
+	            },
 	            templateUrl: 'modules/stocks/settings/article/articlePlanningView.html',
 	            controller: 'articlePlanningCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.stocks.unfinished-operation', {
-	            url: '/unfinished-operation/{operationTypeId}',
+	            url: '/unfinished-operation',
+	            params :{
+	            	statutId: null,
+	            	operationTypeId : null
+	            },
 	            templateUrl: 'modules/stocks/settings/operation/unfinishedOperationView.html',
 	            controller: 'unfinishedOperationCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.stocks.edit-operation', {
-	            url: '/edit-operation/{operationTypeId}/{operationId}',
+	            url: '/edit-operation',
+	            params :{
+	            	operationTypeId: null,
+	            	operationId : null
+	            },
 	            templateUrl: 'modules/stocks/settings/operation/editOperationView.html',
 	            controller: 'editOperationCtrl as vm',
 	            requireAuthenticated: true
@@ -333,8 +385,17 @@ if (!String.format) {
 	            controller: 'salesDashboardCtrl as vm',
 	            requireAuthenticated: true
 	        })
+	        .state('main.sales.product-category', {
+	            url: '/product-category',
+	            templateUrl: 'modules/sales/settings/product-category/productCategoryView.html',
+	            controller: 'productCategoryCtrl as vm',
+	            requireAuthenticated: true
+	        })
 	        .state('main.sales.product', {
 	            url: '/product',
+	            params :{
+	            	categoryId : null
+	            },
 	            templateUrl: 'modules/sales/settings/product/productView.html',
 	            controller: 'productCtrl as vm',
 	            requireAuthenticated: true
@@ -351,38 +412,40 @@ if (!String.format) {
 	            controller: 'productPricingCtrl as vm',
 	            requireAuthenticated: true
 	        })
-	        .state('main.sales.quotation', {
-	            url: '/quotation',
-	            templateUrl: 'modules/sales/features/quotation/quotationView.html',
-	            controller: 'quotationCtrl as vm',
-	            requireAuthenticated: true
-	        })
-	         .state('main.sales.edit-quotation', {
-	            url: '/edit-quotation/{quotationId}',
-	            templateUrl: 'modules/sales/features/quotation/editQuotationView.html',
-	            controller: 'editQuotationCtrl as vm',
-	            requireAuthenticated: true
-	        })
 	        .state('main.sales.purchase-order', {
 	            url: '/purchase-order',
 	            templateUrl: 'modules/sales/features/purchase-order/purchaseOrderView.html',
 	            controller: 'purchaseOrderCtrl as vm',
 	            requireAuthenticated: true
 	        })
-	        .state('main.sales.edit-purchase-order', {
-	            url: '/edit-purchase-order/{quotationId}',
+	         .state('main.sales.edit-purchase-order', {
+	            url: '/edit-purchase-order',
+	            params :{
+	            	purchaseOrderId : null
+	            },
 	            templateUrl: 'modules/sales/features/purchase-order/editPurchaseOrderView.html',
 	            controller: 'editPurchaseOrderCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.sales.invoice', {
-	            url: '/invoice/{purchaseOrderId}',
+	            url: '/invoice',
+	            params :{
+	            	purchaseOrderId : null
+	            },
 	            templateUrl: 'modules/sales/features/invoice/invoiceView.html',
 	            controller: 'invoiceCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.sales.edit-invoice', {
-	            url: '/edit-invoice/{invoiceId}',
+	            url: '/edit-invoice',
+	            params : {
+	            	id: null,
+	            	purchaseOrderId: null,
+            		typeId: null,
+            		percent: null,
+            		amount: null,
+            		base: null
+	            },
 	            templateUrl: 'modules/sales/features/invoice/editInvoiceView.html',
 	            controller: 'editInvoiceCtrl as vm',
 	            requireAuthenticated: true
@@ -397,6 +460,48 @@ if (!String.format) {
 	            url: '/customer',
 	            templateUrl: 'modules/sales/features/customer/customerView.html',
 	            controller: 'customerCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.provision', {
+	            url: '/provision',
+	            templateUrl: 'modules/sales/features/customer/provisionView.html',
+	            controller: 'provisionCtrl as vm',
+	            params: {
+                    customerId: null,
+                },
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.team', {
+	            url: '/team',
+	            templateUrl: 'modules/sales/settings/team/teamView.html',
+	            controller: 'teamCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.team-member', {
+	            url: '/team-member',
+	            params: {
+                    teamId: null,
+                },
+	            templateUrl: 'modules/sales/settings/team/teamSellerView.html',
+	            controller: 'teamSellerCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.interfacage', {
+	        	url: '/interfacage',
+	        	templateUrl: 'modules/sales/interfacage/interfacageView.html',
+	            controller: 'salesInterfacageCtrl as vm',
+	            requireAuthenticated: true
+            })
+            .state('main.sales.interfacage.stocks', {
+	            url: '/stocks',
+	            templateUrl: 'modules/sales/interfacage/stocks/stocksView.html',
+	            controller: 'stocksInterfaceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.sales.interfacage.compta', {
+	            url: '/compta',
+	            templateUrl: 'modules/sales/interfacage/compta/comptaView.html',
+	            controller: 'comptaSalesInterfaceCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('main.pdv', {
@@ -426,9 +531,30 @@ if (!String.format) {
 	            requireAuthenticated: true
 	        })
 	        .state('main.pdv.pdv-product', {
-	            url: '/pdv-product/{pdvId}',
+	            url: '/pdv-product',
+	            params : {
+	            	pdvId : null
+	            },
 	            templateUrl: 'modules/pdv/settings/pdv-settings/pdvProductView.html',
 	            controller: 'pdvProductCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.pdv.pdv-product-category', {
+	            url: '/pdv-product-category',
+	            params : {
+	            	pdvId : null
+	            },
+	            templateUrl: 'modules/pdv/settings/pdv-settings/pdvProductCategoryView.html',
+	            controller: 'pdvProductCategoryCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.pdv.pdv-cashier', {
+	            url: '/pdv-cashier',
+	            params : {
+	            	pdvId : null
+	            },
+	            templateUrl: 'modules/pdv/settings/pdv-settings/pdvCashierView.html',
+	            controller: 'pdvCashierCtrl as vm',
 	            requireAuthenticated: true
 	        })
 	        .state('cashdesk', {
@@ -457,6 +583,12 @@ if (!String.format) {
 	            controller: 'comptaDashboardCtrl as vm',
 	            requireAuthenticated: true
 	        })
+	        .state('main.compta.generalities', {
+	            url: '/generalities',
+	            templateUrl: 'modules/compta/settings/generalities/generalitiesView.html',
+	            controller: 'generalitiesCtrl as vm',
+	            requireAuthenticated: true
+	        })
 	        .state('main.compta.chart', {
 	            url: '/chart',
 	            templateUrl: 'modules/compta/settings/chart/chartView.html',
@@ -468,6 +600,222 @@ if (!String.format) {
 	            templateUrl: 'modules/compta/settings/journal/journalView.html',
 	            controller: 'journalCtrl as vm',
 	            requireAuthenticated: true
+	        })
+	        .state('main.compta.journal-piece-type', {
+	            url: '/journal-piece-type',
+	            params: {
+	            	journalId : null            	
+	            },
+	            templateUrl: 'modules/compta/settings/journal/journalPieceTypeView.html',
+	            controller: 'journalPieceTypeCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.piece-type', {
+	            url: '/piece-type',
+	            templateUrl: 'modules/compta/settings/piece-type/pieceTypeView.html',
+	            controller: 'pieceTypeCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.edit-piece', {
+	            url: '/edit-piece',
+	            params: {
+	            	pieceId : null,
+	            	journalId : null,
+	            	typeId: null
+	            },
+	            templateUrl: 'modules/compta/features/piece/editPieceView.html',
+	            controller: 'editPieceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.piece', {
+	            url: '/piece',
+	            params: {
+	            	journalId : null,           	
+	            },
+	            templateUrl: 'modules/compta/features/piece/pieceView.html',
+	            controller: 'pieceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.correspondance', {
+	            url: '/correspondance',
+	            params: {
+	            	index : null,
+	            	reconcileStatusId: null,
+	            	lineStatusId: null,
+	            	tiersTypeId: null
+	            },
+	            templateUrl: 'modules/compta/features/correspondance/correspondanceView.html',
+	            controller: 'correspondanceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.edit-correspondance', {
+	            url: '/correspondance',
+	            params :{
+	            	reconcileId: null
+	            },
+	            templateUrl: 'modules/compta/features/correspondance/editCorrespondanceView.html',
+	            controller: 'editCorrespondanceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.exercise', {
+	            url: '/exercise',
+	            templateUrl: 'modules/compta/features/exercise/exerciseView.html',
+	            controller: 'exerciseCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.tiers-type', {
+	            url: '/tiers-type',
+	            templateUrl: 'modules/compta/settings/tiers-type/tiersTypeView.html',
+	            controller: 'tiersTypeCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.trame', {
+	            url: '/{pieceTypeId}/trame',
+	            templateUrl: 'modules/compta/settings/piece-type/pieceTrameView.html',
+	            controller: 'pieceTrameCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.edit-trame', {
+	            url: '/edit-trame',
+	            params: {
+	            	pieceTypeId: null,
+	            	trameId : null
+	            },
+	            templateUrl: 'modules/compta/settings/piece-type/editPieceTrameView.html',
+	            controller: 'editPieceTrameCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.reporting', {
+	            url: '/reporting',
+	            templateUrl: 'modules/compta/reporting/reportingView.html',	            
+	            requireAuthenticated: true
+	        })	
+	        .state('main.compta.interfacage', {
+                abstract: true,
+                url:'/interfacage',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/compta/interfacage/interfacageView.html',      
+                        controller: 'interfacageCtrl as vm'                  
+                    }
+                }            
+            })
+            .state('main.compta.interfacage.sales', {
+	            url: '/sales',
+	            templateUrl: 'modules/compta/interfacage/sales/salesView.html',
+	            controller: 'salesInterfaceCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.compta.interfacage.purchases', {
+	            url: '/purchases',
+	            templateUrl: 'modules/compta/interfacage/purchases/purchasesView.html',
+	            controller: 'purchasesInterfacageCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.saas', {
+                abstract: true,
+                url:'/saas',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/saas/saasView.html',      
+                        controller: 'saasCtrl as vm'                  
+                    },                    
+                    'sideBarSaas@main.saas' : {
+                        templateUrl: 'modules/saas/side-bar/sideBarView.html',
+                        controller: 'saasSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.saas.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/saas/dashboard/dashboardView.html',
+	            controller: 'saasDashboardCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.saas.company', {
+	            url: '/company',
+	            templateUrl: 'modules/saas/features/company/companyView.html',
+	            controller: 'companyCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.saas.currency', {
+	            url: '/currency',
+	            templateUrl: 'modules/saas/features/currency/currencyView.html',
+	            controller: 'currencyCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.saas.edit-company', {
+                url: '/edit-company',
+                params: {
+                    itemId: null,
+                },
+                templateUrl: 'modules/saas/features/company/editCompanyView.html',
+                controller: 'editCompanyCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.saas.company-module', {
+                url: '/company-module',
+                params: {
+                    companyId: null,
+                },
+                templateUrl: 'modules/saas/features/company/companyModuleView.html',
+                controller: 'companyModuleCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.saas.company-log', {
+                url: '/company-log',
+                params: {
+                    companyId: null,
+                },
+                templateUrl: 'modules/saas/features/company/logView.html',
+                controller: 'logSaasCtrl as vm',
+                requireAuthenticated: true
+            })
+            .state('main.contacts', {
+                abstract: true,
+                url:'/contacts',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/contacts/contactsView.html',      
+                        controller: 'contactsCtrl as vm'                  
+                    },                    
+                    'sideBarContacts@main.contacts' : {
+                        templateUrl: 'modules/contacts/side-bar/sideBarView.html',
+                        controller: 'contactsSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.contacts.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/contacts/dashboard/dashboardView.html',
+	            controller: 'contactsDashboardCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.contacts.contact', {
+	            url: '/contact',
+	            templateUrl: 'modules/contacts/features/contact/contactView.html',
+	            controller: 'contactCtrl as vm',
+	            requireAuthenticated: true
+	        })
+	        .state('main.purchases', {
+                abstract: true,
+                url:'/purchases',
+                views: {
+                    '' : {
+                        templateUrl: 'modules/purchases/purchasesView.html',      
+                        controller: 'purchasesCtrl as vm'                  
+                    },                    
+                    'sideBarPurchases@main.purchases' : {
+                        templateUrl: 'modules/purchases/side-bar/sideBarView.html',
+                        controller: 'purchasesSideBarCtrl as vm'
+                    }
+                }            
+            })
+            .state('main.purchases.dashboard', {
+	            url: '/dashboard',
+	            templateUrl: 'modules/purchases/dashboard/dashboardView.html',
+	            controller: 'purchasesDashboardCtrl as vm',
+	            requireAuthenticated: true
 	        });
 	}
 	
@@ -476,6 +824,7 @@ if (!String.format) {
 		
 		$rootScope.modeText = modeText;
 		$rootScope.appVersion = appVersion;
+		$rootScope.simpleLogout = membershipService.simpleLogout;
 		
 		membershipService.setAuthenticationIfAlreadyLogged();
         
@@ -493,6 +842,10 @@ if (!String.format) {
                 return;
             }           
         });
+        
+        $rootScope.isGranted = function(access) {
+            return membershipService.isGranted(access);
+        }
         
         $rootScope.$on('$destroy', function ()
         {

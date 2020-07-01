@@ -3,7 +3,7 @@
 		<div class="panel-heading clearfix">
 			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Taxes</h4>
 			<div class="pull-right">                
-                <button class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+                <button ng-if="isGranted('ADMIN-TAX-ADD')" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
             </div>
 		</div>
 		<div class="panel-body">
@@ -19,26 +19,30 @@
 					<div class="col-sm-6" ng-repeat="item in vm.items">
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading">
-	                            <strong>{{item.shortName}}</strong><br />
+	                            <strong>{{item.shortName}}</strong>
 	                        </div>
 	                        <div class="panel-body">
 	                            <div class="table-responsive">
 	                                <table class="table table-condensed shortMargin">
+	                                	<tr>
+	                                        <td class="shortPadding">Type :</td>
+	                                        <td class="shortPadding"><i>{{item.type}}</i></td>
+	                                    </tr>
 	                                	<tr>
 	                                        <td class="shortPadding">Libellé :</td>
 	                                        <td class="shortPadding"><i>{{item.name}}</i></td>
 	                                    </tr>
 	                                	<tr>
 	                                        <td class="shortPadding">Taux :</td>
-	                                        <td class="shortPadding"><i>{{item.rate}} %</i></td>
+	                                        <td class="shortPadding"><i>{{item.valueSummary}}</i></td>
 	                                    </tr>	 	                                                                       				                                   
 	                                </table>
 	                            </div>
 	                        </div>
 	                        <div class="panel-footer clearfix">
 	                            <div class="pull-right">
-	                            	<buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
-	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
+	                            	<button ng-if="isGranted('ADMIN-TAX-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil"></i></button>
+	                                <button ng-if="isGranted('ADMIN-TAX-DEL')" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>

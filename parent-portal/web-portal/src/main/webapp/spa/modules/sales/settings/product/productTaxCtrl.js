@@ -21,7 +21,7 @@
 						notificationService.displaySuccess("La taxe a été ajoutée avec succès !");
 					},
 					function(error){
-						notificationService.displayError(error);
+						
 					}
 			);
 		}
@@ -40,7 +40,7 @@
     						notificationService.displaySuccess("La taxe a été supprimée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

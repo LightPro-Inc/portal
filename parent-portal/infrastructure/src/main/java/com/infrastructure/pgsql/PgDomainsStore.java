@@ -35,10 +35,7 @@ public class PgDomainsStore implements DomainsStore {
 		return getAllOrdered(null, null);
 	}
 
-	private void set(Object key, Map<String, Object> params, UUID author) throws IOException {
-		
-		/*if(params.isEmpty())
-			throw new IOException("Vous devez spécifier un champ à modifier !");*/
+	private void set(Object key, Map<String, Object> params, UUID author, UUID companyId) throws IOException {
 		
 		String clause = "";
 		String clauseSet = "";
@@ -68,11 +65,12 @@ public class PgDomainsStore implements DomainsStore {
 	    else {
 	    	values.add(author);
 	    	values.add(author);
+	    	values.add(companyId);
 	    	
 	    	if(clause.isEmpty())
-	    		statement = String.format("INSERT INTO %s (ownerid, lastmodifierid, datecreated, lastmodifieddate, %s) VALUES (?, ?, now(), now(), ?)", dm.domainName(), dm.keyName(), clauseSet);
+	    		statement = String.format("INSERT INTO %s (ownerid, lastmodifierid, datecreated, lastmodifieddate, owner_companyid, %s) VALUES (?, ?, now(), now(), ?, ?)", dm.domainName(), dm.keyName(), clauseSet);
 	    	else
-	    		statement = String.format("INSERT INTO %s (%s, ownerid, lastmodifierid, datecreated, lastmodifieddate, %s) VALUES (%s, ?, ?, now(), now(), ?)", dm.domainName(), clause, dm.keyName(), clauseSet);
+	    		statement = String.format("INSERT INTO %s (%s, ownerid, lastmodifierid, datecreated, lastmodifieddate, owner_companyid, %s) VALUES (%s, ?, ?, now(), now(), ?, ?)", dm.domainName(), clause, dm.keyName(), clauseSet);
 	    }
 	    
 	    values.add(key);
@@ -82,9 +80,9 @@ public class PgDomainsStore implements DomainsStore {
 	@Override
 	public void set(Object key, Map<String, Object> params) throws IOException {
 		if(base.keyExists("ownerid", dm.domainName()))
-			set(key, params, base.author());
+			set(key, params, base.authorId(), base.companyId());
 		else
-			set(key, params, null);
+			set(key, params, null, null);
 	}
 
 	@Override
@@ -229,6 +227,10 @@ public class PgDomainsStore implements DomainsStore {
 		statement += " LIMIT ? OFFSET ?";
 		
 		if(pageSize > 0){
+			
+			if(page <= 0)
+				throw new IllegalArgumentException("Numéro de page invalide ! Il doit supérieur à 0");
+			
 			params.add(pageSize);
 			params.add((page - 1) * pageSize);
 		}else{
@@ -237,5 +239,10 @@ public class PgDomainsStore implements DomainsStore {
 		}
 		
 		return find(statement, params);
+	}
+
+	@Override
+	public boolean keyExists(String key) {
+		return base.keyExists(key, dm.domainName());
 	}
 }

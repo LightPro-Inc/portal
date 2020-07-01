@@ -1,6 +1,7 @@
 package com.lightpro.admin.rs;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -17,11 +18,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.lightpro.admin.cmd.MesureUnitEdited;
-import com.lightpro.admin.vm.MesureUnitTypeVm;
+import com.lightpro.admin.vm.ListValueVm;
 import com.lightpro.admin.vm.MesureUnitVm;
 import com.securities.api.MesureUnit;
+import com.securities.api.MesureUnitType;
 import com.securities.api.Secured;
-import com.securities.impl.MesureUnitTypeImpl;
 
 @Path("/mesure-unit")
 public class MesureUnitRs extends AdminBaseRs {
@@ -36,7 +37,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<MesureUnitVm> items = currentCompany().mesureUnits().items()
+						List<MesureUnitVm> items = admin().mesureUnits().all()
 								 .stream()
 						 		 .map(m -> new MesureUnitVm(m))
 						 		 .collect(Collectors.toList());
@@ -57,9 +58,10 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<MesureUnitTypeVm> items = currentCompany().mesureUnitTypes().all()
+						List<ListValueVm> items = Arrays.asList(MesureUnitType.values())
 															 .stream()
-													 		 .map(m -> new MesureUnitTypeVm(m))
+															 .filter(m -> m.id() > 0)
+													 		 .map(m -> new ListValueVm(m.id(), m.toString()))
 													 		 .collect(Collectors.toList());
 
 						return Response.ok(items).build();
@@ -79,7 +81,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					public Response call() throws IOException {
 						
 						
-						List<MesureUnitVm> items = currentCompany().mesureUnits().find(MesureUnitTypeImpl.TIME)
+						List<MesureUnitVm> items = admin().mesureUnits().of(MesureUnitType.TIME).all()
 														 .stream()
 												 		 .map(m -> new MesureUnitVm(m))
 												 		 .collect(Collectors.toList());
@@ -101,7 +103,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					public Response call() throws IOException {
 						
 						
-						List<MesureUnitVm> items = currentCompany().mesureUnits().find(MesureUnitTypeImpl.QUANTITY)
+						List<MesureUnitVm> items = admin().mesureUnits().of(MesureUnitType.QUANTITY).all()
 														 .stream()
 												 		 .map(m -> new MesureUnitVm(m))
 												 		 .collect(Collectors.toList());
@@ -122,7 +124,7 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						MesureUnitVm item = new MesureUnitVm(currentCompany().mesureUnits().get(id));
+						MesureUnitVm item = new MesureUnitVm(admin().mesureUnits().get(id));
 
 						return Response.ok(item).build();
 					}
@@ -139,8 +141,9 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						currentCompany().mesureUnits().add( cmd.shortName(), cmd.fullName(), cmd.typeId());
+						MesureUnit mesureUnit = admin().mesureUnits().add(cmd.shortName(), cmd.fullName(), cmd.type());
 						
+						log.info(String.format("Création de l'unité de mesure %s", mesureUnit.fullName()));
 						return Response.status(Response.Status.OK).build();
 					}
 				});		
@@ -157,9 +160,10 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						MesureUnit mesureUnit = currentCompany().mesureUnits().get(cmd.id());						
-						mesureUnit.update(cmd.shortName(), cmd.fullName(), cmd.typeId());
+						MesureUnit mesureUnit = admin().mesureUnits().get(cmd.id());						
+						mesureUnit.update(cmd.shortName(), cmd.fullName(), cmd.type());
 						
+						log.info(String.format("Mise à jour de l'unité de mesure %s", mesureUnit.fullName()));
 						return Response.status(Response.Status.OK).build();
 					}
 				});		
@@ -176,9 +180,11 @@ public class MesureUnitRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						MesureUnit mesureUnit = currentCompany().mesureUnits().get(id);
-						currentCompany().mesureUnits().delete(mesureUnit);
+						MesureUnit mesureUnit = admin().mesureUnits().get(id);
+						String name = mesureUnit.fullName();
+						admin().mesureUnits().delete(mesureUnit);
 						
+						log.info(String.format("Suppression de l'unité de mesure %s", name));
 						return Response.status(Response.Status.OK).build();
 					}
 				});	

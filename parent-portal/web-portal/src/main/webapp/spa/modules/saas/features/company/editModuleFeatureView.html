@@ -1,0 +1,64 @@
+﻿<form role="form" class="form-horizontal" novalidate angular-validator name="addForm" angular-validator-submit="vm.Save()">
+    <div class="modal-header">
+        <h4 class="modal-title">Fonctionnalités souscrites du module {{ vm.module.name }}</h4>
+    </div>
+    <div class="panel-body">
+        <div ng-show="vm.loadingData">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4">
+                <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+        <div ng-show="!vm.loadingData">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Catégories</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-show="vm.loadingMenuFeatures">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4">
+                                <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Charger catégories...</label>
+                            </div>
+                            <div class="col-xs-4"></div>
+                        </div>
+                        <table ng-show="!vm.loadingMenuFeatures" class="table table-condensed table-bordered">
+                            <tr ng-class="{ 'bg-info dker' : item.selected }" ng-repeat="item in vm.menuFeatures" ng-click="vm.selectMenuFeature(item)">
+                                <td><input style="width:20px;height:25px" type="checkbox" ng-disabled="!item.selected" ng-model="item.choosed" ng-change="vm.chooseMenu(item)" class="form-control" /></td>
+                                <td class="shortPadding" style="vertical-align:middle;" uib-tooltip="{{item.description}}">{{ item.name }} <span class="badge badge-sm up bg-danger pull-right" style="background-color:darkslateblue;">{{item.numberOfSubFeatures}}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Fonctionnalités</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-show="vm.loadingFeatures">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4">
+                                <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading features...</label>
+                            </div>
+                            <div class="col-xs-4"></div>
+                        </div>
+                        <table ng-show="!vm.loadingFeatures" class="table table-condensed table-bordered">
+                            <tr ng-class="{ 'bg-info dker' : item.selected }" ng-repeat="item in vm.currentMenuSelected.features" ng-click="vm.selectFeature(item)">
+                                <td><input style="width:20px;height:25px" type="checkbox" ng-model="item.choosed" ng-change="vm.chooseFeature(item)" class="form-control" /></td>
+                                <td class="shortPadding" style="vertical-align:middle;" uib-tooltip="{{item.description}}">{{ item.name }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" click-once>Enregistrer</button>
+        <button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>
+    </div>
+</form>

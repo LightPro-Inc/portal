@@ -5,9 +5,8 @@
 	<div class="modal-body">
 		<div class="form-group">
 			 <label class="control-label" for="mesureUnitType"><small style="color: red">*</small>&nbsp;&nbsp;Type</label>
-			 <select class="form-control" name="mesureUnitType" id="mesureUnitType" ng-model="vm.item.typeId" validate-on="blur" required required-message="'Type est un champ obligatoire'">
+			 <select class="form-control" name="mesureUnitType" id="mesureUnitType" ng-model="vm.item.typeId" validate-on="blur" required required-message="'Type est un champ obligatoire'" ng-options="opt.id as opt.name for opt in vm.mesureUnitTypes">
 			 	<option value="">-- Choisir un type --</option>
-			 	<option ng-repeat="option in vm.mesureUnitTypes" value="{{option.id}}">{{option.name}}</option>
 			 </select>	         
 		</div>
 		<div class="form-group">

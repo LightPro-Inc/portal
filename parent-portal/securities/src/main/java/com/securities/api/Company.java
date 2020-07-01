@@ -3,10 +3,11 @@ package com.securities.api;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.infrastructure.core.Recordable;
+import com.infrastructure.core.Nonable;
 
-public interface Company extends Recordable<UUID, Company> {
+public interface Company extends Nonable {
 	
+	UUID id();
 	String denomination() throws IOException;
 	String shortName() throws IOException;
 	String rccm() throws IOException;
@@ -18,32 +19,32 @@ public interface Company extends Recordable<UUID, Company> {
 	String email() throws IOException;
 	String webSite() throws IOException;
 	String logo() throws IOException;
-	String currencyName() throws IOException;
-	String currencyShortName() throws IOException;
+	Currency currency() throws IOException;
 	
-	Company update( String denomination,
-					String shortName,
-		            String rccm, 
-		            String ncc, 
-		            String siegeSocial, 
-		            String bp, 
-		            String tel,
-		            String fax,
-		            String email, 
-		            String webSite, 
-		            String logo,
-		            String currencyName,
-		            String currencyShortName) throws IOException;
+	void update(String denomination,
+				String shortName,
+	            String rccm, 
+	            String ncc, 
+	            String siegeSocial, 
+	            String bp, 
+	            String tel,
+	            String fax,
+	            String email, 
+	            String webSite, 
+	            String logo,
+	            Currency currency) throws IOException;
 	
-	void changeLogo(String logo) throws IOException;	
-	Modules modules();	
-	Persons persons();
-	Persons personNotUsers();
-	Persons personUsers();
-	Sequences sequences();
-	MesureUnits mesureUnits();
-	MesureUnitTypes mesureUnitTypes();
-	Taxes taxes();
-	Profiles profiles();
-	Membership membership();
+	void changeLogo(String logo) throws IOException;
+	Admin moduleAdmin() throws IOException;
+	
+	Features features() throws IOException;
+	
+	Modules modulesProposed() throws IOException;
+	Modules modulesSubscribed() throws IOException;
+	Modules modulesInstalled() throws IOException;
+	Modules modulesSubscribedNotInstalled() throws IOException;
+	
+	Indicators indicators() throws IOException;
+	Log log() throws IOException;
+	Currencies currencies() throws IOException;
 }

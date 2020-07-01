@@ -31,6 +31,7 @@ public interface DomainsStore {
 	boolean exists(Object key);		
 	boolean exists(String key, Object keyValue);
 	boolean exists(String key1, Object value1, String key2, Object value2);
+	boolean keyExists(String key);
 	
 	void delete(Object key) throws IOException;
 	

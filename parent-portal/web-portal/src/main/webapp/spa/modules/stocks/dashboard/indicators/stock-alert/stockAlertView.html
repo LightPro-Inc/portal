@@ -1,0 +1,29 @@
+<div class="row">
+	<div class="col-sm-4 col-sm-offset-8">
+		   <div class="form-group form-group-sm">
+			   <label class="control-label col-sm-4" for="warehouse">Entrepôt</label>
+			    <div class="col-sm-8">
+			     	<select class="form-control" id="warehouse" name="warehouse" ng-model="warehouseId" ng-change="warehouseChanged(warehouseId)">
+			          <option ng-repeat="option in warehouses" value="{{option.id}}">{{option.name}}</option>
+			      </select>
+			    </div>
+		   </div>
+		</div>
+		<div class="col-md-12" style="margin-top: 10px;">
+			<div class="col-md-4" ng-repeat="stock in stocks">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">{{stock.article}} <span class="badge badge-sm up" style="background-color:orange;">{{stock.totalCount}} {{stock.stockEmballage}}</span></h4>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+						<tr ng-repeat="stockLocation in stock.stocks">
+							<td>{{stockLocation.location}}</td>
+							<td>{{stockLocation.quantity}} <span class="badge badge-sm up" style="background-color: {{getStockColor(stockLocation)}};">{{stockLocation.alert}}</span></td>
+							</tr>							
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>

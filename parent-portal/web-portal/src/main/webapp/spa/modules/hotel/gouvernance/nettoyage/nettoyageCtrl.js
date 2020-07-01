@@ -42,7 +42,7 @@
 	    				notificationService.displaySuccess("Plannification effectuée avec succès !");
 	    			},
 	    			function(error){    				
-	    				notificationService.displayError(error);
+	    				
 	    			}
 	    	);
 	    }

@@ -14,7 +14,8 @@
 		vm.saveItem = saveItem;
 		
 		function saveItem(){
-			vm.item.article = utilityService.findSingle(vm.articles, "id", vm.item.articleId).name;			
+			vm.item.articleId = vm.articleSelected.id;
+			vm.item.article = vm.articleSelected.name;			
 			$uibModalInstance.close(vm.item);			
 		}
 		
@@ -35,7 +36,11 @@
 			
 			apiService.get(String.format('/web/api/article'), {}, 
 					function(response){
-						vm.articles = response.data;												
+						vm.articles = response.data;	
+						
+						if(!vm.isNewItem){
+							vm.articleSelected = utilityService.findSingle(vm.articles, "id", vm.item.articleId);
+						}
 					}
 			);					
 		}

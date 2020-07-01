@@ -3,8 +3,8 @@
 	
 	app.controller('editOperationCtrl', editOperationCtrl);
 	
-	editOperationCtrl.$inject = ['apiService', '$stateParams', 'notificationService', '$rootScope', '$state', '$previousState', '$uibModal', 'utilityService', '$timeout', '$confirm'];
-	function editOperationCtrl(apiService, $stateParams, notificationService, $rootScope, $state, $previousState, $uibModal, utilityService, $timeout, $confirm){
+	editOperationCtrl.$inject = ['apiService', '$stateParams', 'notificationService', '$rootScope', '$state', '$previousState', '$uibModal', 'utilityService', '$timeout', '$confirm', 'contactService'];
+	function editOperationCtrl(apiService, $stateParams, notificationService, $rootScope, $state, $previousState, $uibModal, utilityService, $timeout, $confirm, contactService){
 		var vm = this;
 		
 		vm.operationTypeId = $stateParams.operationTypeId;	
@@ -15,7 +15,7 @@
 	            startingDay: 1
 	        };
 
-	    vm.datepicker = { format: 'yyyy-MM-dd' };
+	    vm.datepicker = { format: 'dd/MM/yyyy' };
 		
 		vm.cancel = cancel;
 		vm.saveItem = saveItem;
@@ -23,7 +23,38 @@
 		vm.modifyItem = modifyItem;
 		vm.deleteItem = deleteItem;
 		vm.validate = validate;
+		vm.execute = execute;
 		vm.openDatePicker = openDatePicker;
+		vm.searchPerson = searchPerson;
+		vm.modifyPartner = modifyPartner;
+		vm.removePartner = removePartner;
+		
+		function removePartner(){
+			vm.item.partner = undefined;
+			vm.item.partnerId = undefined;
+		}
+		
+		function modifyPartner(partnerId){			
+			apiService.get(String.format('/web/api/contact/{0}', partnerId), {}, 
+					function(response){
+						var partner = response.data;
+						
+						contactService.edit(partner, function(itemEdited){
+							vm.item.partner = itemEdited.name;
+						});						
+					},
+					function(error){
+						
+					}
+			);			
+		}
+		
+		function searchPerson(){
+			contactService.search('all', function (person) {
+            	vm.item.partnerId = person.id;
+                vm.item.partner = person.name;
+            });
+		}
 		
 		function openDatePicker($event) {
             $event.preventDefault();
@@ -33,19 +64,31 @@
         };
 		
 		function validate(){			
-			registerItem(function(itemSaved){
-				$confirm({ text: String.format("Souhaitez-vous valider l'opération {0} ?", itemSaved.reference), title: "Valider une opération", ok: 'Oui', cancel: 'Non' })
-	        	.then(function () {
-	        		  apiService.post(String.format('/web/api/operation/{0}/validate', itemSaved.id), {},
-							function(response){
-								notificationService.displaySuccess("L'opération a été validée avec succès!");
-								close();
-							},
-							function(error){
-								notificationService.displayError(error);
-							});	        		
-	        	}); 				
-			});
+			$confirm({ text: String.format("Souhaitez-vous valider l'opération {0} ?", vm.item.reference), title: "Valider une opération", ok: 'Oui', cancel: 'Non' })
+        	.then(function () {
+        		  apiService.post(String.format('/web/api/operation/{0}/validate', vm.item.id), {},
+						function(response){
+							notificationService.displaySuccess("L'opération a été validée avec succès!");
+							vm.$onInit();
+						},
+						function(error){
+							
+						});	        		
+        	}); 	
+		}
+		
+		function execute(){			
+			$confirm({ text: String.format("Souhaitez-vous exécuter l'opération {0} ?", vm.item.reference), title: "Exécuter une opération", ok: 'Oui', cancel: 'Non' })
+        	.then(function () {
+        		  apiService.post(String.format('/web/api/operation/{0}/execute', vm.item.id), {},
+						function(response){
+							notificationService.displaySuccess("L'opération a été exécutée avec succès!");
+							close();
+						},
+						function(error){
+							
+						});	        		
+        	}); 	
 		}
 		
 		function deleteItem(item){
@@ -94,7 +137,7 @@
 								callback(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				return apiService.put(String.format('/web/api/operation/{0}', vm.item.id), vm.item,
@@ -103,20 +146,21 @@
 								callback(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}		
 		}
 		
 		function saveItem() {
 			registerItem(function(itemSaved){
-				if(vm.isNewItem){
-					notificationService.displaySuccess("L'opération a été créé avec succès!");
+				if(vm.isNewItem){				
+					vm.operationId = itemSaved.id;
+					vm.$onInit();
+					notificationService.displaySuccess("L'opération a été créé avec succès!");					
 				}else{
+					vm.$onInit();
 					notificationService.displaySuccess("La modification s'est effectuée avec succès!");					
 				}
-				
-				close();
 			});
 		}
 		

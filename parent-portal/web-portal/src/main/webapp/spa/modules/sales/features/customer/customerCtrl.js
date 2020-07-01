@@ -7,49 +7,46 @@
 	function customerCtrl(apiService, $uibModal, $confirm, notificationService, $state){
 		var vm = this;
 		
-		vm.addNew = addNew;
 		vm.openEditDialog = openEditDialog;
 		vm.clearSearch = clearSearch;
 		vm.search = search;
-		vm.deleteItem = deleteItem;
+		vm.showProvisions = showProvisions;
 		
-		function deleteItem(item){
-			$confirm({ text: String.format("Souhaitez-vous supprimer le client {0} ?", item.fullName), title: 'Supprimer un client', ok: 'Oui', cancel: 'Non' })
-        	.then(function () {
-
-        		apiService.remove("/web/api/customer/" + item.id, {},
-    					function(response){
-    						search();    						
-    						notificationService.displaySuccess("Le client " + item.fullName + " a été supprimé avec succès !");
-    					},
-    					function(error){
-    						notificationService.displayError(error);
-    					}
-    			);
-        	});  	
+		function showProvisions(item){
+			$state.go('main.sales.provision', {customerId: item.id}, {location: false});
 		}
 		
 		function openEditDialog(item){
-			editItem(item, function(){
+			editItem({natureId: item.natureId, id: item.id}, function(){
 				 search(vm.currentPage);
 			 });
 		}
 		
-		function addNew(){
-			 editItem(null, function(){
-				 search();
-			 });
-		}
-		
-		function editItem(item, callback){
+		function editItem(param, callback){
 
+			if(!param.natureId)
+				return;
+			
+			var templateUrl, controller;
+			
+			switch(param.natureId){
+			case 1:
+				templateUrl = 'modules/contacts/features/contact/editContactPersonView.html';
+				controller = 'editContactPersonCtrl as vm';
+				break;
+			case 2:
+				templateUrl = 'modules/contacts/features/contact/editContactSocietyView.html';
+				controller = 'editContactSocietyCtrl as vm';
+				break;
+			}
+			
 			$uibModal.open({
-                templateUrl: 'modules/sales/features/customer/editCustomerView.html',
-                controller: 'editCustomerCtrl as vm',
+                templateUrl: templateUrl,
+                controller: controller,
                 size: "lg",
                 resolve: {
                     data: {
-                    	item : item
+                    	id : param.id
                     }
                 }
             }).result.then(function (itemEdited) {
@@ -92,7 +89,7 @@
 		}
 		
 		this.$onInit = function(){
-			vm.pageSize = 2;
+			vm.pageSize = 4;
 			
 			search();			
 		}

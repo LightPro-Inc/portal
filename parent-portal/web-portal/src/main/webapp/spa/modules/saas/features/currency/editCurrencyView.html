@@ -1,0 +1,33 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body clearfix">
+		<div class="form-group">
+			 <label class="control-label" for="code"><small style="color: red">*</small>&nbsp;&nbsp;Code</label>
+	         <input ng-disabled="!vm.isNewItem" type="text" class="form-control" ng-model="vm.item.id" name="code" id="code" placeholder="Renseigner un code" validate-on="blur" required required-message="'Code est un champ obligatoire'">
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
+	         <input type="text" class="form-control" ng-model="vm.item.name" name="name" id="name" placeholder="Renseigner un libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="symbol"><small style="color: red">*</small>&nbsp;&nbsp;Symbole</label>
+	         <input type="text" class="form-control" ng-model="vm.item.symbol" name="symbol" id="symbol" placeholder="Renseigner un symbole" validate-on="blur" required required-message="'Symbole est un champ obligatoire'">
+		</div>	
+		<div class="form-group">
+			 <label class="control-label" for="precision"><small style="color: red">*</small>&nbsp;&nbsp;Précision</label>
+	         <input type="number" class="form-control" ng-model="vm.item.precision" name="precision" id="precision" placeholder="Renseigner un nombre" validate-on="blur" required required-message="'Précision est un champ obligatoire'">
+		</div>
+		<div class="form-group">
+			<div class="col-sm-12">
+				<label><input type="checkbox" ng-model="vm.item.after"> Symbole après</label>
+			</div>
+		</div>						
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.cancelEdit()">Annuler</button>                
+	</div>
+</form>
+

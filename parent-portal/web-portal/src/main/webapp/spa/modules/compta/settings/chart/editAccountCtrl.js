@@ -21,7 +21,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put('/web/api/compta/account/' + vm.item.id, vm.item,
@@ -30,7 +30,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}
 			
@@ -45,6 +45,7 @@
 			if(vm.isNewItem){
 				vm.title = "Créer un compte";
 				vm.btnSaveLabel = "Créer";
+				vm.item = {typeId : 0};
 			}else{
 				vm.title = "Modifier un compte";
 				vm.btnSaveLabel = "Modifier";

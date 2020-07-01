@@ -12,10 +12,40 @@
 		vm.goPreviousPage = goPreviousPage;
 		vm.addNewInterval = addNewInterval;		
 		vm.deleteInterval = deleteInterval;
-		vm.setFixMode = setFixMode;
-		vm.setTrancheMode = setTrancheMode;
+		/*vm.setFixMode = setFixMode;
+		vm.setTrancheMode = setTrancheMode;*/
 		vm.saveItem = saveItem;
 		vm.cancelEdit = cancelEdit;
+		vm.setModeChanged = setModeChanged;
+		
+		function setModeChanged(contentToEnable){
+
+			switch(contentToEnable){
+			case 'known_in_saling':
+				angular.forEach(vm.item.intervals, function(value){
+					value.deleted = true;
+				});
+				
+				$timeout(function(){
+					vm.item.fixPrice = 0;
+					vm.item.modeId = 4;
+				});
+				break;
+			case 'tranche':
+				$timeout(function(){
+					vm.item.fixPrice = 0;
+					vm.item.modeId = vm.trancheModes[0].id;
+				});
+				break;
+			case 'fix':
+				angular.forEach(vm.item.intervals, function(value){
+					value.deleted = true;
+				})
+
+				vm.item.modeId = 1;
+				break;
+			}
+		}
 		
 		function cancelEdit(){
 			goPreviousPage();
@@ -28,39 +58,16 @@
 						goPreviousPage();
 					},
 					function(error){
-						notificationService.displayError(error);
+						
 					});
 		}
 		
-		function setTrancheMode(){
-			
-			if(vm.contentToEnable == 'tranche')
-			{
-				$timeout(function(){
-					vm.item.fixPrice = 0;
-					vm.item.modeId = vm.trancheModes[0].id;
-				})				
-			}
-		}
-
-		function setFixMode(){
-			
-			if(vm.contentToEnable == 'fix')
-			{
-				angular.forEach(vm.item.intervals, function(value){
-					value.deleted = true;
-				})
-
-				vm.item.modeId = 1;
-			}
-		}
-
 		function deleteInterval(item){
 			item.deleted = true;
 		}
 		
 		function addNewInterval(modeId) {
-			vm.item.intervals.push({id:Guid.newGuid(), priceTypeId: vm.priceTypes[0].id});
+			vm.item.intervals.push({id:Guid.newGuid(), priceTypeId: vm.priceTypes[0].id, taxNotApplied: false});
 		}
 		
 		function goPreviousPage(){
@@ -82,7 +89,19 @@
 						vm.loadingData = false;
 
 						vm.item = response.data;
-						vm.contentToEnable = vm.item.modeId == 1 ? 'fix' : 'tranche';
+						
+						switch(vm.item.modeId){
+							case 1:
+								vm.contentToEnable = 'fix';
+								break;
+							case 2:
+							case 3:
+								vm.contentToEnable = 'tranche';
+								break;
+							case 4:
+								vm.contentToEnable = 'known_in_saling';
+								break;
+						}						
 					});
 			
 			apiService.get(String.format('/web/api/product/price-type'), {}, 
@@ -91,6 +110,13 @@
 
 						vm.priceTypes = response.data;
 					});			
+			
+			apiService.get(String.format('/web/api/product/reduce-amount/value-type'), {}, 
+					function(response){					
+						vm.loadingData = false;
+
+						vm.reduceValueTypes = response.data;
+					});	
 			
 			apiService.get(String.format('/web/api/product/{0}', vm.productId), {}, 
 					function(response){					

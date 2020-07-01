@@ -4,120 +4,227 @@
 	        <div class="panel-heading clearfix">
 	            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{vm.title}}</h4>
 	        </div>
+	        <div class="panel-footer clearfix">
+	        	<div class="pull-left">
+	                <button type="button" class="btn btn-success" ng-click="vm.validate()" ng-if="vm.item.statusId == 4">Valider</button>
+	                <button type="button" class="btn btn-danger" ng-click="vm.deleteItem()" ng-if="vm.item.statusId == 4">Supprimer</button>
+	                <button type="button" class="btn btn-primary" ng-click="vm.markPaid()" ng-if="vm.item.statusId == 1">Classer payée</button>
+	                <button type="button" class="btn btn-primary" ng-click="vm.getRid()" ng-if="vm.item.statusId == 1">Abandonner</button>
+	                <button ng-if="vm.item.statusId == 1 && vm.item.typeId == 1" type="button" ng-click="vm.doEncaissement()" class="btn btn-primary">Encaisser</button>
+	                <button ng-if="vm.item.statusId == 1" type="button" ng-click="vm.doRemboursement()" class="btn btn-primary">Rembourser</button>
+	                <button ng-if="vm.item.statusId == 1 && vm.item.typeId == 1" type="button" ng-click="vm.addNewAvoir()" class="btn btn-primary">Faire un avoir</button>
+	            </div>
+	            <div class="pull-right">
+	            	<button ng-if="vm.isNewItem" type="submit" class="btn btn-primary">Créer</button>
+	                <button ng-if="!vm.isNewItem && vm.isModeCreated()" type="submit" class="btn btn-primary" ng-click="vm.closeAfterSaved = 0">Enregistrer</button>
+	                <button ng-if="!vm.isNewItem && vm.isModeCreated()" type="submit" class="btn btn-primary" ng-click="vm.closeAfterSaved = 1">Enregistrer et fermer</button>
+                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Fermer</button>
+	            </div>
+	        </div>
 	        <div class="panel-body">
 	            <div ng-if="vm.loadingData">
 	                <div class="col-xs-4"></div>
 	                <div class="col-xs-4">
-	                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading metadatas...</label>
+	                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
 	                </div>
 	                <div class="col-xs-4"></div>
 	            </div>
-	            <div ng-if="!vm.loadingMetadatas" class="row">
+	            <div ng-if="!vm.loadingData" class="row">
 	                <div class="col-sm-12">	                
 	                    <div class="row">
 	                    	<div class="form-group form-group-sm col-sm-6">
-                   				<label class="control-label col-sm-5" for="customer">Client</label>
+                   				<label class="control-label col-sm-5" for="seller"><small style="color: red">*</small>&nbsp;&nbsp;Vendeur</label>
 				                <div class="col-sm-7">						                	
-					                <input type="text" class="form-control" id="customer" name="customer" ng-model="vm.item.customer" disabled />   
+					                <div class="input-group">
+						                <input type="text" class="form-control" id="seller" name="seller" ng-model="vm.item.seller" placeholder="Rechercher un vendeur" required required-message="'Vendeur est un champ obligatoire'" disabled />
+                                        <div class="input-group-btn">
+                                            <button ng-disabled="!vm.isModeCreated() || vm.item.purchaseOrderId" type="button" class="btn btn-primary" ng-click="vm.searchSeller()"><i class="glyphicon glyphicon-search"></i></button>
+                                        </div>
+                                    </div>   
+				                </div>
+                   			</div>
+	                    	<div class="form-group form-group-sm col-sm-6">
+                   				<label class="control-label col-sm-5" for="customer"><small style="color: red">*</small>&nbsp;&nbsp;Client</label>
+				                <div class="col-sm-7">						                	
+					                <div class="input-group">
+						                <input type="text" class="form-control" id="customer" name="customer" ng-model="vm.item.customer" placeholder="Rechercher un client" required required-message="'Client est un champ obligatoire'" disabled />
+                                        <div class="input-group-btn">
+                                        	<button ng-disabled="!(vm.item.customerId && vm.isModeCreated())" type="button" class="btn btn-primary" ng-click="vm.modifyCustomer(vm.item.customerId)"><i class="fa fa-edit"></i></button>
+                                            <button ng-disabled="!vm.isModeCreated() || vm.item.customerId" type="button" class="btn btn-primary" ng-click="vm.searchCustomer()"><i class="glyphicon glyphicon-search"></i></button>
+                                        </div>
+                                    </div>   
 				                </div>
                    			</div>	  
 	                    	<div class="form-group form-group-sm col-sm-6">
-                    			<label class="control-label col-sm-4" for="orderDate"><small style="color: red">*</small>&nbsp;&nbsp;Date d'édition</label>                                
-                                <div class="col-sm-8">
+                    			<label class="control-label col-sm-5" for="orderDate"><small style="color: red">*</small>&nbsp;&nbsp;Date d'édition</label>                                
+                                <div class="col-sm-7">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="orderDate" name="orderDate" ng-model="vm.item.orderDate" placeholder="Renseigner une date" validate-on="blur" required required-message="'Date d'édition est un champ obligatoire'" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" />
+                                        <input ng-disabled="!vm.isModeCreated()" type="text" class="form-control" id="orderDate" name="orderDate" ng-model="vm.item.orderDate" placeholder="Renseigner une date" validate-on="blur" required required-message="'Date d'édition est un champ obligatoire'" uib-datepicker-popup="{{vm.datepicker.format}}" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" />
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            <button ng-disabled="!vm.isModeCreated()" type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
                                         </span>
                                     </div>                                    
                                 </div>    
                     		</div>    
+                    		<div class="form-group form-group-sm col-sm-6" ng-if="vm.item.purchaseOrderId">
+                    			<label class="control-label col-sm-5" for="purchaseOrder">Bon de commande</label>                                
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="purchaseOrder" name="purchaseOrder" ng-model="vm.item.purchaseOrder" disabled />                                    
+                                </div>
+                    		</div> 
+                    		<div class="form-group form-group-sm col-sm-6" ng-if="!vm.item.purchaseOrderId">
+                    			<label class="control-label col-sm-5" for="origin">Origine</label>                                
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="origin" name="origin" ng-model="vm.item.origin" placeholder="Origine de la facture" ng-disabled="!vm.isModeCreated()"/>                                   
+                                </div>
+                    		</div>
 	                        <div class="form-group form-group-sm col-sm-6">
                     			<label class="control-label col-sm-5" for="paymentCondition"><small style="color: red">*</small>&nbsp;&nbsp;Condition de règlement</label>
 				                <div class="col-sm-7">						                	
-					                <select class="form-control" id="paymentCondition" name="paymentCondition" ng-model="vm.item.paymentConditionId" required validate-on="blur" required required-message="'Condition de règlement est un champ obligatoire'">
+					                <select ng-disabled="!vm.isModeCreated()" class="form-control" id="paymentCondition" name="paymentCondition" ng-model="vm.item.paymentConditionId" validate-on="blur" required required-message="'Condition de règlement est un champ obligatoire'" ng-options="option.id as option.name for option in vm.paymentConditions">
 					                	<option value="">-- Choisir une condition --</option>
-						                <option ng-selected="vm.item.paymentConditionId == option.id" ng-repeat="option in vm.paymentConditions" value="{{option.id}}">{{option.name}}</option>
 						            </select>   
 				                </div>
+                    		</div>
+	                    	<div class="form-group form-group-sm col-sm-6">
+                    			<label class="control-label col-sm-5" for="dueDate">Date d'échéance</label>                                
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" id="dueDate" name="dueDate" ng-model="vm.item.dueDate" placeholder="Date d'échéance" disabled />                                    
+                                </div>
                     		</div> 
 	                    </div>
-		                <div class="row">
+	                    <div class="row">
+	                    	<div class="col-md-12">
+	                    		<div class="col-md-12">
+	                    			<div class="form-group">
+		                				<textarea ng-disabled="!vm.isModeCreated()" class="form-control" rows="2" placeholder="Saisissez une description..." ng-model="vm.item.description"></textarea>
+		                			</div>
+	                    		</div>
+	                    	</div>
+	                    </div>
+		                <div class="row" ng-if="!vm.isNewItem">
 		                	<div class="col-md-12">
-		                		<table class="table table-bordered table-condensed shortMargin">
-		                			<thead>
-		                				<tr>
-		                					<th>Article</th>
-		                					<th>Description</th>
-		                					<th>Quantité</th>
-		                					<th>Prix unitaire</th>
-		                					<th>Réduction</th>
-		                					<th>Taxes</th>
-		                					<th>Sous-total</th>
-		                				</tr>		                				
-		                			</thead>
-		                			<tbody>
-		                				<tr ng-repeat="item in vm.item.products" ng-if="!item.deleted">
-		                					<td class="shortMargin">{{item.product}}</td>
-		                					<td class="shortMargin">{{item.description}}</td>
-		                					<td class="shortMargin"><span>{{item.quantity}} </span></td>
-		                					<td class="shortMargin">{{item.unitPrice | number}}</td>
-		                					<td class="shortMargin">{{item.reductionAmount | number}}</td>
-		                					<td class="shortMargin">{{item.taxesDescription}}</td>
-		                					<td class="shortMargin">{{item.totalAmountHt | number}}</td>
-		                				</tr>
-		                				<tr ng-if="vm.item.products.length == 0">
-			                                <td colspan="7" class="text-center" style="color: orangered"><i>Aucune ligne d'article.</i></td>
-			                            </tr>
-		                				<tr>
-		                					<td colspan="5" rowspan="5" class="text-center">
-		                						<textarea class="form-control" rows="7" cols="8" placeholder="Définir les termes et conditions" ng-model="vm.item.description"></textarea>
-		                					</td>
-			                                <td colspan="2">
-			                                	<label class="control-label pull-left">Montant hors-taxe : </label>
-			                                	<span class="pull-right">{{vm.item.totalAmountHt | number}} {{companyCurrency}}</span>
-			                                </td>
-			                            </tr>
-			                            <tr>
-			                                <td colspan="2">
-			                                	<label class="control-label pull-left">Taxes : </label>
-			                                	<span class="pull-right">{{vm.item.totalTaxAmount | number}} {{companyCurrency}}</span>
-			                                </td>
-			                            </tr>
-			                            <tr>
-			                            	<td colspan="2">
-			                                	<label class="control-label pull-left">Total : </label>
-			                                	<span class="pull-right"><strong>{{vm.item.totalAmountTtc | number}} {{companyCurrency}}</strong></span>		                                	
-			                                </td>
-			                            </tr>
-			                             <tr>
-			                            	<td colspan="2">
-			                                	<label class="control-label pull-left">Montant versé : </label>
-			                                	<span class="pull-right"><strong>{{vm.item.totalAmountPaid | number}} {{companyCurrency}}</strong></span>		                                	
-			                                </td>
-			                            </tr>
-			                            <tr>
-			                            	<td colspan="2">
-			                                	<label class="control-label pull-left">Montant dû : </label>
-			                                	<span class="pull-right"><strong>{{vm.item.leftAmountToPay | number}} {{companyCurrency}}</strong></span>
-			                                </td>
-			                            </tr>
-		                			</tbody>
-		                		</table>
+		                		<div class="col-md-12" ng-if="vm.isModeCreated() && vm.item.natureId == 2 && !vm.item.purchaseOrderId">
+		                			<div class="pull-right form-group">
+				                		<button type="button" class="btn btn-primary btn-sm" ng-click="vm.addNewOrderProduct()">Ajouter</button>
+				                	</div>
+		                		</div>	
+		                		<div class="col-md-12">
+		                			<div class="table-responsive">
+				                		<table class="table table-responsive table-bordered table-condensed shortMargin">
+				                			<thead>
+				                				<tr>
+				                					<th>Article</th>
+				                					<th>Description</th>
+				                					<th>Qté</th>
+				                					<th>P.U. HT</th>
+				                					<th>Montant hors taxes</th>
+				                					<th>Remise</th>
+				                					<th>Net commercial</th>
+				                					<th>Taxes</th>
+				                					<th>Total TTC</th>
+				                					<th ng-if="vm.isModeCreated()"></th>
+				                				</tr>		                				
+				                			</thead>
+				                			<tbody>
+				                				<tr ng-repeat="item in vm.item.products" ng-if="!item.deleted">
+				                					<td class="shortMargin">{{item.name}}</td>
+				                					<td class="shortMargin">{{item.description}}</td>
+				                					<td class="shortMargin">{{item.quantity}}</td>
+				                					<td class="shortMargin">{{item.unitPrice | number}}</td>
+				                					<td class="shortMargin">{{item.totalAmountHt | number}}</td>
+				                					<td class="shortMargin">{{item.reduceAmount | number}}</td>
+				                					<td class="shortMargin">{{item.netCommercial | number}}</td>
+				                					<td class="shortMargin">{{item.taxesDescription}}</td>
+				                					<td class="shortMargin">{{item.totalAmountTtc | number}}</td>
+				                					<td ng-if="vm.isModeCreated()">
+				                						<button type="button" class="btn btn-primary btn-xs" ng-click="vm.modifyOrderProduct(item)"><i class="fa fa-pencil"></i></button>
+				                						<button ng-if="vm.item.natureId == 2" type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteOrderProduct(item)"><i class="fa fa-trash-o"></i></button>
+				                					</td>
+				                				</tr>
+				                				<tr ng-if="vm.item.products.length == 0">
+					                                <td colspan="{{vm.getNumberOfColumns()}}" class="text-center" style="color: orangered"><i>Aucune ligne d'article.</i></td>
+					                            </tr>
+				                				<tr>
+				                					<td colspan="4" rowspan="{{vm.getTotalRows()}}" class="text-center">
+				                						<textarea ng-disabled="!vm.isModeCreated()" class="form-control" rows="{{vm.getTotalRows() + 3}}" cols="{{vm.getNumberOfColumns()}}" placeholder="Définir les termes et conditions" ng-model="vm.item.notes"></textarea>
+				                					</td>
+					                                <td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Montant hors taxes : </label>
+					                                	<span class="pull-right">{{vm.item.totalAmountHt | companyCurrency}}</span>
+					                                </td>
+					                            </tr>
+					                            <tr>
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Réduction : </label>
+					                                	<span class="pull-right">{{vm.item.reduceAmount | companyCurrency}}</span>
+					                                </td>
+					                            </tr>
+					                            <tr>
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Net commercial : </label>
+					                                	<span class="pull-right">{{vm.item.netCommercial | companyCurrency}}</span>
+					                                </td>
+					                            </tr>
+					                            <tr ng-repeat="tax in vm.item.taxes">
+					                                <td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">{{tax.resumeName}} : </label>
+					                                	<span class="pull-right">{{tax.amount | companyCurrency}}</span>
+					                                </td>
+					                            </tr>
+					                            <tr ng-if="vm.item.taxes.length == 0">
+					                                <td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Taxes : </label>
+					                                	<span class="pull-right">{{0 | companyCurrency}}</span>
+					                                </td>
+					                            </tr>
+					                            <tr>
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Total TTC : </label>
+					                                	<span class="pull-right"><strong>{{vm.item.totalAmountTtc | companyCurrency}}</strong></span>
+					                                </td>
+					                            </tr>
+					                            <tr>
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Montant payé : </label>
+					                                	<button type="button" ng-if="isGranted('SALES-PAY-SEE') && vm.item.statusId != 4" class="btn btn-primary btn-xs pull-right" ng-click="vm.showPayments()">Paiements <i class="fa fa-eye"></i></button>
+					                                	<span class="pull-right"><strong>{{vm.item.totalAmountPaid | companyCurrency}}</strong></span>					                                	
+					                                </td>
+					                            </tr>
+					                            <tr ng-if="vm.item.typeId == 1">
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Montant remboursé : </label>
+					                                	<button type="button" ng-if="isGranted('SALES-PAY-SEE') && vm.item.statusId != 4" class="btn btn-primary btn-xs pull-right" ng-click="vm.showPayments()">Paiements <i class="fa fa-eye"></i></button>
+					                                	<span class="pull-right"><strong>{{vm.item.totalAmountRembourse | companyCurrency}}</strong></span>					                                	
+					                                </td>
+					                            </tr>					                            
+					                            <tr>
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Net à payer : </label>
+					                                	<span class="pull-right"><strong>{{vm.item.leftAmountToPay | companyCurrency}}</strong></span>
+					                                </td>
+					                            </tr>
+					                            <tr ng-if="vm.item.typeId == 1">
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Avoir : </label>
+					                                	<span class="pull-right"><strong>{{vm.item.avoirAmount | companyCurrency}}</strong></span>
+					                                </td>
+					                            </tr>
+					                            <tr>
+					                            	<td colspan="{{vm.getNumberOfColumns() - 4}}">
+					                                	<label class="control-label pull-left">Solde : </label>
+					                                	<span class="pull-right"><strong>{{vm.item.solde | companyCurrency}}</strong></span>
+					                                </td>
+					                            </tr>
+				                			</tbody>
+				                		</table>
+				                	</div>	
+		                		</div>	                					                		                	
 		                	</div>
 		                </div>
 	                </div>
 	            </div>
-	        </div>
-	        <div class="panel-footer clearfix">
-	        	<div class="pull-left">
-	                <button type="button" class="btn btn-primary">Enregistrer un paiement</button>
-	            </div>
-	            <div class="pull-right">
-	                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Annuler</button>
-	            </div>
-	        </div>
+	        </div>	
 	    </div>
 	</div>
 </form>

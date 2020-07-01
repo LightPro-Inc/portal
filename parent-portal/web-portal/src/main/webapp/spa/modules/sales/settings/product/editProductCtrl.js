@@ -3,8 +3,8 @@
 	
 	app.controller('editProductCtrl', editProductCtrl);
 	
-	editProductCtrl.$inject = ['data', '$uibModalInstance', 'apiService', 'notificationService'];
-	function editProductCtrl(data, $uibModalInstance, apiService, notificationService){
+	editProductCtrl.$inject = ['data', '$uibModalInstance', 'apiService', 'notificationService', '$uibModal'];
+	function editProductCtrl(data, $uibModalInstance, apiService, notificationService, $uibModal){
 		var vm = this;
 		
 		vm.item = angular.copy(data.item);
@@ -12,6 +12,14 @@
 		
 		vm.cancelEdit = cancelEdit;
 		vm.saveItem = saveItem;
+		vm.productTypeChanged = productTypeChanged;
+		
+		function productTypeChanged(typeId){
+			vm.item.id = null;
+			vm.item.name = "";
+			vm.item.mesureUnitId = "";
+			vm.item.barCode = "";
+		}
 		
 		function saveItem(){
 			if(vm.isNewItem){
@@ -21,7 +29,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put('/web/api/product/' + vm.item.id, vm.item,
@@ -30,7 +38,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}
 			
@@ -43,6 +51,7 @@
 		this.$onInit = function(){
 
 			if(vm.isNewItem){
+				vm.item = {typeId : 1, categoryId: data.categoryId};
 				vm.title = "Créer un produit";
 				vm.btnSaveLabel = "Créer";
 			}else{
@@ -55,6 +64,11 @@
 						vm.mesureUnits = response.data;
 					}
 			);
+			
+			apiService.get('/web/api/product-category', {}, 
+					function(response){
+						vm.categories = response.data;						
+					});
 		}
 		
 	}

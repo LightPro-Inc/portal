@@ -23,7 +23,7 @@
     						notificationService.displaySuccess("Chambre marquée sale avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);	
         	});  			
@@ -39,7 +39,7 @@
     						notificationService.displaySuccess("Chambre marquée propre avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);	
         	});  				
@@ -55,7 +55,7 @@
     						notificationService.displaySuccess("Chambre mise en service avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);		
         	});			
@@ -71,7 +71,7 @@
     						notificationService.displaySuccess("Chambre mise hors service avec succès!");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);		
         	});				

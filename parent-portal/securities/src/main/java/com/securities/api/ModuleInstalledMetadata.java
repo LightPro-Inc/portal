@@ -29,7 +29,7 @@ public class ModuleInstalledMetadata implements DomainMetadata {
 	
 	public String activatedKey() {
 		return "activated";
-	}	
+	}
 	
 	public static ModuleInstalledMetadata create(){
 		return new ModuleInstalledMetadata();

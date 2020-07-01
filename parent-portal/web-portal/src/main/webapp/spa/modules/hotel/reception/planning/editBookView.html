@@ -8,9 +8,11 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="panel panel-default">
-							<div class="panel-heading">
-								<strong>Status</strong>
-								<span class="badge badge-sm up" style="background-color:{{vm.item.statusColor}};">{{vm.item.status}}</span>
+							<div class="panel-heading clearfix">
+							    <div class="panel-title pull-left" style="padding-top: 7.5px;">
+									<strong>Status</strong>
+									<span class="badge badge-sm up" style="background-color:{{vm.item.statusColor}};">{{vm.item.status}}</span>
+								</div>								
 							</div>
 							<div class="panel-body">
 								<div class="row">
@@ -19,11 +21,39 @@
 									</div>
 								</div>													
 							</div>
-						</div>						
+						</div>																						
+					</div>
+					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading clearfix">
+							    <div class="panel-title pull-left" style="padding-top: 7.5px;">
+									<strong>Client : {{vm.item.customer}}</strong>									
+								</div>		
+								<div class="pull-right">
+									<button type="button" class="btn btn-primary btn-sm" ng-click="vm.modifyCustomer()" ng-disabled="!vm.item.customerId">Editer</button>
+									<button type="button" class="btn btn-primary btn-sm" ng-click="vm.searchCustomer()">Rechercher</button>
+								</div>						
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="pull-left">
+											<label class="control-label">Commande N° {{vm.item.order}}</label>
+										</div>
+										<div class="pull-right">
+											<button disabled type="button" class="btn btn-primary btn-sm" ng-click="vm.linkToOrder()">Associer à une autre commande</button>
+											<button type="button" class="btn btn-primary btn-sm" ng-click="vm.invoice()" ng-disabled="vm.item.statusId == 3">Facturer</button>
+										</div>
+									</div>
+								</div>													
+							</div>
+						</div>																						
+					</div>
+					<div class="col-md-6">
 						<div class="panel panel-default form-horizontal">
 							<div class="panel-heading clearfix">
 								<div class="panel-title pull-left" style="padding-top: 7.5px;">
-									<strong>Pièce d'identité produite</strong>
+									<strong>Identification de l'hôte</strong>
 								</div>
 							</div>
 							<div class="panel-body">
@@ -35,8 +65,20 @@
 					               <div class="col-xs-4"></div>
 					           </div>
 					           <div ng-show="!vm.loadingBooking">
+					           		 <div class="form-group">
+										<label class="col-md-3 control-label" for="hote">Hôte</label>
+										<div class="col-md-9">
+											<div class="input-group">
+								                <input type="text" class="form-control input-sm" id="guest" name="guest" ng-model="vm.item.guest" placeholder="Sélectionner une personne" disabled />
+		                                        <div class="input-group-btn">
+		                                        	<button ng-if="vm.item.guestId" type="button" class="btn btn-primary btn-sm" ng-click="vm.modifyGuest()"><i class="fa fa-edit"></i></button>
+		                                            <button type="button" class="btn btn-primary btn-sm" ng-click="vm.searchGuest()"><i class="glyphicon glyphicon-search"></i></button>
+		                                        </div>
+		                                    </div>  
+										</div>
+									</div>
 					           	   <div class="form-group">
-										<label class="col-md-3 control-label" for="nature">Nature</label>
+										<label class="col-md-3 control-label" for="nature">Nature pièce</label>
 										<div class="col-md-9">
 											<input type="text" class="form-control input-sm" id="nature" name="nature" ng-model="vm.item.naturePiece" placeholder="Renseigner la nature">
 										</div>
@@ -72,7 +114,9 @@
 									</div>								
 					           </div>																				
 							</div>
-						</div>	
+						</div>
+					</div>
+					<div class="col-md-6">
 						<div class="panel panel-default form-horizontal">
 							<div class="panel-heading clearfix">
 								<div class="panel-title pull-left" style="padding-top: 7.5px;">
@@ -108,93 +152,14 @@
 									</div>									
 					           </div>																				
 							</div>
-						</div>										
-					</div>
-					<div class="col-md-6">					
-						<div class="panel panel-default">
-							<div class="panel-heading clearfix">
-								<div class="panel-title pull-left" style="padding-top: 7.5px;">
-									<strong>Hôte : {{vm.guest.fullName}}</strong>
-								</div>
-								
-								<button type="button" class="btn btn-primary btn-sm pull-right" ng-click="vm.searchPerson()">Rechercher</button>
-							</div>
-							<div class="panel-body">
-								<div ng-show="vm.loadingGuestData">
-					               <div class="col-xs-4"></div>
-					               <div class="col-xs-4">
-					                   <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
-					               </div>
-					               <div class="col-xs-4"></div>
-					           </div>
-					           <div ng-show="!vm.loadingGuestData">
-					           	   <div class="form-group">
-										<label class="col-md-3 control-label" for="LastName">Nom</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" id="LastName" name="LastName" ng-model="vm.guest.lastName" placeholder="Renseigner le nom">
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="col-md-3 control-label" for="FirstName">Prénoms</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" id="FirstName" name="FirstName" ng-model="vm.guest.firstName" placeholder="Renseigner le prénom">
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="col-md-3 control-label" for="dateOfBirth">Date naiss.</label>
-										<div class="col-md-9">
-											<div class="input-group">
-		                                        <input type="text" class="form-control input-sm" id="dateOfBirth" name="dateOfBirth" uib-datepicker-popup="{{vm.datepicker.format}}" ng-model="vm.guest.birthDate" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" placeholder="yyyy-MM-dd" />
-		                                        <span class="input-group-btn">
-		                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
-		                                        </span>
-		                                    </div>
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="control-label col-md-3" for="Addresse">Adresse</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" ng-model="vm.guest.address" name="Addresse" id="Addresse" placeholder="Renseigner l'adresse">
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="control-label col-md-3" for="Tel1">Tel 1</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" ng-model="vm.guest.tel1" name="Tel1" id="Tel1" placeholder="Renseigner le téléphone 1">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3" for="Tel2">Tel 2</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" ng-model="vm.guest.tel2" name="Tel2" id="Tel2" placeholder="Renseigner le téléphone 2">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3" for="email">E-mail</label>
-										<div class="col-md-9">
-											<input type="email" class="form-control input-sm" ng-model="vm.guest.email" id="email" name="email" placeholder="Renseigner l'adresse mail">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-offset-2 col-md-10">
-											<div class="checkbox">
-												<label><input name="Sex" type="radio" value="M" ng-model="vm.guest.sex"> Homme</label>
-												<label><input name="Sex" type="radio" value="F" ng-model="vm.guest.sex"> Femme</label>
-											</div>
-										</div>
-									</div>
-					           </div>																				
-							</div>
-							<div class="panel-footer clearfix">
-								<button type="button" class="btn btn-danger pull-left" ng-click="vm.razGuest()" ng-disabled="!vm.canClearGuest()">Effacer</button>								
-							</div>
-						</div>																
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="panel-footer clearfix">
 				<div class="pull-right">
-					<button type="submit" click-once class="btn btn-primary" ng-disabled="!vm.canSaveGuest()">Enregistrer</button>	
+				<button type="submit" class="btn btn-primary" ng-click="vm.canClose = false;">Enregistrer</button>
+				<button type="submit" class="btn btn-primary" ng-click="vm.canClose = true;">Enregistrer et fermer</button>					
 					<button type="button" class="btn btn-default" ng-click="vm.goPreviousPage()">Annuler</button>			
 				</div>			
 			</div>

@@ -1,17 +1,22 @@
 <div class="row">
 	<div class="panel panel-primary">
 		<div class="panel-heading clearfix">
-			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Familles d'article <span ng-if="vm.categoryId">({{vm.category.name}})</span></h4>
-			<div class="input-group" ng-if="!vm.categoryId">
-                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control shortInputSearch input-sm" placeholder="Filtrer, rechercher les familles...">
-                <div class="input-group-btn">
-                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
-                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
-                </div>
-            </div>
-            <div class="pull-right" ng-if="vm.categoryId">
-            	<button class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
-            </div>
+			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Familles d'article</h4>
+			<div class="col-md-6 pull-right">
+				<div class="col-md-6">					
+                	<select class="form-control input-sm" id="category" name="category" ng-options="v.id as v.name for v in vm.categories" ng-model="vm.categoryId" ng-change="vm.search(0)">
+                		<option value="">-- choisir une catégorie --</option>
+                	</select>
+				</div>
+				<div class="input-group col-md-6">
+	                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les familles...">
+	                <div class="input-group-btn">
+	                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
+	                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+	                    <button ng-if="isGranted('STOCKS-FA-ART-ADD')" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+	                </div>
+	            </div>
+			</div>			
 		</div>
 		<div class="panel-body">
 			<div ng-show="vm.loadingData">
@@ -34,7 +39,7 @@
 	                        <div class="panel-body">	                        	
 	                            <div class="table-responsive">
 	                                <table class="table table-condensed shortMargin">	
-	                                    <tr ng-if="!vm.categoryId">
+	                                    <tr>
 	                                        <td class="shortPadding">Catégorie :</td>
 	                                        <td class="shortPadding"><i>{{item.category}}</i></td>
 	                                    </tr>
@@ -43,7 +48,7 @@
 	                                        <td class="shortPadding">
 	                                        	<i>{{item.numberOfArticles | number}}</i>
 	                                        	<div class="pull-right">
-	                                                <buton class="btn btn-primary btn-xs" ng-click="vm.showArticles(item)">Articles <i class="fa fa-eye"></i></buton>
+	                                                <button ng-if="isGranted('STOCKS-ART-SEE')" class="btn btn-primary btn-xs" ng-click="vm.showArticles(item)">Articles <i class="fa fa-eye"></i></button>
 	                                            </div>
 	                                        </td>
 	                                    </tr>	                                                                        	                                    				                                
@@ -52,8 +57,8 @@
 	                        </div>
 	                        <div class="panel-footer clearfix">
 	                            <div class="pull-right">
-	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
-	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
+	                                <button ng-if="isGranted('STOCKS-FA-ART-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil"></i></button>
+	                                <button ng-if="isGranted('STOCKS-FA-ART-DEL')" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -62,13 +67,10 @@
 			</div>
 		</div>
 		<div class="panel-footer clearfix">
-			<label ng-if="!vm.categoryId" class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
-			<div ng-if="!vm.categoryId" class="text-center">
+			<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
+			<div class="text-center">
 				<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" ng-change="vm.pageChanged()"></ul>
 			</div>	
-			
-			<label ng-if="vm.categoryId" class="label label-danger">Total: {{vm.items.length}} éléments</label>		
-			<button ng-if="vm.categoryId" class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>
 		</div>
 	</div>
 </div>

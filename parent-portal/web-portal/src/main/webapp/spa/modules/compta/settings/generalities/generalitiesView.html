@@ -1,0 +1,37 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="row">
+		<div class="panel panel-primary">
+	        <div class="panel-heading clearfix">
+	        	<h4 class="panel-title pull-left">Configurations générales</h4>         
+	        </div>
+	        <div class="panel-body">	        	
+				<div class="row">
+					<div class="form-group form-group-sm col-sm-6">
+               			<label class="control-label col-sm-5" for="start">Dernier jour de l'exercice </label>                                
+                        <div class="col-sm-5">
+                        	<select class="form-control" id="month" name="month" ng-model="vm.lastMonthId" ng-options="v.number as v.name for v in vm.months"></select>                             
+                        </div>   
+                        <div class="col-sm-2">
+                        	<input type="number" class="form-control" id="day" name="day" ng-model="vm.lastDay"/>                                  
+                        </div> 
+               		</div>
+				</div>
+				<div class="row">
+					<div class="form-group form-group-sm col-sm-6">
+               			<label class="control-label col-sm-5" for="ran">Journal des RAN </label>                                
+                        <div class="col-sm-7">
+                        	<select class="form-control" id="ran" name="ran" ng-model="vm.journalRanId" ng-options="v.id as v.name for v in vm.journals">
+                        		<option value="">-- Aucun journal --</option>
+                        	</select>                             
+                        </div>   
+               		</div>
+				</div>
+	        </div>
+	        <div class="panel-footer clearfix">
+	        	<div class="pull-right">
+	        		<button type="submit" class="btn btn-primary">Enregistrer</button>
+	        	</div>
+	        </div>
+	    </div>
+	</div>
+</form>

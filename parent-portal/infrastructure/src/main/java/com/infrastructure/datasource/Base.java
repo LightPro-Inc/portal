@@ -7,15 +7,16 @@ import com.infrastructure.core.DomainMetadata;
 
 public interface Base {
 	
-	void beginTransaction() throws IOException;
-	void commit() throws IOException;
-	void rollback() throws IOException;
-	void terminate() throws IOException;
-	Base build(String username) throws IOException;
+	void commit();
+	void rollback();
+	void terminate();
 	
 	DomainsStore domainsStore(DomainMetadata dm);	
 	List<Object> executeQuery(String query, List<Object> params) throws IOException;
 	void executeUpdate(String query, List<Object> params) throws IOException;
+	void deleteAll(DomainMetadata dm) throws IOException;
+	QueryBuilder createQueryBuilder(DomainsStore ds, String statement, List<Object> params, String orderClause) throws IOException;
+	QueryBuilder createQueryBuilder(DomainsStore ds, String statement, List<Object> params, String keyResult, String orderClause) throws IOException;	
 	
 	public enum OrderDirection {
 		ASC, DESC

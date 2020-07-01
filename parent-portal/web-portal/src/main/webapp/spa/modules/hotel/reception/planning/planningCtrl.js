@@ -76,8 +76,7 @@
         	            		notificationService.displaySuccess("Relogement effectué avec succès !");
         	            	}    						
     					},
-    					function(error){
-    						notificationService.displayError(error);
+    					function(error){    						
     						loadRooms(args.newStart);
     					}
         			); 
@@ -93,8 +92,7 @@
             					loadRooms(args.newStart);    						
         						notificationService.displaySuccess("Modification de la période effectuée avec succès !");
         					},
-        					function(error){
-        						notificationService.displayError(error);
+        					function(error){        						
         						loadRooms(args.newStart);
         					}
         			);           	
@@ -129,11 +127,11 @@
 
                 		apiService.post(String.format('/web/api/booking/{0}/cancel', args.e.id()), null,
             					function(response){
-                					loadRooms(args.e.start);    						
+                					loadRooms(args.start);    						
             						notificationService.displaySuccess("La réservation a été annulée avec succès !");
             					},
             					function(error){
-            						notificationService.displayError(error);
+            						
             					}
             			);
                 	}); 
@@ -150,7 +148,7 @@
                     args.e.toolTip = String.format("{0} - {1}", args.data.guest, status);
 
                     // add a bar highlighting how much has been paid already (using an "active area")
-                    var paid = args.e.paidAmount;
+                    var paid = args.e.paidRate;
                     var paidColor = "#aaaaaa";
                     args.data.areas = [
                         { bottom: 10, right: 4, html: "<div style='color:" + paidColor + "; font-size: 8pt;'>Paid: " + paid + "%</div>", v: "Visible"},
@@ -194,7 +192,6 @@
 
             apiService.post('/web/api/booking', params,
             				function(response){            					
-            		            
 				            	if (day) {
 				            		vm.schedulerConfig.timeline = getTimeline(day);
 				            		vm.schedulerConfig.scrollTo = day;

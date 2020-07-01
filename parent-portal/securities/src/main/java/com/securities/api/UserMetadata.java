@@ -46,4 +46,8 @@ public class UserMetadata implements DomainMetadata {
 	public String profileIdKey() {
 		return "profileid";
 	}
+	
+	public static UserMetadata create(){
+		return new UserMetadata();
+	}
 }

@@ -1,0 +1,200 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<uib-tabset active="vm.active">
+            	   <uib-tab index="0">
+                       <uib-tab-heading>
+                           Factures
+                       </uib-tab-heading>
+                       	<div class="panel" ng-controller="invoiceComptaCtrl as vm">                       		
+                       		<div class="panel panel-body">
+                       		   <div class="col-md-12 m-b-md">
+                               	    <div class="input-group col-md-6 pull-right">
+							            <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les factures ...">
+							            <div class="input-group-btn">
+							                 <button class="btn btn-primary" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+							                 <button class="btn btn-primary" ng-click="vm.clearSearch()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+							            </div>
+							        </div>
+                               </div>
+	                           <div ng-if="vm.loadingData">
+				                    <div class="col-xs-4"></div>
+				                    <div class="col-xs-4">
+				                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+				                    </div>
+				                    <div class="col-xs-4"></div>
+				                </div>
+				                <div ng-if="!vm.loadingData" class="row">
+				                    <div class="col-sm-12">
+				                        <div class="table-responsive">
+				                            <table class="table table-bordered shortMargin">
+				                                <tr>
+				                                	<th>Date</th>
+				                                    <th>Référence</th>
+				                                    <th>Type</th>           
+				                                    <th>Date d'échéance</th>
+				                                    <th>Montant TTC</th>                           
+				                                    <th>Client</th>
+				                                    <th>Statut</th>
+				                                    <th></th>
+				                                </tr>
+				                                <tr ng-repeat="item in vm.items">
+				                                    <td class="shortPadding">{{item.orderDate | date:'dd/MM/yyyy'}}</td>
+				                                    <td class="shortPadding">{{item.reference}}</td>                                    
+				                                    <td class="shortPadding">{{item.type}}</td>
+				                                    <td class="shortPadding">{{item.dueDate | date:'dd/MM/yyyy'}}</td>
+				                                    <td class="shortPadding">{{item.totalAmountTtc | companyCurrency}}</td>
+				                                    <td class="shortPadding">{{item.customer}}</td>
+				                                    <td class="shortPadding">{{item.step}}</td> 
+				                                    <td>
+				                                    	<button ng-if="item.stepId == 2" class="btn btn-primary btn-xs" ng-click="vm.sendToCompta(item);">Envoyer </button>
+	                                					<button ng-if="item.stepId == 3" class="btn btn-primary btn-xs" ng-click="vm.sendToCompta(item);">Ré-envoyer </button>
+				                                    </td>                                  
+				                                </tr>
+				                                <tr ng-if="vm.items.length == 0">
+					                                <td colspan="8" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+					                            </tr>
+				                            </table>
+				                        </div>
+				                    </div>
+				                </div>
+	                       </div>  
+	                       <div class="panel-footer clearfix">
+								<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" max-size="5" ng-change="vm.pageChanged()"></ul>
+								</div>
+				            </div>
+                       	</div>                     	                                                        
+                   </uib-tab>    
+                   <uib-tab index="1">
+                       <uib-tab-heading>
+                           Paiements
+                       </uib-tab-heading>
+                       	<div class="panel" ng-controller="paymentComptaCtrl as vm">                       		
+                       		<div class="panel panel-body">
+                       		   <div class="col-md-12 m-b-md">
+                               	    <div class="input-group col-md-6 pull-right">
+							            <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les paiements ...">
+							            <div class="input-group-btn">
+							                 <button class="btn btn-primary" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+							                 <button class="btn btn-primary" ng-click="vm.clearSearch()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+							            </div>
+							        </div>
+                               </div>
+	                           <div ng-if="vm.loadingData">
+				                    <div class="col-xs-4"></div>
+				                    <div class="col-xs-4">
+				                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+				                    </div>
+				                    <div class="col-xs-4"></div>
+				                </div>
+				                <div ng-if="!vm.loadingData" class="row">
+				                    <div class="col-sm-12">
+				                        <div class="table-responsive">
+				                            <table class="table table-bordered shortMargin">
+				                                <tr>
+				                                	<th>Date</th>
+				                                    <th>Référence</th>
+				                                    <th>Type</th>           
+				                                    <th>Montant payé</th>                           
+				                                    <th>Client</th>
+				                                    <th>Statut</th>
+				                                    <th></th>
+				                                </tr>
+				                                <tr ng-repeat="item in vm.items">
+				                                    <td class="shortPadding">{{item.paymentDate | date:'dd/MM/yyyy'}}</td>
+				                                    <td class="shortPadding">{{item.reference}}</td>                                    
+				                                    <td class="shortPadding">{{item.type}}</td>
+				                                    <td class="shortPadding">{{item.paidAmount | companyCurrency}}</td>
+				                                    <td class="shortPadding">{{item.customer}}</td>
+				                                    <td class="shortPadding">{{item.step}}</td> 
+				                                    <td>
+				                                    	<button ng-if="item.stepId == 2" class="btn btn-primary btn-xs" ng-click="vm.sendToCompta(item);">Envoyer</button>
+				                                    	<button ng-if="item.stepId == 3" class="btn btn-primary btn-xs" ng-click="vm.sendToCompta(item);">Ré-envoyer </button>
+				                                    </td>                                  
+				                                </tr>
+				                                <tr ng-if="vm.items.length == 0">
+					                                <td colspan="7" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+					                            </tr>
+				                            </table>
+				                        </div>
+				                    </div>
+				                </div>
+	                       </div>  
+	                       <div class="panel-footer clearfix">
+								<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" max-size="5" ng-change="vm.pageChanged()"></ul>
+								</div>
+				            </div>
+                       	</div>                     	                                                        
+                   </uib-tab>
+                   <uib-tab index="2">
+                       <uib-tab-heading>
+                           Provisions
+                       </uib-tab-heading>
+                       	<div class="panel" ng-controller="provisionComptaCtrl as vm">                       		
+                       		<div class="panel panel-body">
+                       		   <div class="col-md-12 m-b-md">
+                               	    <div class="input-group col-md-6 pull-right">
+							            <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les provisions ...">
+							            <div class="input-group-btn">
+							                 <button class="btn btn-primary" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+							                 <button class="btn btn-primary" ng-click="vm.clearSearch()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+							            </div>
+							        </div>
+                               </div>
+	                           <div ng-if="vm.loadingData">
+				                    <div class="col-xs-4"></div>
+				                    <div class="col-xs-4">
+				                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+				                    </div>
+				                    <div class="col-xs-4"></div>
+				                </div>
+				                <div ng-if="!vm.loadingData" class="row">
+				                    <div class="col-sm-12">
+				                        <div class="table-responsive">
+				                            <table class="table table-bordered shortMargin">
+				                                <tr>
+				                                	<th>Date</th>
+				                                    <th>Référence</th>          
+				                                    <th>Provision</th>                           
+				                                    <th>Client</th>
+				                                    <th>Statut</th>
+				                                    <th></th>
+				                                </tr>
+				                                <tr ng-repeat="item in vm.items">
+				                                    <td class="shortPadding">{{item.provisionDate | date:'dd/MM/yyyy'}}</td>
+				                                    <td class="shortPadding">{{item.reference}}</td>                                    
+				                                    <td class="shortPadding">{{item.amount | companyCurrency}}</td>
+				                                    <td class="shortPadding">{{item.customer}}</td>
+				                                    <td class="shortPadding">{{item.step}}</td> 
+				                                    <td>
+				                                    	<button ng-if="item.stepId == 2" class="btn btn-primary btn-xs" ng-click="vm.sendToCompta(item);">Envoyer</button>
+				                                    	<button ng-if="item.stepId == 3" class="btn btn-primary btn-xs" ng-click="vm.sendToCompta(item);">Ré-envoyer </button>
+				                                    </td>                                  
+				                                </tr>
+				                                <tr ng-if="vm.items.length == 0">
+					                                <td colspan="6" class="text-center" style="color: orangered"><i>Aucune donnée trouvée.</i></td>
+					                            </tr>
+				                            </table>
+				                        </div>
+				                    </div>
+				                </div>
+	                       </div>  
+	                       <div class="panel-footer clearfix">
+								<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
+								<div class="text-center">
+									<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" max-size="5" ng-change="vm.pageChanged()"></ul>
+								</div>
+				            </div>
+                       	</div>                     	                                                        
+                   </uib-tab>               
+               </uib-tabset>  
+		</div>
+		<div class="panel-footer">
+			
+		</div>
+	</div>
+</div>

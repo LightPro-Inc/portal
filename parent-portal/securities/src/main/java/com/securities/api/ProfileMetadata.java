@@ -35,6 +35,10 @@ public class ProfileMetadata implements DomainMetadata {
 		return "companyid";
 	}	
 	
+	public String isSuperAdminKey() {
+		return "is_super_admin";
+	}	
+	
 	public static ProfileMetadata create(){
 		return new ProfileMetadata();
 	}

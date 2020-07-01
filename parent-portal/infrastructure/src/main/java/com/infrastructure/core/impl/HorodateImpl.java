@@ -1,14 +1,14 @@
 package com.infrastructure.core.impl;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.infrastructure.core.Horodate;
 import com.infrastructure.core.HorodateMetadata;
 import com.infrastructure.datasource.DomainStore;
 
-public class HorodateImpl implements Horodate {
+public final class HorodateImpl implements Horodate {
 
 	private final transient DomainStore ds;
 	private final transient HorodateMetadata dm = new HorodateMetadata();
@@ -18,13 +18,15 @@ public class HorodateImpl implements Horodate {
 	}
 	
 	@Override
-	public Date dateCreated() throws IOException {
-		return this.ds.get(dm.dateCreatedKey());
+	public LocalDateTime dateCreated() throws IOException {
+		java.sql.Timestamp time = this.ds.get(dm.dateCreatedKey());
+		return time.toLocalDateTime();
 	}
 
 	@Override
-	public Date lastModifiedDate() throws IOException {
-		return this.ds.get(dm.lastModifiedDateKey());
+	public LocalDateTime lastModifiedDate() throws IOException {
+		java.sql.Timestamp time = this.ds.get(dm.lastModifiedDateKey());
+		return time.toLocalDateTime();
 	}
 
 	@Override
@@ -39,5 +41,10 @@ public class HorodateImpl implements Horodate {
 	
 	public static HorodateMetadata dm(){
 		return new HorodateMetadata();
+	}
+
+	@Override
+	public UUID ownerCompanyId() throws IOException {
+		return ds.get(dm.ownerCompanyIdKey());
 	}
 }

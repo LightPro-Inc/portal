@@ -1,12 +1,14 @@
 package com.securities.api;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.UUID;
 
-import com.infrastructure.core.Recordable;
+import com.infrastructure.core.Nonable;
 
-public interface Sequence extends Recordable<UUID, Sequence> {
+public interface Sequence extends Nonable {
 	
+	UUID id();
 	String name() throws IOException;
 	String prefix() throws IOException;
 	String suffix() throws IOException;
@@ -18,6 +20,7 @@ public interface Sequence extends Recordable<UUID, Sequence> {
 	Company company() throws IOException;
 	
 	void update(String name, String prefix, String suffix, int size, int step, long nextNumber) throws IOException;
+	Sequence withDateReference(LocalDate date) throws IOException;
 	
 	public enum SequenceReserved {
 		
@@ -25,7 +28,8 @@ public interface Sequence extends Recordable<UUID, Sequence> {
 		PURCHASE_ORDER(1, "Devis et commande"), 
 		INVOICE(2, "Facture"),
 		PAYMENT(3, "Paiement"),
-		PDV_SESSION(4, "Pdv session");
+		PDV_SESSION(4, "Pdv session"),
+		PROVISION(5, "Provision");
 		
 		private final int id;
 		private final String name;

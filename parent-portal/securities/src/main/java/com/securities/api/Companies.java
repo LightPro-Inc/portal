@@ -18,8 +18,7 @@ public interface Companies extends AdvancedQueryable<Company, UUID> {
 		   	    String email,
 	   	   	    String webSite, 
 	   	   	    String logo,
-	   	   	    String currencyName,
-	   	   	    String currencyShortName) throws IOException;
+	   	   	    Currency currency) throws IOException;
 	
 	Company get(String shortName) throws IOException;
 	boolean isPresent(String shortName);

@@ -26,15 +26,19 @@
 		    <groupId>org.apache.tomcat.maven</groupId>
 		    <artifactId>tomcat7-maven-plugin</artifactId>
 		    <version>2.2</version>
-		    <configuration>
-		        <url>http://91.234.194.228:8080/manager/text</url>
+		     <configuration>
+		        <url>https://www.lightpro.online/manager/text</url>
 		        <server>OnlineTomcatServer</server>
-		        <path>/demo</path>
+		        <path>/ROOT</path>
+		        <username>admin</username>
+        		<password>UI874Y8976PM8954@</password>  
 		    </configuration>
 		    <!-- <configuration>
-		        <url>http://localhost:8080/manager/text</url>
+		        <url>http://localhost/manager/text</url>
 		        <server>LocalTomcatServer</server>
 		        <path>/lightpro</path>
+		        <username>tomcat</username>
+        		<password>lightpro</password>
 		    </configuration> -->
 		</plugin>
     </plugins>

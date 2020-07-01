@@ -60,11 +60,15 @@
         }
 
         function modifyItemCompleted(response) {
+        	
+        	$rootScope.repository.loggedUser.photo = vm.item.photo;
+        	membershipService.saveRepository($rootScope.repository);
+        	
             notificationService.displaySuccess('Informations enregistrées avec succès!');
         }
 
         function saveItemLoadFailed(response) {
-            notificationService.displayError(response.data);
+            
         }
 
         function openDatePicker($event) {

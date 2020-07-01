@@ -16,6 +16,12 @@
 		vm.addProduct = addProduct;
 		vm.removeProduct = removeProduct;
 		vm.goPreviousPage = goPreviousPage;
+		vm.categoryChanged = categoryChanged;
+		
+		function categoryChanged(categoryId){
+			searchFreePdv();
+			searchPdToSale();
+		}
 		
 		function goPreviousPage(){
 			$previousState.go();
@@ -30,7 +36,7 @@
 						vm.pageChangedFreePdv();
 					}, function(error){
 						vm.loadingDataPdToSale = false;
-						notificationService.displayError(error);
+						
 					});
 		}
 		
@@ -43,7 +49,7 @@
 						vm.pageChangedFreePdv();
 					}, function(error){
 						vm.loadingDataAddProduct = false;
-						notificationService.displayError(error);
+						
 					});
 		}
 		
@@ -63,7 +69,8 @@
 				params : {
 		                page: pageFreePdv,
 		                pageSize: vm.pageSizeFreePdv,
-		                filter: vm.filterFreePdv
+		                filter: vm.filterFreePdv,
+		                categoryId: vm.categoryId
 		            }	
 			};
 			            
@@ -94,7 +101,8 @@
 				params : {
 		                page: pagePdToSale,
 		                pageSize: vm.pageSizePdToSale,
-		                filter: vm.filterPdToSale
+		                filter: vm.filterPdToSale,
+		                categoryId: vm.categoryId
 		            }	
 			};
 			            
@@ -121,6 +129,11 @@
 							vm.pdv = response.data;
 						}
 			);
+			
+			apiService.get(String.format('/web/api/pdv/pdv/{0}/product-category-to-sale', vm.pdvId), {}, 
+					function(result){					
+			            vm.categories = result.data;
+					});
 		}
 	}
 	

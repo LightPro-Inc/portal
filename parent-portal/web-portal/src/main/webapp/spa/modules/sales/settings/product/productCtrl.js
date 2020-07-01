@@ -3,9 +3,11 @@
 	
 	app.controller('productCtrl', productCtrl);
 	
-	productCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$state', '$previousState'];	
-	function productCtrl(apiService, $uibModal, $confirm, notificationService, $state, $previousState){
+	productCtrl.$inject = ['apiService', '$uibModal', '$confirm', 'notificationService', '$state', '$previousState', '$stateParams'];	
+	function productCtrl(apiService, $uibModal, $confirm, notificationService, $state, $previousState, $stateParams){
 		var vm = this;
+		
+		vm.categoryId = $stateParams.categoryId;
 		
 		vm.addNew = addNew;
 		vm.openEditDialog = openEditDialog;
@@ -13,14 +15,14 @@
 		vm.search = search;
 		vm.deleteItem = deleteItem;		
 		vm.showTaxes = showTaxes;
-		vm.showPricing = showPricing;		
+		vm.showPricing = showPricing;	
 		
 		function showPricing(item){
-			$state.go("main.sales.product-pricing", {productId: item.id});
+			$state.go("main.sales.product-pricing", {productId: item.id}, {location: false});
 		}
 		
 		function showTaxes(item){
-			$state.go("main.sales.product-tax", {productId: item.id});
+			$state.go("main.sales.product-tax", {productId: item.id}, {location: false});
 		}
 		
 		function deleteItem(item){
@@ -33,7 +35,7 @@
     						notificationService.displaySuccess(String.format("Le produit {0} a été supprimé avec succès !", item.name));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -58,7 +60,8 @@
                 controller: 'editProductCtrl as vm',
                 resolve: {
                     data: {
-                    	item : item
+                    	item : item,
+                    	categoryId: item ? item.categoryId : vm.categoryId
                     }
                 }
             }).result.then(function (itemEdited) {
@@ -85,7 +88,8 @@
 				params : {
 		                page: page,
 		                pageSize: vm.pageSize,
-		                filter: vm.filter
+		                filter: vm.filter, 
+		                categoryId: vm.categoryId
 		            }	
 			};
 			            
@@ -103,7 +107,12 @@
 		this.$onInit = function(){
 			vm.pageSize = 4;
 			
-			search();			
+			apiService.get('/web/api/product-category', {}, 
+					function(response){
+						vm.categories = response.data;						
+					});	
+			
+			search();
 		}
 	}
 	

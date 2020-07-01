@@ -10,11 +10,11 @@ public final class Txn {
 	}
 	
 	public <T> T call(Callable<T> callable) throws Exception {
-		try {
-			base.beginTransaction();														
-			T result = callable.call();
+		T result;
+		
+		try {													
+			result = callable.call();
 			base.commit();
-			return result;
 		} catch(Exception e){
 			base.rollback();
 			throw e;
@@ -22,5 +22,7 @@ public final class Txn {
 		finally {
 			base.terminate();
 		}
+		
+		return result;
 	}
 }

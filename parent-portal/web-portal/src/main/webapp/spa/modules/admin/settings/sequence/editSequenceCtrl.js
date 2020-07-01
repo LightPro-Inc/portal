@@ -21,7 +21,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put(String.format('/web/api/sequence/{0}', vm.item.id), vm.item,
@@ -30,7 +30,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}			
 		}
@@ -46,7 +46,7 @@
 				vm.title = "Créer une séquence";
 				vm.btnSaveLabel = "Créer";					
 			}else{
-				vm.title = "Modifier un séquence";
+				vm.title = "Modifier une séquence";
 				vm.btnSaveLabel = "Modifier";
 			}	
 		}

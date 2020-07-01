@@ -2,14 +2,21 @@
 	<div class="panel panel-primary">
 		<div class="panel-heading clearfix">
 			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Produits</h4>
-			<div class="input-group">
-                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control shortInputSearch input-sm" placeholder="Filtrer, rechercher les produits...">
-                <div class="input-group-btn">
-                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
-                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
-                    <button class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
-                </div>
-            </div>
+			<div class="col-md-6 pull-right">
+				<div class="col-md-6">					
+                	<select class="form-control input-sm" id="category" name="category" ng-options="v.id as v.name for v in vm.categories" ng-model="vm.categoryId" ng-change="vm.search()">
+                		<option value="">-- choisir une catégorie --</option>
+                	</select>
+				</div>
+				<div class="input-group col-md-6">
+	                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les produits...">
+	                <div class="input-group-btn">
+	                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
+	                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+	                    <button ng-if="isGranted('SALES-PRODUCT-ADD')" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+	                </div>
+	            </div>
+			</div>			
 		</div>
 		<div class="panel-body">
 			<div ng-show="vm.loadingData">
@@ -31,6 +38,14 @@
 	                            <div class="table-responsive">
 	                                <table class="table table-condensed shortMargin">
 	                                	<tr>
+	                                        <td class="shortPadding">Catégorie :</td>
+	                                        <td class="shortPadding"><i>{{item.category}}</i></td>
+	                                    </tr>
+	                                    <tr>
+	                                        <td class="shortPadding">Référence interne :</td>
+	                                        <td class="shortPadding"><i>{{item.internalReference ? item.internalReference : 'Néant'}}</i></td>
+	                                    </tr> 
+	                                	<tr>
 	                                        <td class="shortPadding">Code barre :</td>
 	                                        <td class="shortPadding"><i>{{item.barCode ? item.barCode : 'Néant'}}</i></td>
 	                                    </tr> 	                                                   
@@ -43,16 +58,16 @@
 	                                        <td class="shortPadding">
 	                                        	<i>{{item.taxesDescription ? item.taxesDescription : 'Néant'}}</i>
 	                                        	<div class="pull-right">
-	                                                <buton class="btn btn-primary btn-xs" ng-click="vm.showTaxes(item)">Taxes <i class="fa fa-eye"></i></buton>
+	                                                <button ng-if="isGranted('SALES-PRODUCT-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.showTaxes(item)">Taxes <i class="fa fa-eye"></i></button>
 	                                            </div>
 	                                        </td>
 	                                    </tr> 
 	                                    <tr>
 	                                        <td class="shortPadding">Mode de tarification :</td>
 	                                        <td class="shortPadding">
-	                                        	<i>{{item.modeId == 1 ? item.mode + ' (' + item.priceSummary + ')' : item.mode }}</i>
+	                                        	<i>{{item.pricingSummary}}</i>
 	                                        	<div class="pull-right">
-	                                                <buton class="btn btn-primary btn-xs" ng-click="vm.showPricing(item)">Détails <i class="fa fa-eye"></i></buton>
+	                                                <button ng-if="isGranted('SALES-PRODUCT-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.showPricing(item)">Détails <i class="fa fa-eye"></i></button>
 	                                            </div>
 	                                        </td>
 	                                    </tr>                  				                                   
@@ -61,8 +76,8 @@
 	                        </div>
 	                        <div class="panel-footer clearfix">
 	                            <div class="pull-right">
-	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
-	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
+	                                <button ng-if="isGranted('SALES-PRODUCT-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil"></i></button>
+	                                <button ng-if="isGranted('SALES-PRODUCT-DEL')" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -73,7 +88,7 @@
 		<div class="panel-footer clearfix">
 			<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
 			<div class="text-center">
-				<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" ng-change="vm.pageChanged()"></ul>
+				<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" max-size="5" ng-change="vm.pageChanged()"></ul>
 			</div>			
 		</div>
 	</div>

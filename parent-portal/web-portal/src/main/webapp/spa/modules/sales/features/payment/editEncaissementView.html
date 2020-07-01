@@ -1,0 +1,62 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body clearfix">	
+		<div class="form-group">			 
+			 <label class="control-label" for="origin">Facture</label>
+		     <input type="text" class="form-control" ng-model="vm.invoice.reference" name="origin" id="origin" disabled>         
+		</div>
+		<div class="form-group">
+            <label class="control-label" for="paymentDate">Date de paiement</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="paymentDate" name="paymentDate" uib-datepicker-popup="{{vm.datepicker.format}}" ng-model="vm.item.paymentDate" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" placeholder="dd/MM/yyyy" ng-disabled="vm.isValidated()"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)" ng-disabled="vm.isValidated()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+		<div class="form-group">
+			 <label class="control-label" for="object"><small style="color: red">*</small>&nbsp;&nbsp;Objet</label>
+	         <input type="text" class="form-control" ng-model="vm.item.object" name="object" id="object" placeholder="Renseigner l'objet" validate-on="blur" required required-message="'Objet est un champ obligatoire'" ng-disabled="vm.isValidated()">         
+		</div>		
+		<div class="form-group" ng-if="vm.totalAmountAvailable > 0 && vm.isNewItem">
+			 <label class="control-label" for="provision">Provision ({{vm.totalAmountAvailable | companyCurrency}})</label>
+			 <select class="form-control" name="provision" id="provision" ng-model="vm.item.provisionId" ng-options="v.id as v.resumeName for v in vm.provisions"
+			 	 ng-change="vm.provisionChanged(vm.item.provisionId)">
+			 	<option value="">-- Choisir une provision --</option>
+			 </select>	         
+		</div>	
+		<div class="form-group" ng-if="vm.item.provisionId && !vm.isNewItem">
+			 <label class="control-label" for="object">Provision</label>
+	         <input type="text" class="form-control" ng-model="vm.item.provision" name="provision" id="provision" disabled>         
+		</div>	
+		<div class="form-group">
+			 <label class="control-label" for="paidAmount"><small style="color: red">*</small>&nbsp;&nbsp;Montant versé</label>
+	         <input type="number" class="form-control" ng-model="vm.item.paidAmount" name="paidAmount" id="paidAmount" placeholder="Renseigner le montant" validate-on="blur" required required-message="'Montant est un champ obligatoire'" ng-disabled="vm.isValidated()">         
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="mode"><small style="color: red">*</small>&nbsp;&nbsp;Mode de paiement</label>
+			 <select class="form-control" name="mode" id="mode" ng-model="vm.item.modeId" ng-options="v.id as v.name for v in vm.paymentModes"
+			 	validate-on="blur" required required-message="'Mode de paiement est un champ obligatoire'" ng-change="vm.modeChanged(vm.item.modeId)" ng-disabled="vm.isValidated() || vm.item.provisionId">
+			 	<option value="">-- Choisir un mode --</option>
+			 </select>	         
+		</div>	
+		<div ng-if="vm.modeSelected.typeId == 2" class="form-group">
+			 <label class="control-label" for="transaction-reference"><small style="color: red">*</small>&nbsp;&nbsp;Référence de la transaction</label>
+	         <input type="text" class="form-control" ng-model="vm.item.transactionReference" name="transaction-reference" id="transaction-reference" placeholder="Renseigner une référence de transaction" validate-on="blur" required required-message="'Référence de la transaction est un champ obligatoire'" ng-disabled="vm.isValidated() || vm.item.provisionId">         
+		</div>					
+		<div class="form-group" ng-if="vm.invoice.leftAmountToPay < vm.item.paidAmount && vm.item.statusId == 1 && !vm.item.provisionId">
+			<div class="col-sm-12">
+				<label class="pull-right"><input type="checkbox" ng-model="vm.item.forcePayment"> Forcer le paiement</label>
+			</div>
+		</div>		
+	</div>
+	<div class="modal-footer clearfix">
+		<button type="button" class="btn btn-success pull-left" ng-if="vm.item.statusId == 1" ng-click="vm.validate()">Valider</button>
+		<button type="button" class="btn btn-danger pull-left" ng-if="vm.item.statusId == 1" ng-click="vm.deleteItem()">Supprimer</button>
+		<button type="submit" class="btn btn-primary" ng-if="!vm.isValidated()">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.close()">Fermer</button>                
+	</div>
+</form>
+

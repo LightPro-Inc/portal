@@ -1,18 +1,22 @@
 <div class="row">
 	<div class="panel panel-primary">
 		<div class="panel-heading clearfix">
-			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Articles <span ng-if="vm.familyId">({{vm.family.category}} {{vm.family.name}})</span></h4>
-			<div class="input-group" ng-if="!vm.familyId">
-                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control shortInputSearch input-sm" placeholder="Filtrer, rechercher les articles...">
-                <div class="input-group-btn">
-                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
-                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
-                    <button ng-if="vm.familyId" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
-                </div>
-            </div>
-            <div class="pull-right" ng-if="vm.familyId">
-            	<button class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
-            </div>
+			<h4 class="panel-title pull-left" style="padding-top: 7.5px;">Articles</h4>
+            <div class="col-md-6 pull-right">
+				<div class="col-md-6">					
+                	<select class="form-control input-sm" id="family" name="family" ng-options="v.id as v.name for v in vm.families" ng-model="vm.familyId" ng-change="vm.search(0)">
+                		<option value="">-- choisir une famille --</option>
+                	</select>
+				</div>
+				<div class="input-group col-md-6">
+	                <input id="inputSearch" type="search" ng-model-options="{ debounce: 500 }" ng-change="vm.search(0)" ng-model="vm.filter" class="form-control input-sm" placeholder="Filtrer, rechercher les articles...">
+	                <div class="input-group-btn">
+	                    <button class="btn btn-primary" ng-click="vm.search();"><i class="glyphicon glyphicon-search"></i></button>
+	                    <button class="btn btn-primary" ng-click="vm.clearSearch();"><i class="glyphicon glyphicon-remove-sign"></i></button>
+	                    <button ng-if="isGranted('STOCKS-ART-ADD')" class="btn btn-primary" ng-click="vm.addNew()"><i class="glyphicon glyphicon-plus"></i></button>
+	                </div>
+	            </div>
+			</div>
 		</div>
 		<div class="panel-body">
 			<div ng-show="vm.loadingData">
@@ -30,7 +34,7 @@
 					<div class="col-sm-6" ng-repeat="item in vm.items">
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading">
-	                            <strong><span ng-if="!vm.familyId">{{item.family}} </span>{{item.name}}</strong><br />	
+	                            <strong>{{item.name}}</strong><br />	
 	                        </div>
 	                        <div class="panel-body">	                        	
 	                            <div class="table-responsive">
@@ -45,11 +49,11 @@
 	                                    </tr>	
 	                                    <tr>
 	                                        <td class="shortPadding">Quantité :</td>
-	                                        <td class="shortPadding"><i>{{item.quantity | number}} {{item.mesureUnitShortName}}</i></td>
+	                                        <td class="shortPadding"><i>{{item.quantity | number}} {{item.emballage}}</i></td>
 	                                    </tr>	
 	                                    <tr>
 	                                        <td class="shortPadding">Coût :</td>
-	                                        <td class="shortPadding"><i>{{item.cost | number}} F CFA</i></td>
+	                                        <td class="shortPadding"><i>{{item.cost | companyCurrency}}</i></td>
 	                                    </tr>		
 	                                    <tr ng-if="!vm.familyId">
 	                                        <td class="shortPadding">Catégorie :</td>
@@ -58,7 +62,7 @@
 	                                    <tr>
 	                                        <td class="shortPadding">Données de plannification :</td>
 	                                        <td class="shortPadding">
-	                                        	<buton class="btn btn-primary btn-xs" ng-click="vm.showPlannings(item)">Configurer <i class="fa fa-eye"></i></buton>
+	                                        	<button ng-if="isGranted('STOCKS-ART-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.showPlannings(item)">Configurer <i class="fa fa-eye"></i></button>
 	                                        </td>
 	                                    </tr>                                                                      	                                    				                                
 	                                </table>
@@ -66,8 +70,8 @@
 	                        </div>
 	                        <div class="panel-footer clearfix">
 	                            <div class="pull-right">
-	                                <buton class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil pull-right"></i></buton>
-	                                <buton class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o pull-right"></i></buton>
+	                                <button ng-if="isGranted('STOCKS-ART-EDIT')" class="btn btn-primary btn-xs" ng-click="vm.openEditDialog(item);">Modifier <i class="fa fa-pencil"></i></button>
+	                                <button ng-if="isGranted('STOCKS-ART-DEL')" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(item);">Supprimer <i class="fa fa-trash-o"></i></button>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -76,13 +80,10 @@
 			</div>
 		</div>
 		<div class="panel-footer clearfix">
-			<label ng-if="!vm.familyId" class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
-			<div ng-if="!vm.familyId" class="text-center">
-				<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" ng-change="vm.pageChanged()"></ul>
+			<label class="label label-danger">Total : {{vm.totalCount}} éléments - {{vm.pagesCount}} pages</label>
+			<div class="text-center">
+				<ul uib-pagination first-text="Premier" last-text="Dernier" previous-text="Précédent" next-text="Suivant" total-items="vm.totalCount" ng-model="vm.currentPage" items-per-page="vm.pageSize" class="pagination-sm" boundary-links="true" force-ellipses="true" num-pages="vm.pagesCount" max-size="5" ng-change="vm.pageChanged()"></ul>
 			</div>	
-			
-			<label ng-if="vm.familyId" class="label label-danger">Total: {{vm.items.length}} éléments</label>		
-			<button ng-if="vm.familyId" class="btn btn-primary pull-right" ng-click="vm.goPreviousPage()">Retour</button>
 		</div>
 	</div>
 </div>

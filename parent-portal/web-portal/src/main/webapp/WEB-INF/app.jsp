@@ -8,14 +8,15 @@
   
   ResourceBundle resourceConfig = ResourceBundle.getBundle(mode + "_config");
   String linkRoot = resourceConfig.getString("linkRoot");
-  String modeText = resourceConfig.getString("modeText"); %>
+  String modeText = resourceConfig.getString("modeText"); 
+  String base = linkRoot.equals("ROOT") ? "" : "/" + linkRoot;
+  %>
  
 <html ng-app="lightpro">
 	<head>
-		<base href="/<%=linkRoot %>/spa/">
+		<base href="<%=base %>/spa/">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>LightPro {{modeText}}</title>
-		<link id="linkRoot" href="/<%=linkRoot %>" />
+		<title>LightPro</title>
 		
 		<jwr:style src="/style.min.css" />
 		<jwr:script src="/vendors.min.js" />
@@ -24,9 +25,14 @@
     	<script type="text/javascript">
         	var appVersion = '<%=version %>';
         	var modeText = '<%=modeText %>';
+        	var rootUrl = '<%=base %>';
     	</script>
 	</head>
-	<body>
-		<div ui-view></div>	
+	<body ng-controller="appCtrl">
+		<!-- WORKSPACE -->
+		<div ui-view ng-show="!isInPrintPreviewState"></div>	
+		
+		<!-- PRINT PREVIEW -->
+		<div style="margin-top:-50px" ng-include="'main/print-preview/printPreviewView.html'" ng-show="isInPrintPreviewState"></div>
 	</body>
 </html>

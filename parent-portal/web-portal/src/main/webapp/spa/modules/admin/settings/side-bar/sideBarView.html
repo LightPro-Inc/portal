@@ -3,14 +3,16 @@
         <h3>Configuration</h3>
         <ul class="nav nav-pills nav-stacked">
             <li class="nav-divider"></li>
-            <li ui-sref-active="active"><a ui-sref=".my-account">Mon compte<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".enterprise">Entreprise<i class="fa fa-home fa-fw pull-right"></i></a></li>           
-            <li ui-sref-active="active"><a ui-sref=".module">Modules<i class="fa fa-male fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".profile">Profils<i class="fa fa-male fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".user">Utilisateurs<i class="fa fa-male fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".sequence">Séquences<i class="fa fa-male fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".mesure-unit">Unités de mesure<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".tax">Taxes<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".my-account">Mon compte<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-COMPANY-INFO-SEE')"><a ui-sref=".enterprise">Entreprise<i class="fa fa-home fa-fw pull-right"></i></a></li>           
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-MODULE-SEE')"><a ui-sref=".module">Modules<i class="fa fa-male fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-PROFILE-SEE')"><a ui-sref=".profile">Profils<i class="fa fa-male fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-USER-SEE')"><a ui-sref=".user">Utilisateurs<i class="fa fa-male fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-SEQ-SEE')"><a ui-sref=".sequence">Séquences<i class="fa fa-male fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-MESURE-UNIT-SEE')"><a ui-sref=".mesure-unit">Unités de mesure<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('ADMIN-TAX-SEE')"><a ui-sref=".tax">Taxes<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".payment-mode">Modes de paiement<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".log">Journalisation<i class="fa fa-assistive-listening-systems fa-fw pull-right"></i></a></li>
         </ul>
     </div>
 </div>

@@ -3,87 +3,49 @@ package com.lightpro.admin.vm;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.securities.api.Company;
 
-public class CompanyVm {
-	private final transient Company company;
+public final class CompanyVm {
+	
+	public final UUID id;
+	public final String denomination;
+	public final String rccm;
+	public final String ncc;
+	public final String siegeSocial;
+	public final String bp;
+	public final String tel;
+	public final String fax;
+	public final String email;
+	public final String webSite;
+	public final String logo;
+	public final String currency;
+	public final String symbolCurrency;
+	public final String currencyId;
+	public final String shortName;
 	
 	public CompanyVm() {
         throw new UnsupportedOperationException("#CompanyVm()");
     }
 	
 	public CompanyVm(final Company company) {
-        this.company = company;
+		try {
+			this.id = company.id();
+	        this.denomination = company.denomination();
+	        this.rccm = company.rccm();
+	        this.ncc = company.ncc();
+	        this.siegeSocial = company.siegeSocial();
+	        this.bp = company.bp();
+	        this.tel = company.tel();
+	        this.fax = company.fax();
+	        this.email = company.email();
+	        this.webSite = company.webSite();
+	        this.logo = company.logo();
+	        this.currencyId = company.currency().id();
+	        this.currency = company.currency().name();
+	        this.symbolCurrency = company.currency().symbol();
+	        this.shortName = company.shortName();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}		     
     }
-	
-	@JsonGetter
-	public UUID getId(){
-		return company.id();
-	}
-	
-	@JsonGetter
-	public String getDenomination() throws IOException {
-		return company.denomination();
-	}
-	
-	@JsonGetter
-	public String getRccm() throws IOException {
-		return company.rccm();
-	}
-	
-	@JsonGetter
-	public String getNcc() throws IOException {
-		return company.ncc();
-	}
-	
-	@JsonGetter
-	public String getSiegeSocial() throws IOException {
-		return company.siegeSocial();
-	}
-	
-	@JsonGetter
-	public String getBp() throws IOException {
-		return company.bp();
-	}
-	
-	@JsonGetter
-	public String getTel() throws IOException {
-		return company.tel();
-	}
-	
-	@JsonGetter
-	public String getFax() throws IOException {
-		return company.fax();
-	}
-	
-	@JsonGetter
-	public String getEmail() throws IOException {
-		return company.email();
-	}
-	
-	@JsonGetter
-	public String getWebSite() throws IOException {
-		return company.webSite();
-	}
-	
-	@JsonGetter
-	public String getLogo() throws IOException {
-		return company.logo();
-	}
-	
-	@JsonGetter
-	public String getCurrencyName() throws IOException {
-		return company.currencyName();
-	}
-	
-	@JsonGetter
-	public String getCurrencyShortName() throws IOException {
-		return company.currencyShortName();
-	}
-	
-	@JsonGetter
-	public String getShortName() throws IOException {
-		return company.shortName();
-	}
 }

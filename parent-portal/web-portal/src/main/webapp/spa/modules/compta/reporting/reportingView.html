@@ -1,0 +1,238 @@
+<div class="row">
+	<div class="col-md-6" ng-controller="grandLivreCtrl as vm">
+		<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.showReport()">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Grand-livre</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-show="vm.loadingDataFeature">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-show="!vm.loadingDataFeature">
+                			<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="start">Début </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="start" name="start" ng-model="vm.query.start" required required-message="'Début est un champ obligatoire'" ng-change="vm.startChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="end">Fin </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="end" name="end" ng-model="vm.query.end" required required-message="'Fin est un champ obligatoire'" ng-change="vm.endChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+                    			<div class="row">
+                    				<div class="col-md-12">
+                    					<button type="button" class="btn btn-primary pull-right" ng-click="vm.setExercicePeriod()" ng-if="vm.query.start">Etendre sur tout l'exercice</button>
+                    				</div>                    				
+                    			</div>
+                    		</div>
+                    		<div class="form-group">
+	                   			<div class="row">
+	                   				<label class="control-label col-sm-4" for="journal">Journal</label>
+					                <div class="col-sm-8">						                	
+						                <select class="form-control" id="journal" name="journal" ng-model="vm.query.journalId" ng-options="v.id as v.name for v in vm.journals">
+						                	<option value="">-- Choisir un journal --</option>					                
+							            </select>   
+					                </div>
+	                   			</div>
+	                   		</div>     
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+            	<div class="pull-right">
+            		<button type="submit" class="btn btn-primary">Générer</button>
+            	</div>
+            </div>
+        </div>    
+    </form>
+	</div>
+	<div class="col-md-6" ng-controller="balanceGeneraleCtrl as vm">
+		<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.showReport()">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Balance générale</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-show="vm.loadingDataFeature">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-show="!vm.loadingDataFeature">
+                			<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="start">Début </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="start" name="start" ng-model="vm.query.start" required required-message="'Début est un champ obligatoire'" ng-change="vm.startChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="end">Fin </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="end" name="end" ng-model="vm.query.end" required required-message="'Fin est un champ obligatoire'" ng-change="vm.endChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+                    			<div class="row">
+                    				<div class="col-md-12">
+                    					<button type="button" class="btn btn-primary pull-right" ng-click="vm.setExercicePeriod()" ng-if="vm.query.start">Etendre sur tout l'exercice</button>
+                    				</div>                    				
+                    			</div>
+                    		</div>     
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+            	<div class="pull-right">
+            		<button type="submit" class="btn btn-primary">Générer</button>
+            	</div>
+            </div>
+        </div>    
+    </form>
+	</div>
+	<div class="col-md-6" ng-controller="balanceAuxiliaireCtrl as vm">
+		<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.showReport()">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Balance auxiliaire</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-show="vm.loadingDataFeature">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-show="!vm.loadingDataFeature">
+                			<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="start">Début </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="start" name="start" ng-model="vm.query.start" required required-message="'Début est un champ obligatoire'" ng-change="vm.startChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="end">Fin </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="end" name="end" ng-model="vm.query.end" required required-message="'Fin est un champ obligatoire'" ng-change="vm.endChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+                    			<div class="row">
+                    				<div class="col-md-12">
+                    					<button type="button" class="btn btn-primary pull-right" ng-click="vm.setExercicePeriod()" ng-if="vm.query.start">Etendre sur tout l'exercice</button>
+                    				</div>                    				
+                    			</div>
+                    		</div> 
+                    		<div class="form-group">
+	                   			<div class="row">
+	                   				<label class="control-label col-sm-4" for="tiersType">Type de tiers</label>
+					                <div class="col-sm-8">						                	
+						                <select class="form-control" id="tiersType" name="tiersType" ng-model="vm.query.tiersTypeId" ng-options="v.id as v.name for v in vm.tiersTypes"></select>   
+					                </div>
+	                   			</div>
+	                   		</div>    
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+            	<div class="pull-right">
+            		<button type="submit" class="btn btn-primary">Générer</button>
+            	</div>
+            </div>
+        </div>    
+    </form>
+	</div>
+	<div class="col-md-6" ng-controller="balanceAgeeDesTiersCtrl as vm">
+		<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.showReport()">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Balance agée des tiers</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-show="vm.loadingDataFeature">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-show="!vm.loadingDataFeature">
+                			<div class="form-group">
+                    			<div class="row">
+                    				<label class="control-label col-sm-4" for="start">Début </label>                                
+	                                <div class="col-sm-8">
+	                                    <input type="date" class="form-control" id="start" name="start" ng-model="vm.query.startDate" required required-message="'Début est un champ obligatoire'" ng-change="vm.startChanged()"/>                                    
+	                                </div>
+                    			</div>    
+                    		</div>
+                    		<div class="form-group">
+	                   			<div class="row">
+	                   				<label class="control-label col-sm-4" for="tiersType">Type de tiers</label>
+					                <div class="col-sm-8">						                	
+						                <select class="form-control" id="tiersType" name="tiersType" ng-model="vm.query.tiersTypeId" ng-options="v.id as v.name for v in vm.tiersTypes"></select>   
+					                </div>
+	                   			</div>
+	                   		</div>    
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+            	<div class="pull-right">
+            		<button type="submit" class="btn btn-primary">Générer</button>
+            	</div>
+            </div>
+        </div>    
+    </form>
+	</div>
+	<div class="col-md-6" ng-controller="compteResultatCtrl as vm">
+		<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.showReport()">
+        <div class="panel panel-primary">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Compte résultat</h4>
+            </div>
+            <div class="panel-body">
+                <div ng-show="vm.loadingDataFeature">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div ng-show="!vm.loadingDataFeature">
+                    		<div class="form-group">
+	                   			<div class="row">
+	                   				<label class="control-label col-sm-4" for="exercise">Exercice</label>
+					                <div class="col-sm-8">						                	
+						                <select class="form-control" id="exercise" name="exercise" ng-model="vm.query.exerciseId" ng-options="v.id as v.name for v in vm.exercises"></select>   
+					                </div>
+	                   			</div>
+	                   		</div>    
+                </div>
+            </div>
+            <div class="panel-footer clearfix">
+            	<div class="pull-right">
+            		<button type="submit" class="btn btn-primary">Générer</button>
+            	</div>
+            </div>
+        </div>    
+    </form>
+	</div>
+</div>

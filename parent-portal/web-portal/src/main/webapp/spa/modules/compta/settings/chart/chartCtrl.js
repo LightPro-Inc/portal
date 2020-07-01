@@ -30,7 +30,7 @@
 		}
 		
 		function deleteItem(item){
-			$confirm({ text: String.format("Souhaitez-vous le compte {0} ?", item.code), title: "Supprimer un compte", ok: 'Oui', cancel: 'Non' })
+			$confirm({ text: String.format("Souhaitez-vous supprimer le compte {0} ?", item.code), title: "Supprimer un compte", ok: 'Oui', cancel: 'Non' })
         	.then(function () {
 
         		apiService.remove(String.format("/web/api/compta/account/{0}", item.id), {},
@@ -39,7 +39,7 @@
     						notificationService.displaySuccess(String.format("Le compte {0} a été supprimé avec succès !", item.code));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -74,7 +74,8 @@
 				params : {
 		                page: page,
 		                pageSize: vm.pageSize,
-		                filter: vm.filter
+		                filter: vm.filter,
+		                typeId: vm.typeId
 		            }	
 			};
 			            
@@ -96,6 +97,13 @@
 					function(result){					
 			            vm.chart = result.data;
 					});
+			
+			apiService.get('/web/api/compta/account/type', null, 
+					function(response){
+						vm.types = response.data;
+						vm.typeId = vm.types[0].id;
+					}
+			);
 			
 			search();			
 		}

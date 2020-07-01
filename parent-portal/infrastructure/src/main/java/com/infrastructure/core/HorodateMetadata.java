@@ -20,4 +20,12 @@ public class HorodateMetadata {
 	public String lastModifiedDateKey(){
 		return "lastmodifieddate";
 	}
+	
+	public String ownerCompanyIdKey(){
+		return "owner_companyid";
+	}
+	
+	public static HorodateMetadata create(){
+		return new HorodateMetadata();
+	}
 }

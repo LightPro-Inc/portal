@@ -1,0 +1,27 @@
+<form role="form" name="addForm" novalidate angular-validator angular-validator-submit="vm.saveItem()">
+	<div class="modal-header">
+		<h4 class="modal-title">{{vm.title}}</h4>
+	</div>
+	<div class="modal-body clearfix">			
+		<div class="form-group">
+			<label class="control-label" for="payment"><small style="color: red">*</small>&nbsp;&nbsp;Paiement</label>
+	        <div class="input-group">
+               	<input type="text" class="form-control" id="payment" name="payment" ng-model="vm.item.originPayment" placeholder="Rechercher un paiement" required required-message="'Paiement est un champ obligatoire'" disabled />
+                      <div class="input-group-btn">
+                          <button ng-disabled="!vm.isNewItem" type="button" class="btn btn-primary" ng-click="vm.searchPayment()"><i class="glyphicon glyphicon-search"></i></button>
+                      </div>
+                  </div>
+		</div>
+		<div class="form-group">
+			 <label class="control-label" for="amount"><small style="color: red">*</small>&nbsp;&nbsp;Montant de provision</label>
+	         <input type="number" class="form-control" ng-model="vm.item.amount" name="amount" id="amount" placeholder="Renseigner le montant" validate-on="blur" required required-message="'Montant est un champ obligatoire'" ng-disabled="vm.isValidated()">         
+		</div>						
+	</div>
+	<div class="modal-footer clearfix">
+		<button type="button" class="btn btn-success pull-left" ng-if="vm.item.statusId == 1" ng-click="vm.validate()">Valider</button>
+		<button type="button" class="btn btn-danger pull-left" ng-if="vm.item.statusId == 1" ng-click="vm.deleteItem()">Supprimer</button>
+		<button type="submit" class="btn btn-primary" ng-if="!vm.isValidated()">{{vm.btnSaveLabel}}</button>
+		<button type="button" class="btn" ng-click="vm.close()">Fermer</button>                
+	</div>
+</form>
+

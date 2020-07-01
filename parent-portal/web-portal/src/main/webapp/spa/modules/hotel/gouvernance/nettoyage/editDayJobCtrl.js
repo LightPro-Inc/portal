@@ -21,7 +21,7 @@
 						$uibModalInstance.close();
 					},
 					function(error){
-						notificationService.displayError(error);
+						
 					});
 		}
 		
@@ -32,7 +32,7 @@
 						$uibModalInstance.close(response.data);
 					},
 					function(error){
-						notificationService.displayError(error);
+						
 					});		
 		}
 		
@@ -43,7 +43,7 @@
 						$uibModalInstance.close(response.data);
 					},
 					function(error){
-						notificationService.displayError(error);
+						
 					});		
 		}
 		

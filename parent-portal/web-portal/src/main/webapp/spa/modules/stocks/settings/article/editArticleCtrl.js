@@ -4,8 +4,8 @@
 	
 	app.controller('editArticleCtrl', editArticleCtrl);
 	
-	editArticleCtrl.$inject = ['data', '$uibModalInstance', 'apiService', 'notificationService'];
-	function editArticleCtrl(data, $uibModalInstance, apiService, notificationService){
+	editArticleCtrl.$inject = ['data', '$uibModalInstance', 'apiService', 'notificationService', 'utilityService'];
+	function editArticleCtrl(data, $uibModalInstance, apiService, notificationService, utilityService){
 		var vm = this;
 				
 		vm.isNewItem = data.item.id ? false : true;
@@ -13,6 +13,18 @@
 		
 		vm.cancelEdit = cancelEdit;
 		vm.saveItem = saveItem;
+		vm.familyChanged = familyChanged;
+		
+		function familyChanged(familyId){
+			
+			if(!familyId) {
+				vm.item.mesureUnitShortName = undefined;
+				return;
+			}
+			
+			var family = utilityService.findSingle(vm.families, "id", familyId);
+			vm.item.mesureUnitShortName = family.mesureUnitShortName;
+		}
 		
 		function saveItem(){
 			if(vm.isNewItem){								
@@ -22,7 +34,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put('/web/api/article/' + vm.item.id, vm.item,
@@ -31,7 +43,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}
 			
@@ -43,27 +55,23 @@
 		
 		this.$onInit = function(){
 
-			if(vm.isNewItem){
-				vm.item.quantity = 1;
-				vm.title = "Créer un article";
-				vm.btnSaveLabel = "Créer";	
-				
-				apiService.get('/web/api/article-family/' + vm.item.familyId, null, 
-						function(response){
-							vm.item.family = response.data.name;
+			apiService.get('/web/api/article-family', {}, 
+					function(response){
+						vm.families = response.data;
+						
+						if(vm.isNewItem){
+							vm.item.quantity = 1;
+							vm.title = "Créer un article";
+							vm.btnSaveLabel = "Créer";	
 							
-							apiService.get('/web/api/article-category/' + response.data.categoryId, null, 
-									function(response){
-										vm.item.mesureUnitShortName = response.data.mesureUnitShortName;				
-									}
-							);
-						}
-				);
-					
-			}else{
-				vm.title = "Modifier un article";
-				vm.btnSaveLabel = "Modifier";
-			}	
+							familyChanged(vm.item.familyId);
+								
+						}else{
+							vm.title = "Modifier un article";
+							vm.btnSaveLabel = "Modifier";
+						}	
+					}
+			);	
 		}		
 	}
 })(angular.module('lightpro'));

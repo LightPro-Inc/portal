@@ -12,6 +12,16 @@
 		vm.clearSearch = clearSearch;
 		vm.search = search;
 		vm.deleteItem = deleteItem;
+		vm.showPieceTypes = showPieceTypes;
+		vm.newPiece = newPiece;
+		
+		function newPiece(journal){
+			$state.go('main.compta.edit-piece', {journalId: journal.id}, {location:false});
+		}
+		
+		function showPieceTypes(journal){
+			$state.go('main.compta.journal-piece-type', {journalId: journal.id}, {location:false});
+		}
 		
 		function deleteItem(item){
 			$confirm({ text: String.format("Souhaitez-vous supprimer le journal {0} ?", item.name), title: "Supprimer un journal", ok: 'Oui', cancel: 'Non' })
@@ -23,7 +33,7 @@
     						notificationService.displaySuccess("Le journal " + item.name + " a été supprimé avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

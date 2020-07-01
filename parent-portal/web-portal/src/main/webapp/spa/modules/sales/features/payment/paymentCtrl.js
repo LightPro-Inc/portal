@@ -9,7 +9,6 @@
 		
 		vm.invoiceId = $stateParams.invoiceId;
 		
-		vm.addNew = addNew;
 		vm.openEditDialog = openEditDialog;
 		vm.clearSearch = clearSearch;
 		vm.search = search;
@@ -20,13 +19,13 @@
 			$confirm({ text: String.format("Souhaitez-vous supprimer le paiement {0} ?", item.reference), title: "Supprimer un paiement", ok: 'Oui', cancel: 'Non' })
         	.then(function () {
 
-        		apiService.remove(String.format("/web/api/invoice/{0}/payment/{1}", vm.invoiceId, item.id), {},
+        		apiService.remove(String.format("/web/api/sales/payment/{0}", item.id), {},
     					function(response){
     						search();    						
     						notificationService.displaySuccess(String.format("Le paiement {0} a été supprimé avec succès !", item.reference));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
@@ -38,19 +37,28 @@
 			 });
 		}
 		
-		function addNew(){
-			 editItem({invoiceId : vm.invoiceId}, function(){
-				 search();
-			 });
-		}
-		
 		function editItem(item, callback){
 
+			if(item.typeId == 1){
+				if(item.originTypeId == 1)
+					editEncaissementPurchaseOrder(item, callback);					
+				else
+					editEncaissement(item, callback);
+			} else {
+				if(item.originTypeId == 3){
+					editRemboursementProvision(item, callback);
+				} else
+					editRemboursement(item, callback);
+			}      
+		}
+		
+		function editEncaissement(item, callback){
 			$uibModal.open({
-                templateUrl: 'modules/sales/features/payment/editPaymentView.html',
-                controller: 'editPaymentCtrl as vm',
+                templateUrl: 'modules/sales/features/payment/editEncaissementView.html',
+                controller: 'editEncaissementCtrl as vm',
                 resolve: {
                     data: {
+                    	invoiceId: item.originId,
                     	item : item
                     }
                 }
@@ -59,7 +67,61 @@
             		callback(itemEdited);
             }, function () {
 
-            });           
+            });
+		}
+		
+		function editRemboursement(item, callback){
+			$uibModal.open({
+                templateUrl: 'modules/sales/features/payment/editRemboursementView.html',
+                controller: 'editRemboursementCtrl as vm',
+                resolve: {
+                    data: {
+                    	invoiceId: item.originId,
+                    	item : item
+                    }
+                }
+            }).result.then(function (itemEdited) {
+            	if(callback)
+            		callback(itemEdited);
+            }, function () {
+
+            });
+		}
+		
+		function editRemboursementProvision(item, callback){
+			$uibModal.open({
+                templateUrl: 'modules/sales/features/customer/editRemboursementProvisionView.html',
+                controller: 'editRemboursementProvisionCtrl as vm',
+                resolve: {
+                    data: {
+                    	item: item,
+                    	provisionId: item.originId
+                    }
+                }
+            }).result.then(function (itemEdited) {
+            	if(callback)
+            		callback(itemEdited);
+            }, function () {
+
+            });
+		}
+		
+		function editEncaissementPurchaseOrder(item, callback){
+			$uibModal.open({
+                templateUrl: 'modules/sales/features/purchase-order/payOrderView.html',
+                controller: 'payPurchaseOrderCtrl as vm',
+                resolve: {
+                    data: {
+                    	item: item,
+                    	orderId: item.originId
+                    }
+                }
+            }).result.then(function (itemEdited) {
+            	if(callback)
+            		callback(itemEdited);
+            }, function () {
+
+            });
 		}
 		
 		vm.pageChanged = function(){
@@ -113,6 +175,13 @@
 		}
 		
 		this.$onInit = function(){
+			
+			apiService.get('/web/api/sales/module/current', {}, 
+					function(response){
+						vm.module = response.data;
+					}
+			);
+			
 			vm.pageSize = 4;
 			
 			search();	

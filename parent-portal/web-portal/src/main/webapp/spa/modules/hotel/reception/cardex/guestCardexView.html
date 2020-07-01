@@ -1,90 +1,10 @@
 <div class="row">
 	<div class="panel panel-primary">
 		<div class="panel-heading clearfix">
-			<h4 class="panel-title">Client : {{vm.item.fullName}}</h4>
+			<h4 class="panel-title">Client : {{vm.item.name}}</h4>
 		</div>
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-md-6">
-					<form role="form" class="form-horizontal" novalidate angular-validator name="addForm" angular-validator-submit="vm.editItem()">
-						<div class="panel panel-default">
-							<div class="panel-heading clearfix">
-								<div class="panel-title">
-									<strong>Informations personnelles</strong>
-								</div>
-							</div>
-							<div class="panel-body">
-								<div ng-show="vm.loadingGuestData">
-					               <div class="col-xs-4"></div>
-					               <div class="col-xs-4">
-					                   <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Loading data...</label>
-					               </div>
-					               <div class="col-xs-4"></div>
-					           </div>
-					           <div ng-show="!vm.loadingGuestData">
-					           	   <div class="form-group">
-										<label class="col-md-3 control-label" for="LastName">Nom</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" id="LastName" name="LastName" ng-model="vm.item.lastName" placeholder="Renseigner le nom">
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="col-md-3 control-label" for="FirstName">Prénoms</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" id="FirstName" name="FirstName" ng-model="vm.item.firstName" placeholder="Renseigner le prénom">
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="col-md-3 control-label" for="dateOfBirth">Date naiss.</label>
-										<div class="col-md-9">
-											<div class="input-group">
-		                                        <input type="text" class="form-control input-sm" id="dateOfBirth" name="dateOfBirth" uib-datepicker-popup="{{vm.datepicker.format}}" ng-model="vm.item.birthDate" is-open="vm.datepicker.opened" datepicker-options="vm.dateOptions" placeholder="yyyy-MM-dd" />
-		                                        <span class="input-group-btn">
-		                                            <button type="button" class="btn btn-default" ng-click="vm.openDatePicker($event, prop)"><i class="glyphicon glyphicon-calendar"></i></button>
-		                                        </span>
-		                                    </div>
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="control-label col-md-3" for="Addresse">Adresse</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" ng-model="vm.item.address" name="Addresse" id="Addresse" placeholder="Renseigner l'adresse">
-										</div>
-									</div>	
-									<div class="form-group">
-										<label class="control-label col-md-3" for="Tel1">Tel 1</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" ng-model="vm.item.tel1" name="Tel1" id="Tel1" placeholder="Renseigner le téléphone 1">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3" for="Tel2">Tel 2</label>
-										<div class="col-md-9">
-											<input type="text" class="form-control input-sm" ng-model="vm.item.tel2" name="Tel2" id="Tel2" placeholder="Renseigner le téléphone 2">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-md-3" for="email">E-mail</label>
-										<div class="col-md-9">
-											<input type="email" class="form-control input-sm" ng-model="vm.item.email" id="email" name="email" placeholder="Renseigner l'adresse mail">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-offset-2 col-md-10">
-											<div class="checkbox">
-												<label><input name="Sex" type="radio" value="M" ng-model="vm.item.sex"> Homme</label>
-												<label><input name="Sex" type="radio" value="F" ng-model="vm.item.sex"> Femme</label>
-											</div>
-										</div>
-									</div>
-					           </div>																				
-							</div>
-							<div class="panel-footer clearfix">
-								<button type="submit" click-once class="btn btn-primary pull-right">Enregistrer</button>
-							</div>
-						</div>		
-					</form>										
-				</div>
 				<div class="col-md-6">					
 					<div class="panel panel-default">
 						<div class="panel-heading clearfix">
@@ -115,7 +35,7 @@
 						                    <td class="shortPadding">{{ item.room }}</td>
 						                    <td class="shortPadding"><i>{{ item.start|date:'dd/MM/yyyy' }}</i></td>
 						                    <td class="shortPadding"><i>{{ item.end|date:'dd/MM/yyyy' }}</i></td>
-						                    <td class="shortPadding"><i>{{ item.ttcTotalBookingAmount | number }} FCFA</i></td>		                    
+						                    <td class="shortPadding"><i>{{ item.ttcTotalBookingAmount | companyCurrency}}</i></td>		                    
 						                </tr>
 						            </table>
 								</div>

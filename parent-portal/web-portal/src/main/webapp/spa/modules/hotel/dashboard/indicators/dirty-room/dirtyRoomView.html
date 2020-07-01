@@ -1,0 +1,20 @@
+<div class="col-md-4">
+	<div class="panel panel-danger">
+		<div class="panel-heading">
+			<h4 class="panel-title">Chambres sales</h4>
+		</div>
+		<div class="panel-body">
+			<div ng-show="loadingRoomDirty">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Load data...</label></div>
+                <div class="col-xs-4"></div>
+            </div>
+			<div class="row" ng-show="!loadingRoomDirty">
+				<div class="col-md-12">
+					<h5 class="text-center">(En service)</h5>
+					<h1 class="text-center">{{numberOfRoomDirty}}</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

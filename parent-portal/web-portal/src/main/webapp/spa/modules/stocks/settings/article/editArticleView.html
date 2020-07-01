@@ -7,8 +7,11 @@
 			<div class="form-group">
 				<div class="row">
 					<div class="col-sm-12">
-		                <label class="control-label" for="Family">Famille</label>
-		                <input type="text" class="form-control" ng-model="vm.item.family" name="Family" id="Family" disabled>
+		                <label class="control-label" for="Family"><small style="color: red">*</small>&nbsp;&nbsp;Famille</label>
+		                <select class="form-control" id="family" name="family" ng-options="v.id as v.name for v in vm.families" ng-model="vm.item.familyId" ng-change="vm.familyChanged(vm.item.familyId)"
+		                validate-on="blur" required required-message="'Famille est un champ obligatoire'">
+	                		<option value="">-- choisir une famille --</option>
+	                	</select>
 		            </div>
 				</div>
 			</div>
@@ -31,18 +34,26 @@
 				<div class="row">
 	                <div class="col-sm-6">
 	                    <label class="control-label" for="quantity">Quantité (en {{vm.item.mesureUnitShortName}})</label>
-	            		<input type="text" class="form-control" ng-model="vm.item.quantity" name="quantity" id="quantity" placeholder="Renseigner la quantité" validate-on="blur" required required-message="'Quantité est un champ obligatoire'">
+	            		<input type="number" class="form-control" ng-model="vm.item.quantity" name="quantity" id="quantity" placeholder="Renseigner la quantité" validate-on="blur" required required-message="'Quantité est un champ obligatoire'">
 	                </div>
 	
 	                <div class="col-sm-6">                            
-                        <label class="control-label" for="Cost">Coût (F CFA)</label>
-	            		<input type="text" class="form-control" ng-model="vm.item.cost" name="Cost" id="Cost" placeholder="Renseigner le coût" validate-on="blur" required required-message="'Coût est un champ obligatoire'">                       
+                        <label class="control-label" for="Cost">Coût ({{companyCurrency.symbol}})</label>
+	            		<input type="number" class="form-control" ng-model="vm.item.cost" name="Cost" id="Cost" placeholder="Renseigner le coût" validate-on="blur" required required-message="'Coût est un champ obligatoire'">                       
                     </div>
 	            </div>
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="barCode">Code barre</label>
-	            <input type="text" class="form-control" ng-model="vm.item.barCode" name="barCode" id="barCode" placeholder="Renseigner le code barre">
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="control-label" for="barCode">Code barre</label>
+	            		<input type="text" class="form-control" ng-model="vm.item.barCode" name="barCode" id="barCode" placeholder="Renseigner le code barre">
+					</div>
+					<div class="col-sm-6">
+						<label class="control-label" for="emballage"><small style="color: red">*</small>&nbsp;&nbsp;Emballage</label>
+	            		<input type="text" class="form-control" ng-model="vm.item.emballage" name="emballage" id="emballage" placeholder="Renseigner l'emballage" validate-on="blur" required required-message="'Emballage est un champ obligatoire'">
+					</div>
+				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label" for="Description">Description</label>

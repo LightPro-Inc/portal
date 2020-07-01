@@ -34,6 +34,10 @@ public class ModuleSubscribedMetadata implements DomainMetadata {
 		return "companyid";
 	}
 	
+	public String activatedKey() {
+		return "activated";
+	}
+	
 	public static ModuleSubscribedMetadata create(){
 		return new ModuleSubscribedMetadata();
 	}

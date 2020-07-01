@@ -4,16 +4,28 @@
 	</div>
 	<div class="modal-body">
 		<div class="form-group">
+          	<label class="control-label" for="type"><small style="color: red">*</small>&nbsp;&nbsp;Type de taxe</label>						                	
+            <select class="form-control" id="type" name="type" ng-model="vm.item.typeId" required validate-on="blur" required required-message="'Type de taxe est un champ obligatoire'" ng-options="v.id as v.name for v in vm.types">
+            	<option value="">-- choisir un type --</option>
+            </select> 
+        </div> 	
+		<div class="form-group">
 			 <label class="control-label" for="name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
 	         <input type="text" class="form-control" ng-model="vm.item.name" name="name" id="name" placeholder="Renseigner le libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
 		</div>	
 		<div class="form-group">
 			<label class="control-label" for="shortName"><small style="color: red">*</small>&nbsp;&nbsp;Nom court</label>
 	        <input type="text" class="form-control" ng-model="vm.item.shortName" name="shortName" id="shortName" placeholder="Renseigner le nom court" validate-on="blur" required required-message="'Nom court est un champ obligatoire'">
-		</div>						
+		</div>	
 		<div class="form-group">
-			 <label class="control-label" for="rate"><small style="color: red">*</small>&nbsp;&nbsp;Taux (%)</label>
-	         <input type="number" class="form-control" ng-min="1" ng-max="100" ng-model="vm.item.rate" name="rate" id="rate" placeholder="Renseigner un taux" validate-on="blur" required required-message="'Taux est un champ obligatoire'">
+          	<label class="control-label" for="valueType"><small style="color: red">*</small>&nbsp;&nbsp;Type de valeur</label>						                	
+            <select class="form-control" id="valueType" name="valueType" ng-model="vm.item.valueTypeId" required validate-on="blur" required required-message="'Type de valeur est un champ obligatoire'" ng-options="v.id as v.name for v in vm.taxes">
+            	<option value="">-- choisir un type de valeur --</option>
+            </select> 
+        </div> 					
+		<div class="form-group">
+			 <label class="control-label" for="value"><small style="color: red">*</small>&nbsp;&nbsp;Valeur</label>
+	         <input type="number" class="form-control" ng-model="vm.item.value" name="value" id="value" placeholder="Renseigner un nombre" validate-on="blur" required required-message="'Valeur est un champ obligatoire'">
 		</div>					
 	</div>
 	<div class="modal-footer">

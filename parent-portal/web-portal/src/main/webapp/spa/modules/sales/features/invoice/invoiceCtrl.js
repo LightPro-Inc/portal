@@ -15,30 +15,30 @@
 		vm.search = search;
 		vm.deleteItem = deleteItem;		
 		vm.goPreviousPage = goPreviousPage;
-		vm.showPayments = showPayments;
+		vm.showPayments = showPayments;		
 		
 		function showPayments(item){
-			$state.go('main.sales.payment', {invoiceId: item.id});
+			$state.go('main.sales.payment', {invoiceId: item.id}, {location: false});
 		}
 		
 		function deleteItem(item){
 			$confirm({ text: String.format("Souhaitez-vous supprimer la facture {0} ?", item.reference), title: "Supprimer une facture", ok: 'Oui', cancel: 'Non' })
         	.then(function () {
 
-        		apiService.remove(String.format("/web/api/purchase-order/{0}/invoice/{1}", vm.purchaseOrderId, item.id), {},
+        		apiService.remove(String.format("/web/api/invoice/{0}", item.id), {},
     					function(response){
     						search();    						
     						notificationService.displaySuccess(String.format("La facture {0} a été supprimée avec succès !", item.reference));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
 		}
 		
-		function openEditDialog(item){
-			$state.go('main.sales.edit-invoice', {invoiceId: item.id});
+		function openEditDialog(invoice){
+			$state.go('main.sales.edit-invoice', invoice, {location: false});
 		}
 		
 		function addNew(){
@@ -50,8 +50,8 @@
                     	purchaseOrderId : vm.purchaseOrderId
                     }
                 }
-            }).result.then(function (invoice) {
-            	openEditDialog(invoice);            	
+            }).result.then(function (cmd) {
+            	openEditDialog(cmd);            	
             }, function () {
 
             });  			
@@ -67,28 +67,36 @@
 		}
 		
 		function search(page){
-			page = page ? page : 1;
-
-			var config = {
-				params : {
-		                page: page,
-		                pageSize: vm.pageSize,
-		                filter: vm.filter
-		            }	
-			};
+			page = page ? page : 1;			
 			            
 			vm.loadingData = true;
-			
 			if(vm.purchaseOrderId){
+				var config = {
+						params : {
+				                page: page,
+				                pageSize: vm.pageSize,
+				                filter: vm.filter
+				            }	
+					};
+				
 				apiService.get('/web/api/purchase-order/' + vm.purchaseOrderId + '/invoice', config, 
 						function(result){					
 							vm.loadingData = false;
 							vm.items = result.data;
 						},
 						function(error){
-							vm.loadingData = true;						
+							vm.loadingData = false;						
 						});
 			}else{
+				var config = {
+					params : {
+			                page: page,
+			                pageSize: vm.pageSize,
+			                filter: vm.filter,
+			                statusId: vm.statusId
+			            }	
+				};
+				
 				apiService.get('/web/api/invoice/search', config, 
 						function(result){					
 							vm.loadingData = false;
@@ -98,7 +106,7 @@
 							vm.items = result.data.items;
 						},
 						function(error){
-							vm.loadingData = true;						
+							vm.loadingData = false;						
 						});
 			}			
 		}
@@ -108,7 +116,14 @@
 		}
 		
 		this.$onInit = function(){
-			vm.pageSize = 4;
+			
+			apiService.get('/web/api/invoice/status', {}, 
+					function(response){
+						vm.status = response.data;
+					}
+			);
+			
+			vm.pageSize = 2;
 			
 			search();	
 			

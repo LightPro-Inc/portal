@@ -3,14 +3,20 @@
         <h3>Ventes</h3>
         <ul class="nav nav-pills nav-stacked">
         	<li class="nav-divider"></li>
-            <li ui-sref-active="active"><a ui-sref=".dashboard">Tableau de bord<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".customer">Clients<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".quotation">Devis<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".purchase-order">Bons de commande<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".invoice">Factures<i class="fa fa-home fa-fw pull-right"></i></a></li>
-            <li ui-sref-active="active"><a ui-sref=".payment">Paiements<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".dashboard">Tableau de bord<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('SALES-CUSTOMER-SEE')"><a ui-sref=".customer">Clients<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li class="nav-divider"></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('SALES-QOT-SEE')"><a ui-sref=".purchase-order">Devis<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li class="nav-divider"></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('SALES-INVOICE-SEE')"><a ui-sref=".invoice">Factures<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li class="nav-divider"></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('SALES-PAY-SEE')"><a ui-sref=".payment">Paiements<i class="fa fa-home fa-fw pull-right"></i></a></li>
             <li class="nav-divider"></li>  
-            <li ui-sref-active="active"><a ui-sref=".product">Produits<i class="fa fa-home fa-fw pull-right"></i></a></li>                                                    
+            <li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".product-category">Catégories<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('SALES-PRODUCT-SEE')"><a ui-sref=".product">Produits<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li ui-sref-active="active" ng-click="vm.selectMenu()" ng-if="isGranted('SALES-TEAM-SEE')"><a ui-sref=".team">Equipes<i class="fa fa-home fa-fw pull-right"></i></a></li>
+            <li class="nav-divider"></li>   
+	     	<li ui-sref-active="active" ng-click="vm.selectMenu()"><a ui-sref=".interfacage">Interfaçage<i class="fa fa-home fa-fw pull-right"></i></a></li>                                                    
         </ul>
     </div>
 </div>

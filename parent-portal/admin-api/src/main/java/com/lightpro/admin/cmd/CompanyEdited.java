@@ -19,8 +19,7 @@ public class CompanyEdited {
 	private final String email;
 	private final String webSite;
 	private final String logo;
-	private final String currencyName;
-	private final String currencyShortName;
+	private final String currencyId;
 	
 	public CompanyEdited(){
 		throw new UnsupportedOperationException("#CompanyEdited()");
@@ -39,8 +38,7 @@ public class CompanyEdited {
 						  @JsonProperty("email") final String email,
 						  @JsonProperty("webSite") final String webSite,
 						  @JsonProperty("logo") final String logo,
-						  @JsonProperty("currencyName") final String currencyName,
-						  @JsonProperty("currencyShortName") final String currencyShortName){
+						  @JsonProperty("currencyId") final String currencyId){
 		
 		this.id = id;
 		this.denomination = denomination;
@@ -54,8 +52,7 @@ public class CompanyEdited {
 		this.email = email;
 		this.webSite = webSite;
 		this.logo = logo;
-		this.currencyName = currencyName;
-		this.currencyShortName = currencyShortName;
+		this.currencyId = currencyId;
 	}
 	
 	public UUID id(){
@@ -101,12 +98,8 @@ public class CompanyEdited {
 		return logo;
 	}
 	
-	public String currencyName(){
-		return currencyName;
-	}
-	
-	public String currencyShortName(){
-		return currencyShortName;
+	public String currencyId(){
+		return currencyId;
 	}
 	
 	public String shortName(){

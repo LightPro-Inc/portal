@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.ws.rs.NotFoundException;
-
 import com.infrastructure.core.DomainMetadata;
 import com.infrastructure.datasource.DomainStore;
 
@@ -39,7 +37,7 @@ public class PgDomainStore implements DomainStore {
     	List<Object> values = this.base.executeQuery(statement, Arrays.asList(key)); 
     	
     	if(values.isEmpty())
-    		throw new NotFoundException(String.format("La propriété %s n'a pas été trouvée !", propertyKey));
+    		throw new IllegalArgumentException(String.format("La propriété %s n'a pas été trouvée !", propertyKey));
     	
     	return (T)values.get(0);
 	}
@@ -64,7 +62,7 @@ public class PgDomainStore implements DomainStore {
 		
 		String statement; 
 				
-	    if(author == null){
+	    if(!base.keyExists("lastmodifieddate", dm.domainName())){
 	    	clause = clause.substring(0, clause.lastIndexOf(","));
 	    	statement = String.format("UPDATE %s SET %s WHERE %s=?", dm.domainName(), clause, dm.keyName());
 	    }
@@ -79,7 +77,7 @@ public class PgDomainStore implements DomainStore {
 
 	@Override
 	public void set(Map<String, Object> params) throws IOException {		
-		set(params, base.author());
+		set(params, base.authorId());
 	}
 
 	@Override
@@ -89,13 +87,13 @@ public class PgDomainStore implements DomainStore {
 
 	@Override
 	public void set(String propertyKey, Object value) throws IOException {
-		set(propertyKey, value, base.author());
+		set(propertyKey, value, base.authorId());
 	}
 
-	private void set(String propertyKey, Object value, UUID author) throws IOException {
+	private void set(String propertyKey, Object value, UUID authorId) throws IOException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(propertyKey, value);
 		
-		set(params, author);
+		set(params, authorId);
 	}
 }

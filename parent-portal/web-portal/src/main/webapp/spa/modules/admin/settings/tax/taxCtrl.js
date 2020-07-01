@@ -40,7 +40,7 @@
 			$uibModal.open({
                 templateUrl: 'modules/admin/settings/tax/editTaxView.html',
                 controller: 'editTaxCtrl as vm',
-                size: 'sm',
+                size: 'md',
                 resolve: {
                     data: {
                     	item : item
@@ -64,13 +64,13 @@
     						notificationService.displaySuccess(String.format("La taxe {0} a été supprimée avec succès !", item.shortName));
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	
 		}
 		
-		this.$onInit = function(){
+		this.$onInit = function(){			
 			loadItems();
 		}
 	}

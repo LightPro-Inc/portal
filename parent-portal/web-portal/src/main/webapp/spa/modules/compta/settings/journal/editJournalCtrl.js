@@ -3,8 +3,8 @@
 	
 	app.controller('editJournalCtrl', editJournalCtrl);
 	
-	editJournalCtrl.$inject = ['data', '$uibModalInstance', 'apiService', 'notificationService'];
-	function editJournalCtrl(data, $uibModalInstance, apiService, notificationService){
+	editJournalCtrl.$inject = ['data', '$uibModalInstance', 'apiService', 'notificationService', '$uibModal'];
+	function editJournalCtrl(data, $uibModalInstance, apiService, notificationService, $uibModal){
 		var vm = this;
 		
 		vm.item = angular.copy(data.item);
@@ -12,6 +12,23 @@
 		
 		vm.cancelEdit = cancelEdit;
 		vm.saveItem = saveItem;
+		vm.searchAccount = searchAccount;
+		
+		function searchAccount(){
+			$uibModal.open({
+                templateUrl: 'modules/compta/settings/chart/accountSearchView.html',
+                controller: 'accountSearchCtrl as vm',
+                size: 'lg',
+                resolve: {
+                    data: { }
+                }
+            }).result.then(function (selected) {
+            	vm.item.accountFullName = selected.fullName; 
+            	vm.item.accountId = selected.id;
+            }, function () {
+
+            }); 
+		}
 		
 		function saveItem(){
 			if(vm.isNewItem){
@@ -21,7 +38,7 @@
 							$uibModalInstance.close(response.data);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}else{
 				apiService.put('/web/api/compta/journal/' + vm.item.id, vm.item,
@@ -30,7 +47,7 @@
 							$uibModalInstance.close(vm.item);
 						},
 						function(error){
-							notificationService.displayError(error);
+							
 						});
 			}
 			

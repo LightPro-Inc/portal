@@ -37,7 +37,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						List<SequenceVm> items = currentCompany().sequences().all()
+						List<SequenceVm> items = admin().sequences().all()
 														 .stream()
 												 		 .map(m -> new SequenceVm(m))
 												 		 .collect(Collectors.toList());
@@ -60,13 +60,13 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Sequences container = currentCompany().sequences();
+						Sequences container = admin().sequences();
 						
 						List<SequenceVm> itemsVm = container.find(page, pageSize, filter).stream()
 															 .map(m -> new SequenceVm(m))
 															 .collect(Collectors.toList());
 													
-						int count = container.totalCount(filter);
+						long count = container.count(filter);
 						PaginationSet<SequenceVm> pagedSet = new PaginationSet<SequenceVm>(itemsVm, page, count);
 						
 						return Response.ok(pagedSet).build();
@@ -86,7 +86,7 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						SequenceVm item = new SequenceVm(currentCompany().sequences().get(id));
+						SequenceVm item = new SequenceVm(admin().sequences().get(id));
 
 						return Response.ok(item).build();
 					}
@@ -103,9 +103,10 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						currentCompany().sequences().add(cmd.name(), cmd.prefix(), cmd.suffix(), cmd.size(), cmd.step(), cmd.nextNumber());
+						Sequence item = admin().sequences().add(cmd.name(), cmd.prefix(), cmd.suffix(), cmd.size(), cmd.step(), cmd.nextNumber());
 						
-						return Response.status(Response.Status.OK).build();
+						log.info(String.format("Création de la séquence %s.", item.name()));
+						return Response.ok(new SequenceVm(item)).build();
 					}
 				});		
 	}
@@ -121,9 +122,10 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Sequence item = currentCompany().sequences().get(id);
+						Sequence item = admin().sequences().get(id);
 						item.update(cmd.name(), cmd.prefix(), cmd.suffix(), cmd.size(), cmd.step(), cmd.nextNumber());
 						
+						log.info(String.format("Mise à jour de la séquence %s.", item.name()));
 						return Response.status(Response.Status.OK).build();
 					}
 				});		
@@ -140,9 +142,11 @@ public class SequenceRs extends AdminBaseRs {
 					@Override
 					public Response call() throws IOException {
 						
-						Sequence item = currentCompany().sequences().get(id);
-						currentCompany().sequences().delete(item);
+						Sequence item = admin().sequences().get(id);
+						String name = item.name();
+						admin().sequences().delete(item);
 						
+						log.info(String.format("Suppression de la séquence %s.", name));
 						return Response.status(Response.Status.OK).build();
 					}
 				});	

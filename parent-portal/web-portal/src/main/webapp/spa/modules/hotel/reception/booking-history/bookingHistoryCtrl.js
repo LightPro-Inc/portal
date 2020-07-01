@@ -45,7 +45,7 @@
 						vm.items = result.data.items;
 					}, 
 					function(error){
-						notificationService.displayError(error);
+						
 					});
 		}
 		

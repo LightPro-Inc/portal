@@ -1,0 +1,62 @@
+<div class="row">
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<uib-tabset active="vm.active">
+            	   <uib-tab index="0">
+                       <uib-tab-heading>
+                           Stocks des équipes commerciales
+                       </uib-tab-heading>
+                       	<div class="panel" ng-controller="teamStockCtrl as vm">
+                       		<div class="panel panel-body">
+	                           <div class="row">
+	                               <div class="col-md-12">	                               	     
+					                    <div class="row">
+					                    	<div class="col-md-12">
+					                			<div class="table-responsive">
+							                		<table class="table table-responsive table-bordered table-condensed shortMargin">
+							                			<thead>
+							                				<tr>
+							                					<th>Equipe commerciale</th>
+							                					<th>Entrepôt</th>
+							                					<th>Opération de livraison</th>
+							                				</tr>		                				
+							                			</thead>
+							                			<tbody>
+							                				<tr ng-repeat="item in vm.teamStocksInterfaces">
+							                					<td class="shortMargin">{{item.team}}</td>
+							                					<td class="shortMargin">
+							                						<select class="form-control input-sm" id="warehouse" name="warehouse" ng-model="item.warehouseId" ng-options="v.id as v.name for v in vm.warehouses" ng-change="vm.warehouseChanged(item, item.warehouseId)">
+													                	<option value="">-- Choisir un entrepôt --</option>
+														            </select>
+							                					</td>
+							                					<td class="shortMargin">
+							                						<select class="form-control input-sm" id="delivery-opt" name="delivery-opt" ng-model="item.deliveryOperationId" ng-options="v.id as v.name for v in item.operationTypes">
+													                	<option value="">-- Choisir un type d'opération --</option>
+														            </select>
+							                					</td>							                					
+							                				</tr>
+							                				<tr ng-if="vm.teamStocksInterfaces.length == 0">
+								                                <td colspan="3" class="text-center" style="color: orangered"><i>Aucune équipe commerciale disponible.</i></td>
+								                            </tr>
+							                			</tbody>
+							                		</table>
+							                	</div>	
+					                		</div>	
+					                    </div>                            	                                      
+	                               </div>                               
+	                           </div>
+	                       </div>  
+	                       <div class="panel-footer clearfix">
+								<div class="pull-right">																									
+									<button type="button" class="btn btn-primary btn-sm" ng-click="vm.save()">Enregistrer</button>
+								</div>
+				            </div>
+                       	</div>                     	                                                        
+                   </uib-tab>                   
+               </uib-tabset>  
+		</div>
+		<div class="panel-footer">
+			
+		</div>
+	</div>
+</div>

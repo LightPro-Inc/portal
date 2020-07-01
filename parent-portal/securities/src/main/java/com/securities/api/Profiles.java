@@ -8,4 +8,6 @@ import com.infrastructure.core.Updatable;
 
 public interface Profiles extends AdvancedQueryable<Profile, UUID>, Updatable<Profile> {
 	Profile add(String name) throws IOException;
+	Profile add(String name, boolean isSuperAdmin) throws IOException;
+	Profile superAdministratorProfile() throws IOException;
 }

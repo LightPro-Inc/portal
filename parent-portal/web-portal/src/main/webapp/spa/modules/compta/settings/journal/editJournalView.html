@@ -2,7 +2,7 @@
 	<div class="modal-header">
 		<h4 class="modal-title">{{vm.title}}</h4>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body clearfix">
 		<div class="form-group">
 			<label class="control-label" for="code"><small style="color: red">*</small>&nbsp;&nbsp;Code</label>
             <input type="text" class="form-control" ng-model="vm.item.code" name="code" id="code" placeholder="Renseigner le code" validate-on="blur" required required-message="'Code est un champ obligatoire'">
@@ -14,10 +14,29 @@
 		<div class="form-group">
 			<label class="control-label" for="type"><small style="color: red">*</small>&nbsp;&nbsp;Type</label>
                <select class="form-control" id="type" name="type" ng-options="v.id as v.name for v in vm.types"
-                       ng-model="vm.item.typeId" validate-on="blur" required required-message="'Type est un champ obligatoire'">
+                       ng-model="vm.item.typeId" validate-on="blur" required required-message="'Type est un champ obligatoire'" ng-disabled="!vm.isNewItem">
                    <option value="">-- Choisir un type --</option>
                </select>
-		</div>			
+		</div>		
+		<div class="form-group">
+	         <label class="control-label" for="account">Compte</label>
+	         <div class="input-group">
+		           <input type="text" class="form-control" id="account" name="account" ng-model="vm.item.accountFullName" placeholder="Rechercher un compte" disabled />
+	               <div class="input-group-btn">		               	
+		                <button type="button" class="btn btn-primary" ng-click="vm.searchAccount()"><i class="glyphicon glyphicon-search"></i></button>
+		           </div>
+		     </div>
+    	</div>
+    	<div class="form-group" ng-if="vm.item.accountId">
+			<div class="col-sm-12">
+				<label><input type="checkbox" ng-model="vm.item.validateAccount"> Valider compte à l'écriture</label>
+			</div>
+		</div>	
+    	<div class="form-group">
+			<div class="col-sm-12">
+				<label><input type="checkbox" ng-model="vm.item.isViewedOnDashboard"> Afficher sur le tableau de bord</label>
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<div class="pull-right">

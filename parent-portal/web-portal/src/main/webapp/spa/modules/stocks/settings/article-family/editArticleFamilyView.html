@@ -7,12 +7,14 @@
 			<div class="form-group">
 				<div class="row">
 					<div class="col-sm-12">
-		                <label class="control-label" for="Category">Catégorie</label>
-		                <input type="text" class="form-control" ng-model="vm.item.category" name="Category" id="Category" disabled>
+		                <label class="control-label" for="Category"><small style="color: red">*</small>&nbsp;&nbsp;Catégorie</label>
+		                <select class="form-control" id="category" name="category" ng-options="v.id as v.name for v in vm.categories" ng-model="vm.item.categoryId"
+		                validate-on="blur" required required-message="'Catégorie est un champ obligatoire'">
+	                		<option value="">-- choisir une catégorie --</option>
+	                	</select>
 		            </div>
 				</div>
-			</div>
-			
+			</div>			
 			<div class="form-group">
 				<div class="row">
 	                <div class="col-sm-12">

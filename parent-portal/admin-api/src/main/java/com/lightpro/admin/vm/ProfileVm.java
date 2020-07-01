@@ -5,23 +5,25 @@ import java.util.UUID;
 
 import com.securities.api.Profile;
 
-public class ProfileVm {
+public final class ProfileVm {
 	
-	private final transient Profile origin;
+	public final UUID id;
+	public final String name;
+	public final boolean isSuperAdmin;
+	public final long numberOfFeatures;
 	
 	public ProfileVm(){
 		throw new UnsupportedOperationException("#ProfileVm()");
 	}
 		
 	public ProfileVm(Profile origin){
-		this.origin = origin;
-	}
-	
-	public UUID getId(){
-		return this.origin.id();
-	}
-	
-	public String getName() throws IOException {
-		return this.origin.name();
+		try {
+			this.id = origin.id();
+			this.name = origin.name();
+			this.isSuperAdmin = origin.isSuperAdmin();
+	        this.numberOfFeatures = origin.featuresSubscribed().count();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}	
 	}
 }

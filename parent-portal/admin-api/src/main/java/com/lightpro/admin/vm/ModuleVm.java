@@ -4,39 +4,35 @@ import java.io.IOException;
 import java.util.UUID;
 
 import com.securities.api.Module;
+import com.securities.api.ModuleType;
 
-public class ModuleVm {
-	private final transient Module module;
+public final class ModuleVm {
+	
+	public final UUID id;
+	public final String name;
+	public final String shortName;
+	public final String description;
+	public final int typeId;
+	public final String type;
+	public final boolean isActive;
+	public final boolean isAdminModule;	
 	
 	public ModuleVm(){
 		throw new UnsupportedOperationException("#ModuleVm()");
 	}
 		
-	public ModuleVm(Module module){
-		this.module = module;
-	}
-	
-	public UUID getId(){
-		return this.module.id();
-	}
-	
-	public String getName() throws IOException {
-		return this.module.name();
-	}
-	
-	public String getShortName() throws IOException {
-		return this.module.shortName();
-	}
-	
-	public String getDescription() throws IOException {
-		return this.module.description();
-	}
-	
-	public int getTypeId() throws IOException {
-		return this.module.type().id();
-	}
-	
-	public boolean getActive() throws IOException {
-		return this.module.isActive();
+	public ModuleVm(Module origin){
+		try {
+			this.id = origin.id();
+			this.name = origin.name();
+			this.shortName = origin.shortName();
+	        this.description = origin.description();
+	        this.typeId = origin.type().id();
+	        this.type = origin.type().toString();
+	        this.isActive = origin.isActive();
+	        this.isAdminModule = origin.type() == ModuleType.ADMIN;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}	
 	}
 }

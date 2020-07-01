@@ -1,0 +1,187 @@
+<form role="form" novalidate angular-validator name="addForm" angular-validator-submit="vm.saveItem(vm.closeAfterSaved)">
+	<div class="row">
+	    <div class="panel panel-primary">
+	        <div class="panel-heading clearfix">
+	            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{vm.title}}</h4>
+	        </div>
+	        <div class="panel-body">
+	            <div ng-if="vm.loadingData">
+	                <div class="col-xs-4"></div>
+	                <div class="col-xs-4">
+	                    <i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Chargement de données...</label>
+	                </div>
+	                <div class="col-xs-4"></div>
+	            </div>
+	            <div ng-if="!vm.loadingData" class="row">
+	                <div class="col-sm-12">	                
+	                    <div class="row">
+                    		<div class="form-group form-group-sm col-sm-6">
+                    			<label class="control-label col-sm-4" for="pieceType"><small style="color: red">*</small>&nbsp;&nbsp;Type de pièce</label>
+				                <div class="col-sm-8">						                	
+					                <select ng-if="vm.isNewItem" class="form-control" id="pieceType" name="pieceType" ng-model="vm.item.typeId" required required-message="'Type de pièce est un champ obligatoire'" ng-change="vm.pieceTypeChanged(vm.item.typeId)">
+					                	<option value="">-- Choisir un type de pièce --</option>
+						                <option ng-repeat="option in vm.pieceTypes" value="{{option.id}}">{{option.name}}</option>
+						            </select>   
+						            <input ng-if="!vm.isNewItem" type="text" class="form-control" id="pieceType" name="pieceType" ng-model="vm.item.type" disabled>
+				                </div>
+                    		</div>
+                    		<div class="form-group form-group-sm col-sm-6">
+                    			<label class="control-label col-sm-4" for="date"><small style="color: red">*</small>&nbsp;&nbsp;Date </label>                                
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" id="date" name="date" ng-model="vm.item.date" placeholder="Renseigner une date" validate-on="blur" required required-message="'Date est un champ obligatoire'" />                                   
+                                </div>    
+                    		</div> 
+                    		<div class="form-group form-group-sm col-sm-6">
+                   				<label class="control-label col-sm-4" for="reference">Référence</label>
+				                <div class="col-sm-8">		 				                	
+					                <input type="text" class="form-control" id="reference" name="reference" ng-model="vm.item.reference" placeholder="Renseigner un numéro de pièce">   
+				                </div>
+                   			</div>
+                    		<div class="form-group form-group-sm col-sm-6" ng-if="vm.item.tiersTypeManagedId">
+                   				<label class="control-label col-sm-4" for="tiers">Tiers</label>
+				                <div class="col-sm-8">		 				                	
+					                <div class="input-group input-group-sm">
+						                <input type="text" class="form-control" id="tiers" name="tiers" ng-model="vm.item.tiers" placeholder="Rechercher un tiers" disabled />
+                                        <div class="input-group-btn">
+                                        	<button ng-disabled="vm.item.statusId == 2" type="button" class="btn btn-danger" ng-show="vm.item.tiersId" ng-click="vm.razTiers()"><i class="glyphicon glyphicon-remove-sign"></i></button>
+                                            <button ng-disabled="vm.item.statusId == 2" type="button" class="btn btn-primary" ng-click="vm.searchTiers()"><i class="glyphicon glyphicon-search"></i></button>
+                                        </div>
+                                    </div>   
+				                </div>
+                   			</div>                   			
+                    		<div class="form-group form-group-sm col-sm-6" ng-if="vm.item.echeanceManaged">
+                    			<label class="control-label col-sm-4" for="dateEcheance"><small style="color: red">*</small>&nbsp;&nbsp;Date d'échéance </label>                                
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" id="dateEcheance" name="dateEcheance" ng-model="vm.item.dateEcheance" placeholder="Renseigner une date" validate-on="blur" required required-message="'Date échéance est un champ obligatoire'" />                                
+                                </div>    
+                    		</div>                      		      
+                   			<div class="form-group form-group-sm col-sm-6" ng-show="vm.item.natureId == 4 || vm.item.natureId == 5">
+                   				<label class="control-label col-sm-4" for="origin">&nbsp;&nbsp;&nbsp;Origine</label>
+				                <div class="col-sm-8">		 				                	
+					                <input type="text" class="form-control" id="origin" name="origin" ng-model="vm.item.origin" placeholder="Référence facture associée, bulletin de salaire...">   
+				                </div>
+                   			</div>              			            
+	                    </div>
+		                <div class="row">
+		                	<div class="col-md-12">	
+		                		<div class="col-md-12">
+		                			<div class="form-group">
+		                				<textarea class="form-control" rows="2" placeholder="Notes..." ng-model="vm.item.notes"></textarea>
+		                			</div>
+		                		</div>
+		                		<div class="col-md-12" style="margin-bottom: 10px;">
+		                			<div class="pull-right form-inline" ng-hide="vm.item.statusId == 2 || !vm.item.typeId">
+	                					<label class="control-label" for="trame">Modèle de saisie</label>			                    			
+		                    			<select class="form-control input-sm" id="trame" name="trame" ng-model="vm.trameId" ng-change="vm.trameChanged(vm.trameId)">
+						                	<option value="">-- Aucun modèle de saisie --</option>
+							                <option ng-repeat="option in vm.trames" value="{{option.id}}">{{option.name}}</option>
+							            </select>	
+							            <select class="form-control input-sm" id="proposed-journal" name="proposed-journal" ng-model="vm.journalId">
+						                	<option value="">-- Aucun journal --</option>
+							                <option ng-repeat="option in vm.journals" value="{{option.id}}">{{option.name}}</option>
+							            </select>
+							            <button type="button" ng-disabled="!vm.journalId" class="btn btn-primary btn-sm" ng-click="vm.addNewArticle(vm.trameId)">Ajouter un article</button>
+		                    		</div>
+		                		</div>
+		                		<div class="col-md-12" ng-show="vm.item" ng-repeat="article in vm.item.articles">
+		                			<div class="table-responsive">
+				                		<table class="table table-responsive table-bordered table-condensed shortMargin">
+				                			<thead>
+				                				<tr>
+				                					<th colspan="{{vm.numberOfColumns}}" style="background-color: yellow;">
+				                						<span>Article {{$index + 1}}</span>
+				                						<div class="pull-right">
+				                							<button ng-if="vm.item.statusId != 2 && vm.item.typeId" type="button" class="btn btn-primary btn-sm" ng-click="vm.addFlux(article)" ng-disabled="article.currentLine">Ajouter une écriture</button>
+				                							<button type="button" class="btn btn-danger" ng-click="vm.deleteArticle(article)" ng-if="vm.item.statusId != 2"><i class="glyphicon glyphicon-remove-sign"></i></button>
+				                						</div>				                						
+				                					</th>
+				                				</tr>
+				                				<tr>				    
+				                					<th>Compte général</th>
+				                					<th ng-show="vm.item.tiersTypeManagedId">Compte auxiliaire</th>				                					
+				                					<th>Débit</th>
+				                					<th>Crédit</th>				                									                				
+				                					<th ng-if="vm.item.statusId != 2"></th>
+				                				</tr>		                				
+				                			</thead>
+				                			<tbody ng-repeat="flux in article.fluxes">	
+				                				<tr>					                                
+				                					<td colspan="{{vm.numberOfColumns}}" class="text-center">
+				                						<span ng-if="vm.item.statusId == 2" class="pull-left">{{flux.object}}</span>
+				                						<div style="padding-left: 0" class="pull-left col-sm-8" ng-if="vm.item.statusId != 2">
+				                							<input type="text" class="form-control input-sm" ng-model="flux.object" placeholder="Saisissez le libellé de l'opération">
+				                						</div>
+				                						<div class="pull-right form-inline">
+				                							<span ng-if="vm.item.statusId == 2" class="pull-left">Journal: {{flux.journal}}</span>
+				                							<select class="form-control input-sm" id="default-journal" name="default-journal" ng-if="vm.item.statusId != 2" ng-options="v.id as v.name for v in flux.journals" ng-model="flux.journalId">
+											                   <option value="">-- Choisir un journal --</option>
+											                </select>
+											            	<button type="button" class="btn btn-primary" ng-click="vm.addNewLine(article, flux)" ng-if="vm.item.statusId != 2"><i class="glyphicon glyphicon-plus"></i></button>
+											            	<button type="button" class="btn btn-danger" ng-click="vm.deleteFlux(article, flux)" ng-if="$index > 0 && vm.item.statusId != 2"><i class="glyphicon glyphicon-remove-sign"></i></button>
+				                						</div>
+				                					</td>
+					                            </tr>			                				
+				                				<tr ng-repeat="item in flux.lines">
+				                					<td class="shortMargin">				                						
+				                						<span ng-if="!item.edited">{{item.generalAccount}}</span>
+				                						<div class="input-group input-group-sm" ng-if="item.edited">
+											                <input type="text" class="form-control" id="generalAccount" name="generalAccount" ng-model="item.mGeneralAccount" placeholder="Rechercher un compte" disabled />
+					                                        <div class="input-group-btn">
+					                                            <button type="button" class="btn btn-primary" ng-click="vm.searchAccount(item)"><i class="glyphicon glyphicon-search"></i></button>
+					                                        </div>
+					                                    </div>
+				                					</td>
+				                					<td ng-show="vm.item.tiersTypeManagedId" class="shortMargin">{{item.auxiliaryAccountId ? item.auxiliaryAccount : ''}}</td>
+				                					<td class="shortMargin" ng-class="{'bg-danger': item.sensId == 1}">				                						
+				                						<span ng-if="!item.edited">{{item.debit | companyCurrency}}</span>
+				                						<input ng-if="item.edited && item.sensId == 1" type="number" class="form-control input-sm" id="debit" name="debit" ng-model="item.mDebit"/>     
+				                					</td>
+				                					<td class="shortMargin" ng-class="{'bg-success': item.sensId == 2}">				                						
+				                						<span ng-if="!item.edited">{{item.credit | companyCurrency}}</span>
+				                						<input ng-if="item.edited && item.sensId == 2" type="number" class="form-control input-sm" id="credit" name="credit" ng-model="item.mCredit"/>     
+				                					</td>				                									                				
+				                					<td ng-if="vm.item.statusId != 2">
+				                						<div ng-if="!item.edited">
+				                							<button type="button" class="btn btn-primary btn-xs" ng-click="vm.modifyItem(article, flux, item)"><i class="fa fa-pencil"></i></button>
+				                							<button type="button" class="btn btn-danger btn-xs" ng-click="vm.deleteItem(article, flux, item)"><i class="fa fa-trash-o"></i></button>
+				                						</div>
+				                						<div ng-if="item.edited">
+				                							<button type="button" class="btn btn-primary btn-xs" ng-click="vm.applyChangesItem(article, flux, item)"><i class="fa fa-save"></i></button>
+				                							<button type="button" class="btn btn-danger btn-xs" ng-click="vm.cancelEditItem(article, flux, item)"><i class="fa fa-times"></i></button>
+				                						</div>
+				                					</td>
+				                				</tr>				                				
+					                            <tr>					                             
+					                            	<td colspan="{{vm.item.statusId == 2 ? vm.numberOfColumns - 2 : vm.numberOfColumns - 3}}"></td>				                                					                                
+					                                <td colspan="1" class="text-center"><i>{{vm.debitTotal(flux) | companyCurrency}}</i></td>
+					                                <td colspan="1" class="text-center"><i>{{vm.creditTotal(flux) | companyCurrency}}</i></td>
+					                                <td ng-if="vm.item.statusId != 2" colspan="1"></td>
+					                            </tr>					                            
+				                			</tbody>
+				                			<tbody ng-if="vm.item.fluxes.length == 0">
+				                				<tr>
+					                                <td colspan="{{vm.numberOfColumns}}" class="text-center" style="color: orangered"><i>Aucune écriture comptable saisie.</i></td>
+					                            </tr>
+				                			</tbody>
+				                		</table>
+				                	</div>	
+		                		</div>	                					                		                	
+		                	</div>
+		                </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="panel-footer clearfix">
+	        	<div class="pull-left">	                
+	                <button type="button" class="btn btn-primary" ng-if="vm.item.statusId != 2" ng-click="vm.count(false)" ng-disabled="vm.isNewItem">Comptabiliser</button>
+	                <button type="button" class="btn btn-primary" ng-if="vm.item.statusId != 2" ng-click="vm.count(true)" ng-disabled="vm.isNewItem">Comptabiliser et continuer</button>
+	            </div>
+	            <div class="pull-right">
+	                <button type="submit" class="btn btn-primary" ng-click="vm.closeAfterSaved = false" ng-disabled="!vm.item.typeId">Enregistrer</button>
+	                <button type="submit" class="btn btn-primary" ng-click="vm.closeAfterSaved = true" ng-disabled="!vm.item.typeId">Enregistrer et fermer</button>	                
+                    <button type="button" class="btn btn-default" ng-click="vm.cancel()">Fermer</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</form>

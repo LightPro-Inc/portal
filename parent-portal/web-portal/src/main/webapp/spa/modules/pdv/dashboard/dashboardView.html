@@ -3,40 +3,9 @@
 	<div class="row m-b-md">
         <div class="col-md-12">
             <div class="pull-right">
-                <button type="button" class="btn btn-primary" ng-click="vm.resfreshData()"><i class="fa fa-refresh fa-2x"></i></button>
+                <button type="button" class="btn btn-primary" ng-click="vm.loadIndicators()"><i class="fa fa-refresh fa-2x"></i></button>
             </div>
         </div>
     </div>
-	<div class="row">
-		<div class="col-md-12">
-	        <div class="panel panel-success">
-		        <div class="panel-heading clearfix">
-		            <h3 class="panel-title pull-left">Résumé des ventes <span ng-if="!vm.loadingResume" class="badge badge-sm up bg-danger" style="background-color:darkblue;">{{ vm.totalTurnover | number }} {{companyCurrency}}</span></h3>
-		            <div class="pull-right form-inline">
-                        <select class="form-control input-sm" ng-model="vm.criteriaResumeVente.daySelected" ng-options="v.dayOfMonth as v.name for v in vm.days" ng-change="vm.changeResumeVenteDay(vm.criteriaResumeVente.daySelected)"></select>
-                        <select class="form-control input-sm" ng-model="vm.criteriaResumeVente.monthSelected" ng-options="v.number as v.name for v in vm.months" ng-change="vm.changeResumeVenteMonth(vm.criteriaResumeVente.monthSelected)"></select>
-                        <select class="form-control input-sm" ng-model="vm.criteriaResumeVente.yearSelected" ng-options="v for v in vm.years" ng-change="vm.changeResumeVenteYear(vm.criteriaResumeVente.yearSelected)"></select>
-                        <button class="btn btn-primary btn-sm" ng-click="vm.loadResume()"><i class="fa fa-search"></i></button>
-                    </div>
-		        </div>
-		        <div class="panel-body">
-		            <div ng-if="vm.loadingResume">
-		                <div class="col-xs-4"></div>
-		                <div class="col-xs-4"><i class="fa fa-refresh fa-5x fa-spin"></i> <label class="label label-primary">Charger ventes..</label></div>
-		                <div class="col-xs-4"></div>
-		            </div>
-		            <div class="row" ng-if="!vm.loadingResume">		            	
-			            <div class="col-md-offset-3 col-md-6" style="min-width:900px; overflow-x:auto; overflow-y:hidden">
-		                    <div fusioncharts
-		                         width="600"
-		                         height="400"
-		                         type="pie3d"
-		                         dataSource="{{vm.salesByPdv}}">
-		                    </div>
-		                </div>               
-		            </div>
-		        </div>
-		     </div>
-	    </div>
-	</div>
+	<div id="placeholder" class="row"></div>
 </div>

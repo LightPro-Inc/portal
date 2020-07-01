@@ -30,7 +30,7 @@
     						notificationService.displaySuccess("La chambre N° " + item.number + " a été supprimée avec succès !");
     					},
     					function(error){
-    						notificationService.displayError(error);
+    						
     					}
     			);
         	});  	

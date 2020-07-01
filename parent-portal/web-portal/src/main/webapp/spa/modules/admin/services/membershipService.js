@@ -14,7 +14,8 @@
 							loggedUser : {
 		                            username: credentials.fullUsername,
 		                            id: response.data.idUser,
-		                            token: response.data.token		                            
+		                            token: response.data.token,
+		                            photo: response.data.photo
 		                        },
 		                    rememberMe: credentials.rememberMe,
 	                        domain: response.data.domain
@@ -29,7 +30,7 @@
 		}
 		
 		function loginFailed(error){
-			notificationService.displayError(error);
+			
 		}
 		
 		function saveRepository(repository){
@@ -64,13 +65,14 @@
 		}
 		
 		function simpleLogout(){		
-			$rootScope.repository = {};
-			localStorageService.remove('repository');
+			$rootScope.repository.loggedUser = undefined;
+			$rootScope.repository.rememberMe = false;
+			saveRepository($rootScope.repository);
 			$state.go('login');
 		}
 		
 		function isUserLoggedIn() {
-            return $rootScope.repository.loggedUser != null;
+            return !($rootScope.repository.loggedUser == undefined);
         }
 		
 		return {
@@ -78,7 +80,8 @@
 			logout: logout,
 			setAuthenticationIfAlreadyLogged: setAuthenticationIfAlreadyLogged,
 			isUserLoggedIn: isUserLoggedIn,
-			simpleLogout: simpleLogout
+			simpleLogout: simpleLogout,
+			saveRepository: saveRepository
 		};
 	}
 })(angular.module('common.core'));

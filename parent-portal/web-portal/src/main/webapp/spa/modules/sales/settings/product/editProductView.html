@@ -5,20 +5,46 @@
 		</div>
 		<div class="panel-body">
 			<div class="form-group">
-				<label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>
-	            <input type="text" class="form-control" ng-model="vm.item.name" name="Name" id="Name" placeholder="Renseigner le libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
-			</div>			
-			<div class="form-group">
-				<label class="control-label" for="MesureUnit"><small style="color: red">*</small>&nbsp;&nbsp;Unité de mesure</label>
-                <select class="form-control" id="MesureUnit" name="MesureUnit"
-                        ng-model="vm.item.mesureUnitId" validate-on="blur" required required-message="'Unité de mesure est un champ obligatoire'">
-                    <option value="">-- Choisir une unité de mesure --</option>
-                    <option ng-repeat="option in vm.mesureUnits" value="{{option.id}}">{{option.fullName}} ({{option.shortName}})</option>
-                </select>
+				<label class="control-label" for="category"><small style="color: red">*</small>&nbsp;&nbsp;Catégorie</label>
+                <select class="form-control" id="category" name="category" ng-options="v.id as v.name for v in vm.categories" ng-model="vm.item.categoryId" validate-on="blur" required required-message="'Catégorie est un champ obligatoire'">
+               		<option value="">-- choisir une catégorie --</option>
+               	</select>
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="barCode">Code barre</label>
-	            <input type="text" class="form-control" ng-model="vm.item.barCode" name="barCode" id="barCode" placeholder="Renseigner le code barre">
+				<label class="control-label" for="Name"><small style="color: red">*</small>&nbsp;&nbsp;Libellé</label>	            
+				<input type="text" class="form-control" ng-model="vm.item.name" name="Name" id="Name" placeholder="Renseigner le libellé" validate-on="blur" required required-message="'Libellé est un champ obligatoire'">
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="InternalReference">Référence interne</label>	            
+				<input type="text" class="form-control" ng-model="vm.item.internalReference" name="InternalReference" id="InternalReference" placeholder="Renseigner la référence interne">
+			</div>					
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="control-label" for="MesureUnit"><small style="color: red">*</small>&nbsp;&nbsp;Unité de mesure</label>
+		                <select class="form-control" id="MesureUnit" name="MesureUnit"
+		                        ng-model="vm.item.mesureUnitId" validate-on="blur" required required-message="'Unité de mesure est un champ obligatoire'">
+		                    <option value="">-- Choisir une unité de mesure --</option>
+		                    <option ng-repeat="option in vm.mesureUnits" value="{{option.id}}">{{option.fullName}} ({{option.shortName}})</option>
+		                </select>
+					</div>
+					<div class="col-sm-6">
+						<label class="control-label" for="quantity"><small style="color: red">*</small>&nbsp;&nbsp;Quantité</label>
+	            		<input type="number" class="form-control" ng-model="vm.item.quantity" name="quantity" id="quantity" placeholder="Renseigner la quantité" validate-on="blur" required required-message="'Quantité est un champ obligatoire'">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-sm-6">
+						<label class="control-label" for="barCode">Code barre</label>
+	            		<input type="text" class="form-control" ng-model="vm.item.barCode" name="barCode" id="barCode" placeholder="Renseigner le code barre">
+					</div>
+					<div class="col-sm-6">
+						<label class="control-label" for="emballage"><small style="color: red">*</small>&nbsp;&nbsp;Emballage</label>
+	            		<input type="text" class="form-control" ng-model="vm.item.emballage" name="emballage" id="emballage" placeholder="Renseigner un nom" validate-on="blur" required required-message="'Emballage est un champ obligatoire'">
+					</div>
+				</div>
 			</div>		
 			<div class="form-group">
 				<label class="control-label" for="Description">Description</label>

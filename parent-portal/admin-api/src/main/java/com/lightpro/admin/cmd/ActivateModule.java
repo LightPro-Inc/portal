@@ -5,18 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ActivateModule {
 	
-	private final boolean active;
+	private final boolean used;
 	
 	public ActivateModule(){
 		throw new UnsupportedOperationException("#ActivateModule()");
 	}
 	
 	@JsonCreator
-	public ActivateModule( @JsonProperty("active") final boolean active){				
-		this.active = active;
+	public ActivateModule( @JsonProperty("used") final boolean used){				
+		this.used = used;
 	}
 	
-	public boolean active(){
-		return active;
+	public boolean isUsed(){
+		return used;
 	}
 }

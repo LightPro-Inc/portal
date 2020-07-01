@@ -28,7 +28,7 @@
 		                        <th></th>
 		                        <th>Nom complet</th>
 		                        <th>Nom court</th>
-		                        <th>Taux</th>
+		                        <th>Valeur</th>
 		                        <th></th>
 		                    </tr>
 		                </thead>
@@ -37,7 +37,7 @@
 		                        <td class="shortPadding">{{$index + 1}}</td>
 		                        <td class="shortPadding"><i>{{item.name}}</i></td>
 		                        <td class="shortPadding"><i>{{item.shortName}}</i></td>  
-		                        <td class="shortPadding"><i>{{item.rate}} %</i></td>                                    
+		                        <td class="shortPadding"><i>{{item.valueSummary}}</i></td>                                    
 		                        <td>
 		                            <button class="btn btn-primary btn-xs" ng-click="vm.deleteItem(item)"><i class="fa fa-trash-o"></i></button>
 		                        </td>

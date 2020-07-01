@@ -3,33 +3,27 @@ package com.lightpro.admin.vm;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.securities.api.MembershipContext;
+import com.securities.api.User;
 
-public class MembershipContextVm {
+public final class MembershipContextVm {
 	
-	private final transient MembershipContext membershipContext;
+	public final String token;
+	public final UUID idUser;
+	public final String domain;
+	public final String photo;
 	
 	public MembershipContextVm() {
         throw new UnsupportedOperationException("#MembershipContextVm()");
     }
 	
-	public MembershipContextVm(final MembershipContext membershipContext) {
-        this.membershipContext = membershipContext;
+	public MembershipContextVm(final User user) {
+		try {
+			this.token = user.generateToken();
+	        this.idUser = user.id();
+	        this.domain = String.format("@%s", user.company().shortName());
+	        this.photo = user.photo();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
     }
-	
-	@JsonGetter
-	public String getToken() throws IOException {
-		return membershipContext.token();
-	}
-	
-	@JsonGetter
-	public UUID getIdUser(){
-		return membershipContext.user().id();
-	}
-	
-	@JsonGetter
-	public String getDomain() throws IOException{
-		return String.format("@%s", membershipContext.user().company().shortName());
-	}
 }
